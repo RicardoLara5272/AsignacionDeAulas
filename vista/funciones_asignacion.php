@@ -43,6 +43,7 @@
             $resultado_consulta=mysqli_query($conexion,$consulta);
            
             echo '<script language="javascript">alert("asignacion realizada exitosamente ");</script>';
+            echo "<script language='javascript'>window.location.replace('http://localhost/pruebasTis/aceptar_rechazar.php')</script>";
             mysqli_close($conexion);
       } else if(isset($_POST["Cancelado"])){
             echo "<a href='aceptar_rechazar.php'><script language='javascript'>alert('usted cancelo la asignacion');</script></a>";
