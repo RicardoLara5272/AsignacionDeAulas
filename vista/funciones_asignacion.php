@@ -32,21 +32,18 @@
             //Datos de la tabla a pasar son :
             //id, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_inicio_final, texto
 
-             //Datos de la tabla a pasar son :
-            //id, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_inicio_final, texto
-
             
             $guardar="INSERT INTO asignacionaula(id_aula, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_hora_final, comentario) VALUES ('$aula', '$nombre', '$apellido', '$correo', '$id_solicitud', '$fecha_solicitud', '$fecha_solicitud', '$mensaje')"; 
             $consulta="SELECT * FROM `asignacionaula`";
 
             $resultado_guardar=mysqli_query($conexion,$guardar);
             $resultado_consulta=mysqli_query($conexion,$consulta);
-           
-            echo '<script language="javascript">alert("asignacion realizada exitosamente ");</script>';
+
+            echo "<script language='javascript'>alert('asignacion realizada exitosamente')</script>";
             echo "<script language='javascript'>window.location.replace('http://localhost/pruebasTis/aceptar_rechazar.php')</script>";
             mysqli_close($conexion);
       } else if(isset($_POST["Cancelado"])){
-            echo "<a href='aceptar_rechazar.php'><script language='javascript'>alert('usted cancelo la asignacion');</script></a>";
+            echo "<a href='aceptar_rechazar.php'><script language='javascript'>alert('usted cancelo la asignacion')</script>";
       }
 
 ?>

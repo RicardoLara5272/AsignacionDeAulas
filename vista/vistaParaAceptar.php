@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html>
 
@@ -25,6 +24,7 @@
     $count=0;
             echo "<table><tr><td><label>codigo</label></td>";
             echo "<td><label>nombre</label></td>";
+
             echo "<td><label>correo</label></td></tr></table><br>";
     while(($fila=mysqli_fetch_row($resultado_consulta))==true){
 
