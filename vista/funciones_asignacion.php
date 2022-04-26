@@ -32,26 +32,16 @@
             //Datos de la tabla a pasar son :
             //id, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_inicio_final, texto
 
+             //Datos de la tabla a pasar son :
+            //id, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_inicio_final, texto
+
             
-            $guardar="INSERT INTO asignacionaula(id_aula, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_hora_final, comentario) VALUES ('$aula, $nombre', '$apellido', '$correo', '$id_solicitud', '$fecha_solicitud', '$fecha_solicitud', '$mensaje')";
-            
+            $guardar="INSERT INTO asignacionaula(id_aula, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_hora_final, comentario) VALUES ('$aula', '$nombre', '$apellido', '$correo', '$id_solicitud', '$fecha_solicitud', '$fecha_solicitud', '$mensaje')"; 
             $consulta="SELECT * FROM `asignacionaula`";
 
             $resultado_guardar=mysqli_query($conexion,$guardar);
             $resultado_consulta=mysqli_query($conexion,$consulta);
-            /*
-            while(($fila=mysqli_fetch_row($resultado_consulta))==true){
-                  echo "hay datos '";
-                  echo "$fila[0] . ' '";
-                  echo "$fila[1] . ' '";
-                  echo "$fila[2] . ' '";
-                  echo "$fila[3] . ' '";
-                  echo "$fila[4] . ' '";
-                  echo "$fila[5] . ' '";
-                  echo "$fila[6] . ' '";
-                  echo "$fila[7] . ' '";
-                  echo "$fila[8] . ' '";
-            }*/
+           
             echo '<script language="javascript">alert("asignacion realizada exitosamente ");</script>';
             mysqli_close($conexion);
       } else if(isset($_POST["Cancelado"])){
