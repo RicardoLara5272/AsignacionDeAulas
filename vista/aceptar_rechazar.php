@@ -13,20 +13,9 @@
     <h1>SISTEMA DE ASIGNACION DE AULAS</h1>
 </header>
 
-<form>
-    <table>
-        <tr>
-            <th>id</th>
-            <th>nombre</th>
-            <th>correo</th>
-            <th>aceptar</th>
-            <th>rechazar</th>
-        </tr>
-        <?php
-            include("vistaParaAceptar.php");
-        ?>
-    </table>
-</form>
+<?php
+    include("vistaParaAceptar.php");
+?>
 
 <footer class="conteiner-fluid">
   <center><h2>Universidad Mayor de San Simon</h2></center>
