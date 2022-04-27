@@ -181,7 +181,7 @@ function enviar(destino){
         <?php 
         echo "<input type='hidden' id='fila' name='id_solicitud' value='". $id_solicitud ."'>";
         ?>
-        <button id="btn1" type="button" onClick="enviar2('vistaParaAceptar.php')" >Atras</button>
+        <button id="btn1" type="button" onClick="enviar2('aceptar_rechazar.php')" >Cancelar</button>
         <button id="btn2" type="button" onClick="enviar('recibir_Rechazar.php')">Rechazar</button>
     </div>
   </form>

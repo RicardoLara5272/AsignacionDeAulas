@@ -37,6 +37,6 @@ $id_solicitud=$_POST["id_solicitud"];
   <title>Verificacion de Envio</title>
 </head>
 <body>     
-         <a href="vistaParaAceptar.php">    <img src="boton_Atras.png" width="70" height="70"  alt=""  style="position:absolute; top: 20%; left: 10%;"> </a>
+         <a href="aceptar_rechazar.php">    <img src="boton_Atras.png" width="70" height="70"  alt=""  style="position:absolute; top: 20%; left: 10%;"> </a>
 </body>
 </html>
