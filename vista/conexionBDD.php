@@ -24,8 +24,11 @@
       $db_contra="";
       $conexion=mysqli_connect($db_host,$db_usuario,$db_contra,$db_nombre);
       $insertar2="INSERT INTO `rechazados` (`Id`, `Doecente`, `Fecha`, `Materia`, `Motivo_Rechazo`) VALUES ('9', '$nombre', '2022-04-13', '$materia', '$motivo')";
-      
       $consulta=mysqli_query($conexion,$insertar2);
+
+      $ultimo_dato=mysqli_insert_id($conexion);
+      echo $ultimo_dato;
+      
       if($consulta){
           echo "correcto";
       }

@@ -27,7 +27,7 @@ $correo="corr";
 
 //Realizamos la consulta
 $db_host="localhost";
-$db_nombre="umss_tis";
+$db_nombre="asignacionaulas";
 $db_usuario="root";
 $db_contrasenia="";
 $conexion=mysqli_connect($db_host,$db_usuario,$db_contrasenia,$db_nombre);
@@ -37,7 +37,7 @@ if(mysqli_connect_errno()){
 }
 mysqli_set_charset($conexion, "utf8");
 
-$consulta="SELECT * FROM `asignacion_de_m`";
+$consulta="SELECT * FROM `docente_materia`";
 
 $resultado_consulta=mysqli_query($conexion,$consulta);
 
