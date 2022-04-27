@@ -16,10 +16,10 @@
 <?php
     include("vistaParaAceptar.php");
 ?>
-
+</body>
 <footer class="conteiner-fluid">
   <center><h2>Universidad Mayor de San Simon</h2></center>
 </footer>
-</body>
+
 
 </html>

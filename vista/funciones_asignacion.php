@@ -15,7 +15,7 @@
             $mensaje=$_POST["mensaje"];
 
             $db_host="localhost";
-            $db_nombre="umss_tis";
+            $db_nombre="asignacionaulas";
             $db_usuario="root";
             $db_contrasenia="";
             $conexion=mysqli_connect($db_host,$db_usuario,$db_contrasenia,$db_nombre);
@@ -36,14 +36,14 @@
             //id, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_inicio_final, texto
 
             
-            $guardar="INSERT INTO asignacionaula(id_aula, nombre, apellido, correo, identificacion_solicitud, fecha_hora_inicio, fecha_hora_final, comentario) VALUES ('$aula', '$nombre', '$apellido', '$correo', '$id_solicitud', '$fecha_solicitud', '$fecha_solicitud', '$mensaje')"; 
-            $consulta="SELECT * FROM `asignacionaula`";
+            $guardar="INSERT INTO asignacion(id_asignacion, id_aula, nombres, apellidos, correo, fecha_hora_asignado, fecha_hora_inicio, fecha_hora_final, id_solicitud, mansaje) VALUES (NULL,'$aula', '$nombre', '$apellido', '$correo', NULL, '$fecha_solicitud', '$fecha_solicitud', '$id_solicitud', '$mensaje')"; 
+            $consulta="SELECT * FROM `asignacion`";
 
             $resultado_guardar=mysqli_query($conexion,$guardar);
             $resultado_consulta=mysqli_query($conexion,$consulta);
            
             echo '<script language="javascript">alert("asignacion realizada exitosamente ");</script>';
-            echo "<script language='javascript'>window.location.replace('http://localhost/pruebasTis/aceptar_rechazar.php')</script>";
+            echo "<script language='javascript'>window.location.replace('http://localhost/Proyectp/AsignacionDeAulas/vista/aceptar_rechazar.php')</script>";
             mysqli_close($conexion);
       } else if(isset($_POST["Cancelado"])){
             echo "<a href='aceptar_rechazar.php'><script language='javascript'>alert('usted cancelo la asignacion');</script></a>";
