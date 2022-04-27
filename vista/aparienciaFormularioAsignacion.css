@@ -1,22 +1,10 @@
-header {
-	padding:1em;
-    background: black;
-    display: flex;
-    height: 120px;
-    min-width: 5px;
-    text-align: center;
-    align-items: center;
-	justify-content: center;
-    color: #fff;
-    text-shadow: #000 0 0 .2em;
-}
-body {
+.body {
   font-family: Arial, "Times New Roman",
         Times, serif;
-  color: black;
+  color: white;
 }
 
-form{
+.form{
 	width:300px;
 	padding:50px;
 	margin:auto;
@@ -29,7 +17,7 @@ form{
 	align-items: left;
 }
 
-form label{
+.form label{
 	width:200px;
 	font-weight:normal;
 	align-items: center;
@@ -37,8 +25,8 @@ form label{
  	white-space: 1em;
 }
 
-form input[type="text"],
-form input[type="email"]{
+.form input[type="text"],
+.form input[type="email"]{
 	width:180px;
 	padding:3px 10px;
 	border:1px solid #f6f6f6;
@@ -48,40 +36,40 @@ form input[type="email"]{
 	display:inline-block;
 }
 
-form input[type="submit"]{
+.form input[type="submit"]{
 	width:100%;
 	padding:8px 16px;
 	margin-top:32px;
-	border:1px solid #000;
+	border:1px solid green;
 	border-radius:180px;
 	display:block;
 	color:#fff;
-	background-color:#000;
+	background-color:green;
 } 
 
-form input[type="submit"]:hover{
+.form input[type="submit"]:hover{
 	cursor:pointer;
 }
 
-form a[type="botton"]{
+.form a[type="botton"]{
 	width:100%;
 	padding:8px 16px;
 	margin-top:32px;
-	border:1px solid #000;
+	border:1px solid red;
 	border-radius:180px;
 	display:block;
 	color:#fff;
-	background-color:#000;
+	background-color:red;
 	text-align: center;
     align-items: center;
 	justify-content: center;
 } 
 
-form a[type="botton"]:hover{
+.form a[type="botton"]:hover{
 	cursor:pointer;
 }
 
-textarea{
+/*textarea{
 	width:100%;
 	height:100px;
 	border:1px solid #f6f6f6;
@@ -91,9 +79,9 @@ textarea{
 	resize: vertical | horizontal | none | both
 	resize:none;
 	display:block;
-}
+}*/
 
-table {
+.table {
 	border-collapse: collapse;
 	text-align: left;
     align-items: left;
@@ -104,15 +92,4 @@ tr, td {
 
 	width: 50%;
 }
-footer {
-	background: black;
-    display: flex;
-    height: 120px;
-    min-width: 100%;
-    text-align: center;
-    align-items: center;
-	justify-content: center;
-    color: #fff;
-    text-shadow: #000 0 0 .2em;
-    position: relative;
-}
+
