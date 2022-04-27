@@ -1,8 +1,6 @@
 <?php 
     include('vista/layouts/header.php');
     $active = "active";
-    
-
 ?>
 <div class="container" style="width: 650px;margin-top: 0;">
 	<div class="row">
