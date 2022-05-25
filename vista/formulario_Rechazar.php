@@ -1,47 +1,96 @@
 <?php
 //  $motivo=$_POST[]
 //capturamos datos de la tabla solicitud
-$id_solicitud = $_GET["id_solicitud2"];
-$fecha_solicitud = $_GET["fecha_solicitud2"];
-$fecha_reserva = $_GET["fecha_reserva2"];
-$cantidad_estudiantes = $_GET["cantidad_estudiantes2"];
-$detalle = $_GET["detalle2"];
-$id_docente_materia = $_GET["id_docente_materia2"];
 
+$id = $_GET["id_solicitud_Pend"];
+$id_reserva=$id[1];
+$boolean="pendiente";
 $db_host = "localhost";
 $db_nombre = "asignacionaulas";
 $db_usuario = "root";
 $db_contra = "";
-$id_docente = "";
-$id_materia = "";
-$conexion = mysqli_connect($db_host, $db_usuario, $db_contra, $db_nombre);
-$sql = "SELECT * FROM `docente_materia`";
-$result = mysqli_query($conexion, $sql);
-while ($mostrar = mysqli_fetch_array($result)) {
-  if ($id_docente_materia == $mostrar['id_docente_materia']) {
-    $id_docente = $mostrar['id_docente'];
-    $id_materia = $mostrar['id_materia'];
-  }
-}
-$sql2 = "SELECT * FROM `docente`";
-$result2 = mysqli_query($conexion, $sql2);
-$nombre_Docente = "";
-$apellido = "";
-while ($mostrar2 = mysqli_fetch_array($result2)) {
-  if ($mostrar2['id_docente'] == $id_docente) {
-    $nombre_Docente = $mostrar2['nombres'];
-    $apellido = $mostrar2['apellidos'];
-  }
-}
 
-$sql3 = "SELECT * FROM `materia`";
-$result3 = mysqli_query($conexion, $sql3);
-$materia = "";
-while ($mostrar3 = mysqli_fetch_array($result3)) {
-  if ($id_materia == $mostrar3['id_materia']) {
-    $materia = $mostrar3['nombre_materia'];
+$id_solicitud="";
+$id_materia = "";
+$fecha_reserva="";
+$grupo="";
+$hora_inicio="";
+$hora_fin="";
+$cap_est="";
+$detalle="";
+
+$codigo_materia="";
+$nom_materia="";
+$nivel="";
+
+$id_docente="";
+$nombre_docente="";
+
+$conexion = mysqli_connect($db_host, $db_usuario, $db_contra, $db_nombre);
+
+$sql5 = "SELECT * FROM `reservas_atendidas`";
+$result5 = mysqli_query($conexion, $sql5);
+while ($mostrar5 = mysqli_fetch_array($result5)) {
+  if ($id_reserva == $mostrar5['id_reserva']) {
+        if($mostrar5['estado']=="rechazado"){
+          $boolean="rechazado";
+          echo "
+      <div>
+      <h1   style='background:red; color:white; text-align: center;font-family:Verdana, sans-serif;'; > La Solicitud ha sido rechazada anteriormente  
+      </div>  </h1>";
+        }
+        if($mostrar5['estado']=="aceptado"){
+          $boolean="aceptado";
+          echo "
+      <div>
+      <h1   style='background:red; color:white; text-align: center;font-family:Verdana, sans-serif;'; > La Solicitud ha sido aceptada anteriormente   
+      </div>  </h1>";
+        }
   }
-}
+} 
+if($boolean=="pendiente"){
+
+$sqlP = "SELECT * FROM `reserva`";
+$resultP = mysqli_query($conexion, $sqlP);
+while ($mostrarP = mysqli_fetch_array($resultP)) {
+        if($mostrarP['id_reserva']==$id_reserva){
+            $id_solicitud=$mostrarP['id_solicitudes'];
+            $id_materia=$mostrarP['id_materia'];
+            $fecha_reserva=$mostrarP['fecha_reserva'];
+            $grupo=$mostrarP['grupo'];
+            $hora_inicio=$mostrarP['hora_inicio'];
+            $hora_fin=$mostrarP['hora_fin'];
+            $cap_est=$mostrarP['capEstudiantes'];
+            $detalle=$mostrarP['detalle'];
+        }
+      }
+     $sql2 = "SELECT * FROM `materias`"; 
+      $result2 = mysqli_query($conexion, $sql2);
+      while ($mostrar2 = mysqli_fetch_array($result2)) {
+        if ($mostrar2['id_materia'] == $id_materia) {
+          $codigo_materia = $mostrar2['codigo_materia'];
+          $nom_materia=$mostrar2['nombre_materia'];
+          $nivel=$mostrar2['nivel'];
+         }
+      }
+      
+      $sql3 = "SELECT * FROM `solicitudes`";
+      $result3 = mysqli_query($conexion, $sql3);
+      while ($mostrar3 = mysqli_fetch_array($result3)) {
+        if ($id_solicitud == $mostrar3['id_solicitudes']) {
+              $id_docente = $mostrar3['id_docente'];
+        }
+      }        
+      
+      $sql4 = "SELECT * FROM `docentes`";
+      $result4 = mysqli_query($conexion, $sql4);
+      while ($mostrar4 = mysqli_fetch_array($result4)) {
+        if ($id_docente == $mostrar4['id_docente']) {
+              $nombre_docente = $mostrar4['nombre_docente'];
+        }
+      } 
+  
+    }
 
 ?>
 
@@ -164,16 +213,16 @@ while ($mostrar3 = mysqli_fetch_array($result3)) {
   <div class="row text-center">
     <form id="formluario" name="formulario" method="post">
       <!-- <h3>ID: </h3>-->
-      <b><label for="ID">ID Solicitud:</label></b><br/>
-      <label><?php echo $id_solicitud ?></label><br>
+      <b><label for="ID">ID Reserva:</label></b>
+      <label><?php echo $id_reserva ?></label><br>
       <b><label for="docente">Docente:</label></b><br/>
-      <label><?php echo $nombre_Docente . $apellido ?></label><br>
+      <label><?php echo $nombre_docente ?></label><br>
       <b><label for="materia">Materia:</label></b><br/>
-      <label><?php echo $materia ?></label><br>
-      <b><label for="fecha_solicitud">Fecha de solicitud:</label></b><br/>
-      <label for=""><?php echo $fecha_solicitud ?></label><br>
-      <b><label for="fecha_reserva">Fecha de reserva:</label></b><br/>
+      <label><?php echo $nom_materia ?></label><br>
+      <b><label for="fecha_solicitud">Fecha de Reserva:</label></b><br/>
       <label for=""><?php echo $fecha_reserva ?></label><br>
+      <b><label for="fecha_reserva">Hora de Reserva:</label></b><br/>
+      <label for=""><?php echo $hora_inicio . " - ". $hora_fin ?></label><br>
       <b><label for="detalle">Detalle:</label></b><br/>
       <label for=""><?php echo $detalle ?></label><br>
       <div class="campo">
@@ -181,9 +230,17 @@ while ($mostrar3 = mysqli_fetch_array($result3)) {
         <label for="experiencia"><b>Motivo para el rechazo de la Solicitud</b></label>
         <textarea rows="6" style="width: 26em" id="experiencia" name="experiencia" onkeypress="return sololetras(event)"></textarea>
         <?php
-        echo "<input type='hidden' id='fila' name='id_solicitud' value='" . $id_solicitud . "'>";
+        if($boolean=="pendiente"){
+          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
+        }
+        else if($boolean=="aceptado"){
+          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
+        }
+        else if($boolean=="rechazado"){
+          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
+        }
         ?>
-        <button id="btn1" type="button" onClick="enviar2('aceptar_rechazar.php')">Atras</button>
+        <button id="btn1" type="button" onClick="enviar2('vistaDetPend.php')">Atras</button>
         <button id="btn2" type="button" onClick="enviar('recibir_Rechazar.php')">Rechazar</button>
       </div>
     </form>

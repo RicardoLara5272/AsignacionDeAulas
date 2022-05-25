@@ -78,7 +78,7 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
             <td> 
             <!--redirigr mariscal y ricardo-->
                 <div class="btn-group">
-                    <form action="formulario_Rechazar.php" method="post">
+                    <form action="formulario_Rechazar.php" method="get">
                         <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
                         <input type="submit" class="btn btn-success btn-space" value="Rechazar" >
                     </form>
