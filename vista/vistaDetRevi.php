@@ -7,6 +7,13 @@ $sentenciaSQL->execute();
 $listaSolicitudes=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
+<div class="jumbotron">
+    <blockquote class="blockquote text-center">
+        <p class="h2">Lista de solicitudes Revisadas</p>
+    </blockquote>
+    <br/>
+</div>
+
 <table class="table table-bordered">
     <thead>
         <tr>

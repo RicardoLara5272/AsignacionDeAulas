@@ -7,6 +7,8 @@
     <title>Sitio web</title>
     <link rel="stylesheet" href="css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/estiloBtn.css" />
+    <script src="../librerias/jquery/jquery-3.6.0.js"></script>
+    <script src="../librerias/popper/popper.min.js"></script>
 
 </head>
 <body>

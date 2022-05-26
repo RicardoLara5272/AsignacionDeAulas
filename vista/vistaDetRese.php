@@ -3,9 +3,11 @@
 
 <?php 
 $id_sol_DetPend = $_POST['id_solicitud_Pend'];
+
 $sentenciaSQL= $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
 $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <div class="jumbotron">
@@ -42,7 +44,10 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
         </tr>
     </thead>
     <tbody>
-    <?php $indice = 1 ; ?>
+    <?php 
+    $indice = 1 ; 
+    $indiceRev = 0;
+    ?>
     <?php foreach($listaReservas as $reserva) {?>
         <tr>
             <td> <?php echo $indice++; ?> </td>
@@ -61,7 +66,6 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
             <td> 
                 <?php 
                     //es unico el id_reserva?
-                    $indiceRev = 0;
                     $id_reserva = $reserva['id_reserva'];
                     $sentenciaSQL= $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
                     $sentenciaSQL->execute();
@@ -80,7 +84,7 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                 <div class="btn-group">
                     <form action="formulario_Rechazar.php" method="post">
                         <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
-                        <input type="submit" class="btn btn-success btn-space" value="Rechazar" >
+                        <input type="submit" name="enviar"class="btn btn-success btn-space" value="Rechazar" >
                     </form>
                     <form action="ricardo.php" method="post">
                         <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_sol_DetPend; ?> ">
@@ -96,24 +100,11 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 <div class="col-12">
     <div style="text-align:right">
         <br><br>
+        <input id="id_solicitud" type="hidden" value="<?php echo $id_sol_DetPend; ?>">
         <input id="num_total_rese" type="hidden" value="<?php echo $indice; ?>">
         <input id="num_rese_ate" type="hidden" value="<?php echo $indiceRev; ?>">
         <button type="submit" class="btn btn-primary" href="funciono.php" id="boton" onclick="comprobacion()">Revisado</button>
         
-        <script>
-            function comprobacion(){
-                var  numReservas = document.getElementById('num_total_rese').value - 1;
-                var  numResAten = document.getElementById('num_rese_ate').value;
-                console.log(numReservas);
-                console.log(numResAten);
-                if (numReservas == numResAten) {
-                    document.getElementById('boton').disabled=false;
-                } else{
-                    document.getElementById('boton').disabled=true;
-                }
-            }
-        </script>
-
         <a class="btn btn-primary" href="vistaDetPend.php">Salir</a>
     </div>
 </div>

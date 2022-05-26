@@ -1,0 +1,102 @@
+*{
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 24px; 
+}
+
+body {
+    background-color: #F2F7F8;
+}
+  
+input[type=text], input[type=email], input[type=password], input[type=number], input[type=tel], option,select{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    resize: vertical;
+}
+
+
+.seleccion{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    resize: vertical;
+}
+  
+label {
+    padding: 10px 10px 10px 0;
+    display: inline-block;
+}
+
+input[type=submit] {
+    width: 90%;
+    background-color: #45A049;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: solid;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+.container {
+    width: 700px;
+    background-color: #F2F7F8;
+    padding: 15px;
+    align-content: center;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+
+.col-50 {
+    float: left;
+    width: 50%;
+    margin-top: 6px;
+}
+
+.col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+  
+.col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+.error{
+    color: red;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 56, 0.63);
+    text-align: center;
+    font-weight: bold;
+    border-style: ridge;
+    border-color: gold;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+  
+@media screen and (max-width: 600px) {
+.container, .col-25, .col-75, .col-50, input[type=submit],input[type=button] {
+    width: 100%;
+    margin-top: 0;
+    }
+}
