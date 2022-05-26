@@ -1,4 +1,13 @@
 <?php
+ini_set("pcre.jit", "0");
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require 'librerias/phpmailer/src/PHPMailer.php';
+require 'librerias/phpmailer/src/SMTP.php';
+require 'librerias/phpmailer/src/Exception.php';
+
 $texto=$_POST['experiencia'];
 $id_reserva=$_POST["id_reserva"];
   $db_host="localhost";
@@ -38,7 +47,43 @@ $id_reserva=$_POST["id_reserva"];
    
  // $insertar2="INSERT INTO `rechazados` (`Id`, `Doecente`, `Fecha`, `Materia`, `Motivo_Rechazo`) VALUES (NULL, '$docente', '2022-04-13', '$materia', '$texto')";
   if($result){
-    //aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+    $nombreDoc = "SELECT nombre_docente FROM reserva, solicitudes, docentes WHERE reserva.id_reserva = $id_reserva AND reserva.id_solicitudes = solicitudes.id_solicitudes AND solicitudes.id_docente = docentes.id_docente";
+    $correoDoc = "SELECT correo FROM reserva, solicitudes, docentes WHERE reserva.id_reserva = $id_reserva AND reserva.id_solicitudes = solicitudes.id_solicitudes AND solicitudes.id_docente = docentes.id_docente";
+    
+    $nombresql = mysqli_query($conexion, $nombreDoc);
+    $correosql = mysqli_query($conexion, $correoDoc);
+    $nombre_docente = mysqli_fetch_array($nombresql);
+    $correo_docente = mysqli_fetch_array($correosql);
+
+    $mail = new PHPMailer(true);
+
+    try {
+      $mail->isSMTP();
+      $mail->Host = 'smtp.gmail.com';
+      $mail->SMTPAuth = true;
+      $mail->Username = 'gerfsoftware.srl@gmail.com';
+      $mail->Password = 'gerf2022';
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+      $mail->Port = 587;
+
+      $mail->setFrom('gerfsoftware.srl@gmail.com', 'UMSS FCyT');
+      $mail->addAddress($correo_docente[0]);
+      $mail->addCC($correo_docente[0]);
+
+
+      $mail->isHTML(true);
+      $mail->Subject = 'Respuesta a solicitud de asignacion de aula.';
+      $mail->Body = '<h4>'.$nombre_docente[0].'</h4>' .
+        '<p>
+            Su solicitud de reserva de aula fue rechazada. <br>
+            <b>Motivo de rechazo: </b>'. $texto.
+        '</p>';
+      $mail->send();
+
+    } catch(Exception $e) {
+
+    }
+    
       echo "<div  style='background:green;color:white; text-align: center;font-family:Verdana, sans-serif;'>
       <h1 >  SE ENVIO CORRECTAMENTE EL FORMULARIO  </h1>
       </div>";
