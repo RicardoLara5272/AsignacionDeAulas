@@ -1,9 +1,17 @@
 <?php
 //  $motivo=$_POST[]
 //capturamos datos de la tabla solicitud
+$id= $_POST['id_solicitud_Pend'];
+if(strlen($id)==3){
+  $id_reserva=$id[1];
+}
+if(strlen($id)==4){
+  $id_reserva=$id[1].$id[2];
+}
+if(strlen($id)==5){
+  $id_reserva=$id[1].$id[2].$id[3];
+}
 
-$id = $_GET["id_solicitud_Pend"];
-$id_reserva=$id[1];
 $boolean="pendiente";
 $db_host = "localhost";
 $db_nombre = "asignacionaulas";
@@ -111,7 +119,7 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
     function sololetras(e) {
       key = e.keyCode || e.which;
       teclado = String.fromCharCode(key).toLowerCase();
-      letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwqyz1234567890,.:;";
+      letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwxyz1234567890,.:;";
       especiales = "8-37-38-46-164";
       teclado_especial = false;
       for (var i in especiales) {
@@ -134,7 +142,7 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
     function validar(texto) {
       for (var j = 0; j < 69; j++) {
         var res = true;
-        var letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwqyz1234567890,.:;";
+        var letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwxyz1234567890,.:;";
         console.log(letras[j]);
         if (texto == letras[j]) {
           res = false;
@@ -157,7 +165,9 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
               motivo[i] != 'i' && motivo[i] != 'j' && motivo[i] != 'k' && motivo[i] != 'l' && motivo[i] != 'm' && motivo[i] != 'n' && motivo[i] != 'o' && motivo[i] != 'p' &&
               motivo[i] != 'q' && motivo[i] != 'r' && motivo[i] != 's' && motivo[i] != 't' && motivo[i] != 'v' && motivo[i] != 'w' && motivo[i] != 'x' && motivo[i] != 'y' &&
               motivo[i] != 'z' && motivo[i] != '1' && motivo[i] != '2' && motivo[i] != '3' && motivo[i] != '4' && motivo[i] != '5' && motivo[i] != '6' && motivo[i] != '7' &&
-              motivo[i] != '8' && motivo[i] != '9' && motivo[i] != '0' && motivo[i] != ',' && motivo[i] != '.' && motivo[i] != ':' && motivo[i] != ';' && motivo[i] != ' ') {
+              motivo[i] != '8' && motivo[i] != '9' && motivo[i] != '0' && motivo[i] != ',' && motivo[i] != '.' && motivo[i] != ':' && motivo[i] != ';' && motivo[i] != ' '
+              && motivo[i] != 'U' && motivo[i] != 'u'
+              ) {
               res = false;
               alert('No se permiten caraecteres especiales');
             }
@@ -210,7 +220,7 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
     </div>
   </section>
   <br />
-  <div class="row text-center">
+  <div id="for" class="row text-center">
     <form id="formluario" name="formulario" method="post">
       <!-- <h3>ID: </h3>-->
       <b><label for="ID">ID Reserva:</label></b>
@@ -240,8 +250,12 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
           echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
         }
         ?>
+        <div id="botones">
+          <?php if($boolean=="pendiente"){
+                 echo   "<button id='btn2' type='button' onClick="."enviar('recibir_Rechazar.php')>Rechazar</button>";
+          }?>
         <button id="btn1" type="button" onClick="enviar2('vistaDetPend.php')">Atras</button>
-        <button id="btn2" type="button" onClick="enviar('recibir_Rechazar.php')">Rechazar</button>
+      </div>
       </div>
     </form>
     </div>
