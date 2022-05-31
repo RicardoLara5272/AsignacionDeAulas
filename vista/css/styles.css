@@ -1,0 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans', sans-serif;
+}
+body{
+    background-color: white;
+}
+
+header{
+    background:black;
+    display: flex;
+    padding: 18px;
+}
+header h1{
+    color:white;
+    text-align: left;
+    font-family: 'Noto Sans', sans-serif;
+    font-size:30px;
+    padding: 0px 0px 0px 0px;
+}
+.navfooter{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    min-height: 62vh;
+}
+.navfooter footer{
+    position: relative;
+    width: 100%;
+    background: #E5E0DE;
+    min-height: 10px;
+    padding: 10px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.navfooter footer .social_icon{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+    flex-wrap: wrap;
+}
+.navfooter footer .social_icon li{
+    list-style: none;
+}
+.navfooter footer .social_icon li a{
+    font-size: 1em;
+    color: black;
+    margin: 0 15px;
+    display: inline-block;
+    transition: 0.5s;
+}
+.navfooter footer .social_icon li a:hover{
+    transform: translateY(-10px);
+}
+.navfooter footer p{
+    color: black;
+    text-align: center;
+    font-size: 1em;
+
+}
