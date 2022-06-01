@@ -100,7 +100,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     confirmButtonText: 'OK',
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      redireccionA("../vista/solicitud.php");
+                      redireccionA("../vista/homeDocente.php");
                     }
                   })
                 }
