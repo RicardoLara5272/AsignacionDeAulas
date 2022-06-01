@@ -12,7 +12,7 @@ if(strlen($id)==5){
   $id_reserva=$id[1].$id[2].$id[3];
 }
 
-$id_reserva= $_POST['id_solicitud_Pend'];
+//$id_reserva= $_POST['id_solicitud_Pend'];
 //$id_reserva=$id[1];
 $boolean="pendiente";
 $db_host = "localhost";

@@ -1,5 +1,9 @@
-<?php include("../template/cabecera.php"); ?>
-<?php include("../config/db.php"); ?>
+<?php //include("../template/cabecera.php"); ?>
+
+<?php 
+include("./layouts/navAdministrativo.php");
+include("../config/db.php"); 
+?>
 
 <?php 
 $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='Pendiente' ");

@@ -37,6 +37,8 @@
 					<hr>
 					<a class="btn btn-success" style="width: 300px;background-color: #45A049;" href="/vista/homeDocente.php">Usuario docente</a>
 					<hr>
+					<a class="btn btn-primary" style="width: 300px;" href="/vista/homeAdministrativo.php">Usuario administrativo</a>
+					<hr>
 				</div>
 			</div>
 		</div>
