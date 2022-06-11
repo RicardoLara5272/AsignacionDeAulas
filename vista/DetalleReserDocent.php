@@ -4,24 +4,23 @@ include("../config/db.php");
 ?>
 
 <?php 
-$id_sol_DetPend = $_POST['id_solicitud_Revi'];
+$id_solicitud = $_POST['id_solicitud'];
 
-$sentenciaSQL= $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
+$sentenciaSQL= $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_solicitud");
 $sentenciaSQL->execute();
 $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
 <section>
     <div class="row text-center">
         <div class="col-lg-12">
-            <br><h2>Solicitud nro # <?php echo $id_sol_DetPend;?> </h2>
+            <br><h2>Solicitud nro # <?php echo $id_solicitud;?> </h2>
         </div>
     </div>
     <div class="col-lg-12">
         <h3>
             <?php 
-            $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes WHERE id_solicitudes = $id_sol_DetPend");
+            $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes WHERE id_solicitudes = $id_solicitud");
             $sentenciaSQL->execute();
             $id_docente = $sentenciaSQL->fetchColumn(3);
 
@@ -29,7 +28,7 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
             $sentenciaSQL->execute();
             $nom_docente = $sentenciaSQL->fetchColumn(2);
             echo $nom_docente; 
-            ?>   
+            ?> 
         </h3>
     </div>
     <div class="row text-center">
@@ -47,13 +46,13 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                 <tr>
                     <th>Num</th>
                     <th>Materia</th>
-                    <th>Grupo</th>
                     <th>Cap.</th>
                     <th>Fecha Reserva</th>
                     <th>Hora Inicio</th>
                     <th>Hora Final</th>
                     <th>Estado</th>
-                    <th>Detalle</th>
+                    <th>Detalles</th> 
+                    <th>Aula</th>        
                 </tr>
             </thead>
             <tbody>
@@ -73,14 +72,12 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         echo $nom_materia; 
                         ?> 
                     </td>
-                    <th> <?php echo $reserva['grupo']; ?></th>
                     <th> <?php echo $reserva['capEstudiantes']; ?></th>
                     <td> <?php echo $reserva['fecha_reserva']; ?> </td>
                     <td> <?php echo $reserva['hora_inicio']; ?> </td>
                     <td> <?php echo $reserva['hora_fin'];?> </td>
                     <td> 
                         <?php 
-                            //es unico el id_reserva?
                             $id_reserva = $reserva['id_reserva'];
                             $sentenciaSQL= $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
                             $sentenciaSQL->execute();
@@ -104,8 +101,8 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="col-12">
     <div style="text-align:right">
-        <br><br>
-        <a class="btn btn-danger" href="vistaDetRevi.php">SALIR</a>
+        <br><br>        
+        <a class="btn btn-danger" href="seguimienDocente.php">SALIR</a>
     </div>
 </div>
 

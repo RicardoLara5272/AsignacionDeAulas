@@ -14,6 +14,20 @@
 </head>
 
 <body>
+
+<div class="container-fluid text-white bg-dark">
+    <div class="row">
+        <div class="col-md">
+            <header class="py-3">
+                <h3>Sistema de asignación de aulas</h3>
+            </header>
+        </div>
+    </div>
+</div>
+<nav>
+    <section id="menu-nav">
+        <ul class="menu">
+
     <header>
         <div class="pull-left" style="width: 50%;">
             <h1>Sistema de asignación de aulas</h1>
@@ -58,7 +72,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>Seguimientos</li>
+                <li><a class="Segimiento" href="../vista/seguimienDocente.php">Seguimiento</a></li>
                 <li>Otros</li>
             </ul>
         </section>
