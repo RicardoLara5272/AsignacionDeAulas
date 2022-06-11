@@ -1,3 +1,14 @@
+<?php
+session_start();
+if (!isset($_SESSION['usuario'])) {
+    header('Location: ../login.php');
+}
+if($_SESSION['is_admin'] != 1)
+    {
+        header("location: /asignacionAulas-main/vista/homeDocente.php");
+    }
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 

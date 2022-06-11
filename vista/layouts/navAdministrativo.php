@@ -1,47 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asignaciones</title>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&display=swap" rel="stylesheet">
 
-<!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"  integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    
-    <link rel="stylesheet" href="css/estiloSolicitud.css">
 </head>
+
 <body>
-
-<div class="container-fluid text-white bg-dark">
-    <div class="row">
-        <div class="col-md">
-            <header class="py-3">
-                <h3>Sistema de asignación de aulas</h3>
-            </header>
+    <header>
+        <div class="pull-left" style="width: 50%;">
+            <h1>Sistema de asignación de aulas</h1>
         </div>
-    </div>
-</div>
+        <div class="pull-right" style= "width: 50%;">
+            <ul class="nav nav-tabs nav-pills" style="float:right;">
+                <li class="nav-item dropdown active">
+                    <div class="btn-group dropleft">
+                        <a class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><ion-icon name="person-circle-outline" style="color: #fff; font-size: 30px; float: right;"></ion-icon></a>
+                    <div class="dropdown-menu">
+                        <p class="dropdown-item"><b><?php echo $_SESSION['nombre_docente'] ?></b></a>
+                        <div class="dropdown-divider"></div>
+                        <?php if ($_SESSION["is_admin"] == 1) { ?>
+                            <p class="dropdown-item"><i></small>Administrativo de la Facultad de Ciencias y Tecnologia</small></i></p>
+                        <?php } 
+                        else {?>
+                            <p class="dropdown-item"><i><small>Docente de la Facultad de Ciencias y Tecnologia</small></i></p>
+                        <?php }?>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="../vista/homeDocente.php">Cambiar a Docente</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="../vista/destroy.php">Cerrar Sesion</a>
+                    </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </header>
+    <nav>
+        <section id="menu-nav">
+            <ul class="menu">
+                <li class="reserva">Solicitudes
+                    <ul class="ul-second">
+                        <li><a class="revisadas" href="/vista/homeAdministrativo.php">Pendientes</a></li>
+                        <li><a class="pendientes" href="/vista/vistaDetRevi.php">Revisadas</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+    </nav>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
 
-<nav>
-    <section id="menu-nav">
-        <ul class="menu">
-            <li class="reserva">Mostrar
-                <ul class="ul-second">
-                    <li><a class="Pendientes" href="./vistaDetPend.php">Pendientes</a></li>
-                    <li><a class="Revisadas" href="./vistaDetRevi.php">Revisadas</a></li>
-                </ul>
-            </li>
-            <li>Seguimientos</li>
-            <li>Otros</li>
-        </ul>
-    </section>
-</nav>
-
-<div class="container">
-    <div class="ListaSolicitudReserva">
+</html>
