@@ -102,7 +102,7 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 <div class="col-12">
     <div style="text-align:right">
         <br><br>        
-        <a class="btn btn-danger" href="seguimienDocente.php">Salir</a>
+        <a class="btn btn-danger" href="seguimienDocente.php">SALIR</a>
     </div>
 </div>
 

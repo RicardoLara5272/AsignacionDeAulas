@@ -51,12 +51,26 @@ $listaSolicitudes=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     </td>
                     <td> 
                         <?php 
-                            echo 'En producción'; 
+                            $id_solic = $solicitud['id_solicitudes'];
+                            $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes_atendidas WHERE id_solicitud = $id_solic");
+                            $sentenciaSQL->execute();
+                            $id_admin=$sentenciaSQL->fetchColumn(3);
+
+                            $sentenciaSQL= $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_admin");
+                            $sentenciaSQL->execute();
+                            $nomb_admin=$sentenciaSQL->fetchColumn(2);
+                            echo $nomb_admin;  
                         ?> 
                     </td>
                     <td> <?php echo $solicitud['fecha_solicitud']; ?> </td>
                     <td> 
-                        <?php echo 'dato no existete' ;?> 
+                        <?php 
+                            $id_solic = $solicitud['id_solicitudes'];
+                            $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes_atendidas WHERE id_solicitud = $id_solic");
+                            $sentenciaSQL->execute();
+                            $fecha_aten=$sentenciaSQL->fetchColumn(2);
+                            echo $fecha_aten;  
+                        ?> 
                     </td>
                     <td> <?php echo $solicitud['estado']; ?> </td>
                     <td> 

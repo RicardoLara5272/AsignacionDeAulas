@@ -99,11 +99,11 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         <div class="btn-group">
                             <form action="ricardo.php" method="post">
                                 <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_sol_DetPend; ?> ">
-                                <input type="submit" class="btn btn-success btn-space" value="Asignar" >
+                                <input type="submit" class="btn btn-info btn-space" value="Asignar" >
                             </form>
                             <form action="formulario_Rechazar.php" method="post">
                                 <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
-                                <input type="submit" name="enviar"class="btn btn-success" value="Rechazar" >
+                                <input type="submit" name="enviar"class="btn btn-secondary" value="Rechazar" >
                             </form>
                         </div>
                     </td>
@@ -120,9 +120,9 @@ $listaReservas=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
         <input id="id_solicitud" type="hidden" value="<?php echo $id_sol_DetPend; ?>">
         <input id="num_total_rese" type="hidden" value="<?php echo $indice; ?>">
         <input id="num_rese_ate" type="hidden" value="<?php echo $indiceRev; ?>">
-        <button type="submit" class="btn btn-primary" href="funciono.php" id="boton" onclick="comprobacion()">Revisado</button>
+        <button type="submit" class="btn btn-primary" href="funciono.php" id="boton" onclick="comprobacion()">REVISADO</button>
         
-        <a class="btn btn-danger" href="vistaDetPend.php">Salir</a>
+        <a class="btn btn-danger" href="vistaDetPend.php">SALIR</a>
     </div>
 </div>
 

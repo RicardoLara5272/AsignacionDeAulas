@@ -43,6 +43,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Fecha Solicitud</th>
+                            <th>Fecha Revisada</th>
                             <th>Estado</th>
                             <th>Accion</th>
                         </tr>
@@ -52,6 +53,20 @@
                         <tr>
                             <td> <?php echo $solicitud['id_solicitudes']; ?> </td>
                             <td> <?php echo $solicitud['fecha_solicitud']; ?></td>
+                            <td> 
+                                <?php 
+                                $id_solicit = $solicitud['id_solicitudes'];
+                                $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes_atendidas WHERE id_solicitud = $id_solicit ");
+                                $sentenciaSQL->execute();
+                                $fecha_atend= $sentenciaSQL->fetchColumn(2);
+                                if(empty($fecha_atend)){
+                                    echo 'aún no se reviso';
+                                }
+                                else{
+                                    echo $fecha_atend;
+                                }
+                                ?>
+                            </td>
                             <td> <?php echo $solicitud['estado']; ?></td>
                             <td> 
                                 <form action="DetalleReserDocent.php" method="post" name="formulario">
