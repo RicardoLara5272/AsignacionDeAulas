@@ -10,9 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
-<header>
-    <h1>Sistema de asignación de aulas</h1>
-</header>
+<div class="container-fluid text-white bg-dark">
+    <div class="row">
+        <div class="col-md">
+            <header class="py-3">
+                <h3>Sistema de asignación de aulas</h3>
+            </header>
+        </div>
+    </div>
+</div>
 <nav>
     <section id="menu-nav">
         <ul class="menu">
@@ -27,7 +33,7 @@
                         </li>
                     </ul>
                 </li>
-                <li>Seguimientos</li>
+                <li><a class="Segimiento" href="../vista/seguimienDocente.php">Seguimiento</a></li>
                 <li>Otros</li>
         </ul>
     </section>
