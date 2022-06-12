@@ -17,17 +17,43 @@ switch ($_GET['accion']) {
         $resultado = $conexion->prepare($datos);
         $resultado->execute();
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
-        print json_encode($data, JSON_UNESCAPED_UNICODE);
+        $result=array();
+
+        foreach($data as $key){
+            $number=json_decode($key['grupo']);
+            $expan='';
+            foreach( $number as $index){
+                $expan = $expan.'<span class="span_'.$key['id_pendientes'].'">'. $index .' </span>';
+            }
+            $key['prueba'] = $expan;
+            $result[]=$key;
+        }
+        print json_encode($result, JSON_UNESCAPED_UNICODE);
+        
         $conexion = NULL;
         break;
         
     case 'agregar':
-            $respuesta = "INSERT INTO reserva_pendientes(id_materia, grupo, fecha_reserva, hora_inicio, hora_fin, capEstudiantes, detalle, id_docente) VALUES ( $_POST[id_materia], '$_POST[grupo]', '$_POST[fecha_reserva]', '$_POST[hora_inicio]', '$_POST[hora_fin]', $_POST[capEstudiantes], '$_POST[detalle]', $_POST[id_doc])";
-            $resultado = $conexion->prepare($respuesta);
-            $resultado->execute();
-            $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
-            print json_encode($data, JSON_UNESCAPED_UNICODE);
-            break;
+        $grupos = $_POST['grupo'];
+        
+        $json = json_encode($grupos, true);
+        $respuesta = sprintf("INSERT INTO reserva_pendientes(id_materia, grupo, fecha_reserva, hora_inicio, hora_fin, capEstudiantes, detalle, id_docente) VALUES ( $_POST[id_materia], '%s', '$_POST[fecha_reserva]', '$_POST[hora_inicio]', '$_POST[hora_fin]', $_POST[capEstudiantes], '$_POST[detalle]', $_POST[id_doc])", $json);
+        $resultado = $conexion->prepare($respuesta);
+        $resultado->execute();
+        $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
+        print json_encode($data, JSON_UNESCAPED_UNICODE);
+        break;
+        
+    case 'agregarCompartido':
+        $grupos = explode(",", $_POST['grupo']);
+            
+        $json = json_encode($grupos, true);
+        $respuesta = sprintf("INSERT INTO reserva_pendientes(id_materia, grupo, fecha_reserva, hora_inicio, hora_fin, capEstudiantes, detalle, id_docente) VALUES ( $_POST[id_materia], '%s', '$_POST[fecha_reserva]', '$_POST[hora_inicio]', '$_POST[hora_fin]', $_POST[capEstudiantes], '$_POST[detalle]', $_POST[id_doc])", $json);
+        $resultado = $conexion->prepare($respuesta);
+        $resultado->execute();
+        $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
+        print json_encode($data, JSON_UNESCAPED_UNICODE);
+        break;
         
     case 'borrar':
         $respuesta = "DELETE FROM reserva_pendientes WHERE id_pendientes=$_GET[id_pendientes]";
@@ -82,4 +108,13 @@ switch ($_GET['accion']) {
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
         print json_encode($data, JSON_UNESCAPED_UNICODE);
         break;
+
+    case 'borrarReservaPendientes':
+        $consulta = "DELETE FROM reserva_pendientes WHERE id_docente='$id_docente'";		
+        $resultado = $conexion->prepare($consulta);
+        $resultado->execute();
+        $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
+        print json_encode($data, JSON_UNESCAPED_UNICODE);
+        break;
+
 }

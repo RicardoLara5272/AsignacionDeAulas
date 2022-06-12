@@ -47,8 +47,8 @@
             <ul class="menu">
                 <li class="reserva">Solicitudes
                     <ul class="ul-second">
-                        <li><a class="revisadas" href="/vista/homeAdministrativo.php">Pendientes</a></li>
-                        <li><a class="pendientes" href="/vista/vistaDetRevi.php">Revisadas</a></li>
+                        <li><a class="pendientes" href="/vista/homeAdministrativo.php">Pendientes</a></li>
+                        <li><a class="revisadas" href="/vista/vistaDetRevi.php">Revisadas</a></li>
                     </ul>
                 </li>
             </ul>

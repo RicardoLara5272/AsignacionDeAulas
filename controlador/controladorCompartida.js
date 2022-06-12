@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
       $("#FormularioArticulo").modal('hide');
       let registro = recuperarDatosFormulario();
       validarCampos(registro);
+      
     });
 
     $('#tablaarticulos tbody').on('click', 'button.botonborrar', function() {
@@ -65,16 +66,16 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
 
-    $('#btnReserva').click(function() { 
+    $('#btnReserva').click(function() {
       mostrarMensaje(id_doc);
-    });
-
-    $('.cancelModal').click(function() {
-      $('#grupo').empty().append('<option value="">Primero seleccione materia...</option>');
     });
 
     $('#btnCancelReserva').click(function() {
       mostrarMensajeCancelCompartida(id_doc);
+    });
+
+    $('.cancelModal').click(function() {
+      $('#hora_fin').empty().append('<option value="">Primero seleccione hora inicio...</option>');
     });
 
     function mostrarMensaje(id_doc){
@@ -97,9 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 cancelButtonText: 'NO',
               }).then((result) => {
                 if (result.isConfirmed) {
-
                   agregarSolicitud(id_doc);
-
                   Swal.fire({
                     title: 'Enviado',
                     text: 'La solicitud ha sido enviada con exito!',
@@ -124,6 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
     }
+
     function mostrarMensajeCancelCompartida(id_doc){
       Swal.fire({
         title: 'Cancelar solicitud #' + nro_solicitud,
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
           borrarReservaPendientes(id_doc);
           Swal.fire({
             title: 'Cancelado',
-            text: 'La solicitud se cancelo con exito!',
+            text: '¡La solicitud se cancelo con exito!',
             icon: 'success',
             confirmButtonText: 'OK',
             }).then((result) => {
@@ -191,8 +191,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // funciones que interactuan con el formulario de entrada de datos
     function limpiarFormulario() {
-      $('#id_materia').val('');
-      $('#grupo').val('');
       $('#fecha_reserva').val('');
       $('#hora_inicio').val('');
       $('#hora_fin').val('');
@@ -205,7 +203,7 @@ document.addEventListener("DOMContentLoaded", function() {
       let hora_f = $('#hora_fin').val();
       let ini_valor = "";
       let fin_valor = "";
-
+      
       if (hora_ini == 1) {
         ini_valor = "08:15";
         if(hora_f == 0){
@@ -277,63 +275,47 @@ document.addEventListener("DOMContentLoaded", function() {
         detalle: $('#detalle').val(),
         id_doc: id_doc
       };
-
-      if(!Array.isArray(registro.grupo)){
-        let arrayGrupo = [];
-        arrayGrupo.push(registro.grupo);
-        registro.grupo = arrayGrupo;
-      }
       return registro;
     }
-    
+      
     function validarCampos(registro){
-      var id_materia = $("#id_materia").val();
-      var grupo = $("#grupo").val();
       var hora_inicio = $("#hora_inicio").val();
       var hora_fin = $("#hora_fin").val();
       fecha_reserva = $.trim(registro.fecha_reserva);
       capEstudiantes = $.trim(registro.capEstudiantes);
       detalle = $.trim(registro.detalle);
-      
-      if (id_materia != "") {
-        if (grupo != '') {
-          if (fecha_reserva != '') {
-            if (hora_inicio != '') {
-              if (hora_fin != '') {
-                if(capEstudiantes!='' && capEstudiantes >=1 && capEstudiantes<=1000 ){
-                  if (detalle != '' && detalle.length <= 200 ) {
-                    agregarRegistro(registro);
-                  } else {
-                    alert("Error!!\nDebe introducir un detalle maximo de 200 caracteres");
-                    
-                  }
-                }else{
-                  alert("Error!!\nDebe introducir una capacidad de estudiantes entre 1 y 1000");
-                }
-              }else{
-                alert("Error!!\nDebe introducir una hora de inicio de reserva de aula");
+
+      if (fecha_reserva != '') {
+        if (hora_inicio != '') {
+          if (hora_fin != '') {
+            if(capEstudiantes!='' && capEstudiantes >=1 && capEstudiantes<=1000 ){
+              if (detalle != '' && detalle.length <= 200 ) {
+                agregarCompartido(registro);
+              } else {
+                alert("Error!!\nDebe introducir un detalle maximo de 200 caracteres");    
               }
             }else{
-              alert("Error!!\nDebe introducir una hora de inicio de reserva de aula");
+              alert("Error!!\nDebe introducir una capacidad de estudiantes entre 1 y 1000");
             }
           }else{
-            alert("Error!!\nDebe introducir una fecha de reserva de aula");
+            alert("Error!!\nDebe introducir una hora de inicio de reserva de aula");
           }
         }else{
-          alert("Error!!\nDebe seleccionar un grupo!");
+          alert("Error!!\nDebe introducir una hora de inicio de reserva de aula");
         }
       }else{
-        alert("Error!!\nDebe seleccionar una materia!");
+        alert("Error!!\nDebe introducir una fecha de reserva de aula");
       }
+        
       $('#ConfirmarAgregar').show();
       $("#FormularioArticulo").modal('show');
       registro = recuperarDatosFormulario();
     }
 
-    function agregarRegistro(registro) {
+    function agregarCompartido(registro) {
       $.ajax({
         type: 'POST',
-        url: '../vista/datosReserva.php?accion=agregar',
+        url: '../vista/datosReserva.php?accion=agregarCompartido',
         data: registro,
         success: function(msg) {
           tabla1.ajax.reload();
