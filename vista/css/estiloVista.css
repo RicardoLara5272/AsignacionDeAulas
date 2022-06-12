@@ -46,7 +46,7 @@ nav a{
     list-style: none;
     cursor: pointer;
     padding: 9px;
-    transition: all 0.1s ease 0s;
+    transition: all 0.3s ease 0s;
 }
 .menu li:hover{
     background-color: #00B849;
@@ -85,6 +85,6 @@ nav a{
     padding: 10px;
     border-bottom: solid 1px #fff;
 }
-.menu .compartida:hover > .ul-third{
+.menu .revisadas:hover > .ul-third{
     display: block;
 }

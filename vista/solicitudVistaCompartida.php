@@ -15,37 +15,21 @@
     <script src="./bootstrap-4.3.1/js/bootstrap.min.js"></script>
     <script src="./DataTables/datatables.min.js"></script>
     <script src="./sweet/dist/sweetalert2.all.min.js"></script>
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="sweetalert2.min.css">
 </head>
 <?php
 include_once("layouts/head.php");
 include_once("../conexiones/conexion.php");
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = 1;
-$id_materias=1;
+
 $objeto = new Conexion();
 $conexion = $objeto->Conectar();
-
-/*echo "<pre>";
-print_r($data);
-print_r($fila);
-echo "</pre>";*/
-
-$sql = "SELECT nombre_docente FROM docentes WHERE id_docente = $id_docente";
-$resultado = $conexion->prepare($sql);
-$resultado->execute();
-$nombre_docente = $resultado->fetchAll(PDO::FETCH_ASSOC);
-
-$sql = "SELECT DISTINCT d.id_materia, m.nombre_materia FROM docente_materia d INNER JOIN materias m ON d.id_materia=m.id_materia WHERE d.id_docente=$id_docente";
-$resultado = $conexion->prepare($sql);
-$resultado->execute();
-$tablamaterias = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
 $consulta = "SELECT count(solicitudes.id_solicitudes) from solicitudes WHERE id_docente=$id_docente";
 $resultado = $conexion->prepare($consulta);
@@ -53,10 +37,47 @@ $resultado->execute();
 $nrosolicitudes = $resultado->fetchAll(PDO::FETCH_ASSOC);
 $nro = $nrosolicitudes['0']['count(solicitudes.id_solicitudes)'] + 1;
 
-$consulta = "SELECT fecha_reserva, grupo, periodos, capEstudiantes, detalle FROM reserva r WHERE r.id_solicitudes = $nro";
-$resultado = $conexion->prepare($consulta);
+$sql = "SELECT nombre_docente FROM docentes WHERE id_docente = $id_docente";
+$resultado = $conexion->prepare($sql);
 $resultado->execute();
-$data = $resultado->fetchAll(PDO::FETCH_ASSOC);
+$nombre_docente = $resultado->fetchAll(PDO::FETCH_ASSOC);
+
+$peticion=$_SERVER['REQUEST_METHOD'];
+switch($peticion){
+    case 'GET':
+        break;
+    case 'POST':
+        if(isset($_POST["registroDoc"])){
+            if(isset($_POST['nombre_materia']) && isset($_POST["grupo"])){
+                $id_materia = $_POST['nombre_materia'];
+                $docentes_compartidos=$_POST["grupo"]; 
+                $aux=implode(',', $docentes_compartidos); //``
+                $aux = str_replace(",","','",$aux);
+                $queryDocente = "SELECT * from `docente_materia` WHERE `id_docente`=$id_docente AND `id_materia`=$id_materia AND `id_grupo` IN('$aux')";
+                $resultadoqueryDocente = $conexion->prepare($queryDocente);
+                $resultadoqueryDocente->execute();
+                $arrayData = $resultadoqueryDocente->fetchAll(PDO::FETCH_ASSOC);
+                if(count($arrayData) == 0){
+                    header('Location:'.'./solicitudCompartida.php?Message=' . urlencode(0));
+                }
+            }else{
+                header('Location:'.'./solicitudCompartida.php');
+            }
+        }
+        break;
+}
+
+$sql = "SELECT nombre_materia FROM materias WHERE id_materia = $id_materia";
+$resultado = $conexion->prepare($sql);
+$resultado->execute();
+$nombre_materia = $resultado->fetchAll(PDO::FETCH_ASSOC);
+
+$auxDocCompartido=implode(',', $docentes_compartidos); //``
+$auxDocCompartido = str_replace(",","','",$auxDocCompartido);
+$queryDocenteCompartido = "SELECT DISTINCT m.nombre_docente, d.id_grupo FROM docente_materia d INNER JOIN docentes m ON d.id_docente=m.id_docente WHERE `id_grupo` IN('$auxDocCompartido') AND d.id_materia=$id_materia";
+$resultadoDocenteCompartido = $conexion->prepare($queryDocenteCompartido);
+$resultadoDocenteCompartido->execute();
+$arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 
@@ -64,10 +85,10 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
     <section>
         <div class="row text-center">
             <div class="col-lg-12">
-                <h2>Solicitud de Reserva de Aula: # <?php echo $nro ?></h2>
+                <h3>Solicitud Compartida Reserva de Aula: # <?php echo $nro ?></h3>
             </div>
             <div class="col-lg-12">
-                <h2><?php echo $_POST["fecha"] ?></h2>
+                <h4><?php echo $_POST["fecha"] ?></h4>
             </div>
         </div>
     </section>
@@ -76,7 +97,11 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
             <div class="col-md-4">
                 <label for="nombre_docente">Solicitado por Docente:</label>
                 <h5><?php echo $nombre_docente['0']['nombre_docente'] ?></h5>
-                <button id="BotonAgregar" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#FormularioArticulo" data-whatever="@mdo">NUEVA RESERVA</button>
+                <label for="nombre_grupos">Solicitud compartida con los docentes:</label>
+                <h5><?php for ($i=0;$i<count($arrayDataCompartido);$i++){     
+                                echo ($arrayDataCompartido[$i]['nombre_docente']); echo (' - ' . $arrayDataCompartido[$i]['id_grupo']); ?><br>   
+                    <?php } ?></h5>
+                <button id="BotonAgregar" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#FormularioArticulo" data-whatever="@mdo">NUEVA RESERVA COMPARTIDA</button>
             </div>
         </div>
     </div>
@@ -118,39 +143,15 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title col-11 text-center" id="FormularioArticulo">NUEVA RESERVA</h5>
+                        <h5 class="modal-title col-11 text-center" id="FormularioArticulo">NUEVA RESERVA MULTIPLE</h5>
                         <button type="button" class="close cancelModal" data-dismiss="modal">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <input type="hidden" id="id_reserva">
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <!--<label>Materia:</label>
-                                    <input type="number" id="id_materia" class="form-control" placeholder="">-->
-                                <label for="id_materia">Materia:</label>
-                                <select class="form-control" name="nombre_materia" id="id_materia">
-                                    <option value="">Seleccionar materia...</option>
-                                    <?php
-                                    foreach ($tablamaterias as $key => $materia) {
-                                    ?>
-                                        <option value="<?php echo $materia['id_materia'] ?>"><?php echo $materia['nombre_materia'] ?></option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
-                                <input type="hidden" value="<?php echo $id_docente ?>" id="id_docente">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                <label for="grupo" class="col-form-label">Grupo:</label>
-                                <select class="form-control" name="grupo[]" id="grupo">
-                                    <option value="">Primero seleccione materia...</option>
-                                </select>
-                            </div>
-                        </div>
+                        <input type="hidden" value="<?php echo $id_materia ?>" id="id_materia">
+                        <input type="hidden" value="<?php echo implode(",", $docentes_compartidos); ?>" name="grupo[]" id="grupo">
                         <div class="form-row">
                             <div class="form-group col-md-12">
                                 <label>Fecha:</label>
@@ -202,14 +203,17 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
             </div>
+            
             <script>
                 var nro_solicitud = '<?php echo $nro ?>';
                 var id_doc = '<?php echo $id_docente ?>';
             </script>
-            <script src="../controlador/controladorReserva.js"></script>
+            <script src="../controlador/controladorCompartida.js"></script>
             <script src="./scrip.js"></script>
         </div>
     </div>
 </body>
+
+
 
 </html>

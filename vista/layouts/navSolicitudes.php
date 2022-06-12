@@ -19,7 +19,7 @@
                 <li class="reserva">Reservas
                     <ul class="ul-second">
                         <li><a class="individual" href="/vista/solicitud.php">Individual</a></li>
-                        <li><a class="compartida" href="/vista/solicitudesCompartidas.php">Compartida</a>
+                        <li><a class="compartida" href="/vista/solicitudCompartida.php">Compartida</a>
                             <!--<ul class="ul-third">
                                 <li>semestre-1</li>
                                 <li>semestre-2</li>
