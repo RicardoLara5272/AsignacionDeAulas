@@ -1,12 +1,21 @@
-
+<?php
+session_start();
+if (isset($_SESSION["usuario"])) {
+    if ($_SESSION["is_admin"] == 1) {
+        header("Location: /vista/homeAdministrativo.php");
+    } else {
+        header("Location: /vista/homeDocente.php");
+    }
+}
+?>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!--link href="./vista/css/stylesFooter.css" rel="stylesheet">
-<link rel="stylesheet" href="./vista/css/estiloSolicitud.css"-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<link rel="stylesheet" href="./vista/css/estiloSolicitud.css">
+<link rel="stylesheet" href="./vista/css/estiloVista.css"-->
 <!------ Include the above in your HEAD tag ---------->
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&display=swap');
@@ -38,7 +47,6 @@
     }
     .black{
     color:black;
-	position: relative;
     }
 .navfooter{
     display: flex;
@@ -115,17 +123,6 @@
     .text-white {
         color: #fff;
     }
-	.icon-eye {
-        position: absolute;
-		right: 10px;
-		top: 62%;
-		transform: translateY(-62%);
-		cursor: pointer;
-		transition: .4s ease all;
-    }
-	.icon-eye:hover {
-        opacity: 0.8;
-    }
 @media (min-width: 400px) {
     #login .container #login-row #login-column #login-box {
         width: 100%;
@@ -151,12 +148,11 @@
                             <h3 class="text-center black">Iniciar Sesion</h3>
                             <div class="form-group">
                                 <label for="username" class="black">Usuario:</label><br>
-                                <input type="text" name="username" id="username" class="form-control" required placeholder="Ej. JuanPerez">
+                                <input type="text" name="username" id="username" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="password" class="black">Contraseña:</label><br>
-                                <span class="icon-eye"><i class="fa-solid fa-eye-slash"></i></span>
-								<input type="password" name="password" id="password" class="form-control" required placeholder="Ingrese su contraseña...">
+                                <input type="password" name="password" id="password" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <input type="submit" name="submit" class="btn btn-black text-white btn-md" value="Ingresar">
@@ -187,6 +183,5 @@
         </footer>
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-		<script src="./vista/js/code.js"></script>
     </div>
 </body>
