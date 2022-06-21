@@ -110,7 +110,7 @@ if (isset($_GET['Message'])) {
     </div>
 </main>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-<script src="./scrip.js"></script>
+<script src="http://asignaciondeaulas/vista/scrip.js"></script>
 
 <?php
 //include header template

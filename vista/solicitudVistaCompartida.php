@@ -185,20 +185,23 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" id="ConfirmarAgregar" class="btn btn-info cancelModal">AGREGAR</button>
+                    <button type="button" id="ConfirmarAgregar" class="btn btn-info">AGREGAR</button>
                     <button type="button" class="btn btn-danger cancelModal" data-dismiss="modal">CANCELAR</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
+<script>
         var nro_solicitud = '<?php echo $nro ?>';
         var id_doc = '<?php echo $id_docente ?>';
     </script>
-    <script src="../controlador/controladorCompartida.js"></script>
-    <script src="./scrip.js"></script>
-</div>
+    <script src="http://asignaciondeaulas/vista/DataTables/datatables.min.js"></script>
+    <script src="http://asignaciondeaulas/vista/DataTables/datatables.js"></script>
+    <script src="http://asignaciondeaulas/controlador/controladorCompartida.js"></script>
+    <script src="http://asignaciondeaulas/vista/scrip.js"></script>
+
 <?php
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');
