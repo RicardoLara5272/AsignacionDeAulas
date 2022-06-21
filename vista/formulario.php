@@ -136,7 +136,7 @@ function enviar(destino){
         <button id="btn2" type="button" onClick="enviar('recibir.php')">Rechazar</button>
     </div>
   </form>
-  <script src="Nueva carpeta/jquery/jquery-3.3.1.min.js"></s>
+  <script src="Nueva carpeta/jquery/jquery-3.3.1.min.js"></script>
   <script src="Nueva carpeta/popper/popper.min.js"></script>
   <script src="Nueva carpeta/plugins/sweetAlert2/sweetalert2.all.min.js"></script>
 </body>

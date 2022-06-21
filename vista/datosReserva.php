@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
 
-require("../conexiones/conexion.php");
+require("http://asignaciondeaulas/conexiones/conexion.php");
 
 $objeto = new Conexion();
 $conexion = $objeto->Conectar();

@@ -1,61 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+include('../template/cabecera.php');
+?>
+<header>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignaciones</title>
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300&display=swap" rel="stylesheet">
-
-</head>
-
-<body>
-    <header>
-        <div class="pull-left" style="width: 50%;">
-            <h1>Sistema de asignación de aulas</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Sistema de asignación de aulas</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/vista/vistaDetPend.php">Pendientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/vista/vistaDetRevi.php">Revisadas</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <p class="dropdown-item"><b><?php echo $_SESSION['nombre_docente'] ?></b></a>
+                            <div class="dropdown-divider"></div>
+                            <?php if ($_SESSION["is_admin"] == 1) { ?>
+                                <p class="dropdown-item"><i></small>Administrativo de la Facultad de Ciencias y Tecnologia</small></i></p>
+                            <?php } else { ?>
+                                <p class="dropdown-item"><i><small>Docente de la Facultad de Ciencias y Tecnologia</small></i></p>
+                            <?php } ?>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="../vista/homeDocente.php">Cambiar a Docente</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="../vista/destroy.php">Cerrar Sesion</a>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
-        <div class="pull-right" style= "width: 50%;">
-            <ul class="nav nav-tabs nav-pills" style="float:right;">
-                <li class="nav-item dropdown active">
-                    <div class="btn-group dropleft">
-                        <a class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><ion-icon name="person-circle-outline" style="color: #fff; font-size: 30px; float: right;"></ion-icon></a>
-                    <div class="dropdown-menu">
-                        <p class="dropdown-item"><b><?php echo $_SESSION['nombre_docente'] ?></b></a>
-                        <div class="dropdown-divider"></div>
-                        <?php if ($_SESSION["is_admin"] == 1) { ?>
-                            <p class="dropdown-item"><i></small>Administrativo de la Facultad de Ciencias y Tecnologia</small></i></p>
-                        <?php } 
-                        else {?>
-                            <p class="dropdown-item"><i><small>Docente de la Facultad de Ciencias y Tecnologia</small></i></p>
-                        <?php }?>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../vista/homeDocente.php">Cambiar a Docente</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../vista/destroy.php">Cerrar Sesion</a>
-                    </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </header>
-    <nav>
-        <section id="menu-nav">
-            <ul class="menu">
-                <li class="reserva">Solicitudes
-                    <ul class="ul-second">
-                        <li><a class="pendientes" href="/vista/homeAdministrativo.php">Pendientes</a></li>
-                        <li><a class="revisadas" href="/vista/vistaDetRevi.php">Revisadas</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </section>
     </nav>
-    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-</body>
-
-</html>
+</header>

@@ -1,59 +1,67 @@
-<?php //include("../template/cabecera.php"); ?>
+<?php
+// include_once("layouts/head.php");
+// include_once("../conexiones/conexion.php");
+require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
+//if not logged in redirect to login page
+if (!$user->is_logged_in()) {
+    header('Location: login.php');
+    exit();
+}
 
-<?php 
-include("./layouts/navAdministrativo.php");
-include("../config/db.php"); 
-?>
+//define page title
+$title = 'Docentes Page';
 
-<?php 
-$sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='Pendiente' ");
+//include header template
+require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
+$_POST["fecha"] = date("Y-m-d");
+$conexion = $db;
+$sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='Pendiente' ");
 $sentenciaSQL->execute();
-$listaSolicitudes=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+$listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
-<section>
-    <div class="row text-center">
-        <div class="col-lg-12">
-            <br>
-            <h2>Lista de solicitudes pendientes</h2>
-            <br><br>
-        </div>
-    </div>
-</section> 
-<!-- comienzo de tabla-->
-<div class="row justify-content-center">
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Fecha Solicitud</th>
-                    <th>Estado</th>
-                    <th>Urgencia</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody action="vistaDetRese.php" method="post">
-            <?php foreach($listaSolicitudes as $solicitud) {?>
-                <tr>
-                    <td> <?php echo $solicitud['id_solicitudes']; ?> </td>
-                    <td> 
-                        <?php  
-                        $id_docente = $solicitud['id_docente'];
-                        $sentenciaSQL= $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_docente ");
-                        $sentenciaSQL->execute();
-                        $docente=$sentenciaSQL->fetchColumn(2);
-                        echo $docente;
-                        ?> 
-                    </td>
-                    <td> <?php echo $solicitud['fecha_solicitud']; ?> </td>
-                    <td> <?php echo $solicitud['estado']; ?> </td>
-                    
-                    <td> 
-                        <?php
-                        //como sacar solo la primera fecha y hora de la tabla reserva solo con id_solicitudes
-                        /*$id_solicitudes = $solicitud['id_solicitudes'];
+
+<main class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <br>
+                <div class="card-header text-center">
+                    <h2>Lista de solicitudes Pendientes</h2>
+                </div>
+                <!-- comienzo de tabla-->
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Fecha Solicitud</th>
+                                <th>Estado</th>
+                                <th>Urgencia</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody action="vistaDetRese.php" method="post">
+                            <?php foreach ($listaSolicitudes as $solicitud) { ?>
+                                <tr>
+                                    <td> <?php echo $solicitud['id_solicitudes']; ?> </td>
+                                    <td>
+                                        <?php
+                                        $id_docente = $solicitud['id_docente'];
+                                        $sentenciaSQL = $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_docente ");
+                                        $sentenciaSQL->execute();
+                                        $docente = $sentenciaSQL->fetchColumn(2);
+                                        echo $docente;
+                                        ?>
+                                    </td>
+                                    <td> <?php echo $solicitud['fecha_solicitud']; ?> </td>
+                                    <td> <?php echo $solicitud['estado']; ?> </td>
+
+                                    <td>
+                                        <?php
+                                        //como sacar solo la primera fecha y hora de la tabla reserva solo con id_solicitudes
+                                        /*$id_solicitudes = $solicitud['id_solicitudes'];
                         $sentenciaSQL= $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_solicitudes ");
                         $sentenciaSQL->execute();
                         $fecha_reserva=$sentenciaSQL->fetchColumn(2);
@@ -75,19 +83,29 @@ $listaSolicitudes=$sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                 }
                             }
                         }*/
-                        echo "dato no exitente";
-                        ?>
-                    </td>
+                                        echo "dato no exitente";
+                                        ?>
+                                    </td>
 
-                    <td>
-                        <form action="vistaDetRese.php" method="post" name="formulario">
-                            <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $solicitud['id_solicitudes']; ?> ">
-                            <input type="submit" class="btn btn-success botton" value="Detalles" >
-                        </form>    
-                    </td>
+                                    <td>
+                                        <form action="vistaDetRese.php" method="post" name="formulario">
+                                            <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $solicitud['id_solicitudes']; ?> ">
+                                            <input type="submit" class="btn btn-success botton" value="Detalles">
+                                        </form>
+                                    </td>
 
-                </tr>
-            <?php }?>
-            </tbody>
-        </table> <!-- final de tabla-->
-<?php include("../template/pie.php"); ?>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table> <!-- final de tabla-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<?php
+//include header template
+require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');
+?>

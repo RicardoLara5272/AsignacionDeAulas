@@ -1,5 +1,11 @@
 <?php
-//  $motivo=$_POST[]
+require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
+//if not logged in redirect to login page
+if (!$user->is_logged_in()) {
+    header('Location: login.php');
+    exit();
+}
+
 //capturamos datos de la tabla solicitud
 $id= $_POST['id_solicitud_Pend'];
 if(strlen($id)==3){
@@ -104,7 +110,7 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
 
 ?>
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -114,7 +120,7 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
   <link rel="stylesheet" href="librerias/plugins/sweetAlert2/sweetalert2.min.css" />
   <link rel="stylesheet" href="librerias/plugins/animate.css/animate.css" />
   <title>Formulario de Rechazo</title>
-</head>
+</head> -->
 
 <body>
   <script>
@@ -209,62 +215,70 @@ while ($mostrarP = mysqli_fetch_array($resultP)) {
       }
     }
   </script>
-  <?php
-  include('layouts/header.php');
-  include('layouts/navegacion.php');
-  ?>
 
-  <section>
-    <div class="row text-center">
-      <div class="col-lg-12">
-        <h2 id="titulo">Rechazar Solicitud</h2>
-      </div>
-    </div>
-  </section>
-  <br />
-  <div id="for" class="row text-center">
-    <form id="formluario" name="formulario" method="post">
-      <!-- <h3>ID: </h3>-->
-      <b><label for="ID">ID Reserva:</label></b>
-      <label><?php echo $id_reserva ?></label><br>
-      <b><label for="docente">Docente:</label></b><br/>
-      <label><?php echo $nombre_docente ?></label><br>
-      <b><label for="materia">Materia:</label></b><br/>
-      <label><?php echo $nom_materia ?></label><br>
-      <b><label for="fecha_solicitud">Fecha de Reserva:</label></b><br/>
-      <label for=""><?php echo $fecha_reserva ?></label><br>
-      <b><label for="fecha_reserva">Hora de Reserva:</label></b><br/>
-      <label for=""><?php echo $hora_inicio . " - ". $hora_fin ?></label><br>
-      <b><label for="detalle">Detalle:</label></b><br/>
-      <label for=""><?php echo $detalle ?></label><br>
-      <div class="campo">
-        
-        <label for="experiencia"><b>Motivo para el rechazo de la Solicitud</b></label>
-        <textarea rows="6" style="width: 26em" id="experiencia" name="experiencia" onkeypress="return sololetras(event)"></textarea>
-        <?php
-        if($boolean=="pendiente"){
-          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
-        }
-        else if($boolean=="aceptado"){
-          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
-        }
-        else if($boolean=="rechazado"){
-          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
-        }
-        ?>
-        <div id="botones">
-          <?php if($boolean=="pendiente"){
-                 echo   "<button id='btn2' type='button' onClick="."enviar('recibir_Rechazar.php')>Rechazar</button>";
-          }?>
-        <button id="btn1" type="button" onClick="enviar2('vistaDetPend.php')">Atras</button>
-      </div>
-      </div>
-    </form>
-    </div>
+<?php
+//define page title
+$title = 'Docentes Page';
 
+//include header template
+require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
+?>  
+<main class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="card-header text-center">
+                <h2>Rechazar Solicitud</h2>
+              </div>
+              <div id="for" class="row text-center">
+                <form id="formluario" name="formulario" method="post">
+                  <!-- <h3>ID: </h3>-->
+                  <b><label for="ID">ID Reserva:</label></b>
+                  <label><?php echo $id_reserva ?></label><br>
+                  <b><label for="docente">Docente:</label></b><br/>
+                  <label><?php echo $nombre_docente ?></label><br>
+                  <b><label for="materia">Materia:</label></b><br/>
+                  <label><?php echo $nom_materia ?></label><br>
+                  <b><label for="fecha_solicitud">Fecha de Reserva:</label></b><br/>
+                  <label for=""><?php echo $fecha_reserva ?></label><br>
+                  <b><label for="fecha_reserva">Hora de Reserva:</label></b><br/>
+                  <label for=""><?php echo $hora_inicio . " - ". $hora_fin ?></label><br>
+                  <b><label for="detalle">Detalle:</label></b><br/>
+                  <label for=""><?php echo $detalle ?></label><br>         
+                  <label for="experiencia"><b>Motivo para el rechazo de la Solicitud</b></label><br/>
+                  <textarea rows="4" style="width: 18em" id="experiencia" name="experiencia" onkeypress="return sololetras(event)"></textarea><br>
+                    <?php
+                      if($boolean=="pendiente"){
+                        echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
+                      }
+                      else if($boolean=="aceptado"){
+                        echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
+                      }
+                      else if($boolean=="rechazado"){
+                        echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
+                      }
+                    ?>
+                  
+                  <div id="botones"><br/>
+                    <?php if($boolean=="pendiente"){
+                      echo   "<button id='btn2' type='button' class='btn btn-danger' onClick="."enviar('recibir_Rechazar.php')>RECHAZAR</button>";
+                    }?>
+                    <button id="btn1" type="button" class="btn btn-primary" onClick="enviar2('vistaDetPend.php')">ATRAS</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+    </div>
     <script src="librerias/jquery/jquery-3.3.1.min.js"></script>
     <script src="librerias/popper/popper.min.js"></script>
     <script src="librerias/plugins/sweetAlert2/sweetalert2.all.min.js"></script>
-</body>
+</main>
+<?php
+//include header template
+require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');
+?>
 
-</html>
+
+
+
