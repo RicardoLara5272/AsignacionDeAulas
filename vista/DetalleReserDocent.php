@@ -108,6 +108,24 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                         ?>
                                     </td>
                                     <td> <?php echo $reserva['detalle']; ?> </td>
+                                    <th>
+                                        <?php
+                                            $id_reserva = $reserva['id_reserva'];
+                                            $sentenciaSQL= $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
+                                            $sentenciaSQL->execute();
+                                            $aula_reserva= $sentenciaSQL->fetchColumn(5);
+
+                                            if(empty($aula_reserva)){
+                                                echo '-';
+                                            }
+                                            else{
+                                                $sentenciaSQL= $conexion->prepare(" SELECT * FROM aula WHERE id_aula = $aula_reserva ");
+                                                $sentenciaSQL->execute();
+                                                $codigo_aula= $sentenciaSQL->fetchColumn(1);
+                                                echo $codigo_aula;
+                                            }
+                                        ?>
+                    </th>
                                 </tr>
                             <?php } ?>
                         </tbody>

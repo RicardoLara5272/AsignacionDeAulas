@@ -36,6 +36,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         <thead>
                             <tr>
                             <th>ID</th>
+                            <th>Materia</th>
                             <th>Fecha Solicitud</th>
                             <th>Fecha Revisada</th>
                             <th>Estado</th>
@@ -46,6 +47,19 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                             <?php foreach ($listaSolicitudes as $solicitud) { ?>
                                 <tr>
                                 <td> <?php echo $solicitud['id_solicitudes']; ?> </td>
+                                <td> 
+                                <?php 
+                                $id_solicitud = $solicitud['id_solicitudes'];
+                                $sentenciaSQL= $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_solicitud ");
+                                $sentenciaSQL->execute();
+                                $id_materia= $sentenciaSQL->fetchColumn(2);
+
+                                $sentenciaSQL= $conexion->prepare(" SELECT * FROM materias WHERE id_materia = $id_materia ");
+                                $sentenciaSQL->execute();
+                                $nombre_materia= $sentenciaSQL->fetchColumn(2);
+                                echo $nombre_materia; 
+                                ?> 
+                            </td>
                                 <td> <?php echo $solicitud['fecha_solicitud']; ?></td>
                                 <td>
                                 <?php

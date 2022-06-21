@@ -18,7 +18,7 @@ $id_materias = 1;
 
 //$objeto = new Conexion();
 $conexion = $db; // $objeto->Conectar();
-$sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='revisado' ");
+$sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='revisado'");
 $sentenciaSQL->execute();
 $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -51,7 +51,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                     <td> <?php echo $solicitud['id_solicitudes']; ?> </td>
                                     <td>
                                         <?php
-                                        $id_docente = $solicitud['id_docente'];
+                                        $id_docente = $_SESSION['id_docente'];
                                         $sentenciaSQL = $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_docente");
                                         $sentenciaSQL->execute();
                                         $docente = $sentenciaSQL->fetchColumn(2);

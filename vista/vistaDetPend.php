@@ -60,30 +60,48 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 
                                     <td>
                                         <?php
-                                        //como sacar solo la primera fecha y hora de la tabla reserva solo con id_solicitudes
-                                        /*$id_solicitudes = $solicitud['id_solicitudes'];
-                        $sentenciaSQL= $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_solicitudes ");
-                        $sentenciaSQL->execute();
-                        $fecha_reserva=$sentenciaSQL->fetchColumn(2);
-                        $hora_soli = $sentenciaSQL->fetchColumn(5);
-                        $fecha_soli_com = $fecha_reserva .' '. $hora_soli;
-                        $fecha_actual = time();
-                        $fecha_soli_conv = strtotime($fecha_soli_com) + 21600;
-                        $comparacion = $fecha_soli_conv - $fecha_actual; 
-                        if ($comparacion >= 172801) {
-                            echo "NO";
-                        } else {
-                            if ($comparacion <= 172800 && $comparacion > 86400) {
-                                echo "menos de 2 dias";
-                            } else {
-                                if ($comparacion <= 86400 && $comparacion > 43200) {
-                                    echo "menos de 1 dia";
-                                } else {
-                                    echo"menos de 12 hrs";
-                                }
-                            }
-                        }*/
-                                        echo "dato no exitente";
+                                        $id_solicitudes = $solicitud['id_solicitudes'];
+                                        $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_solicitudes ");
+                                        $sentenciaSQL->execute();
+                                        $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+                                        //ciclo para sacar primer valor
+                                        foreach ($listaReservas as $reserva) {
+                                            $pri_fecha = $reserva['fecha_reserva'];
+                                            $pri_hora = $reserva['hora_inicio'];
+                                            $pri_fecha_comp = $pri_fecha . ' ' . $pri_hora;
+                                            $comp_date = strtotime($pri_fecha_comp) + 21600;
+                                            break;
+                                        }
+                                        //ciclo para buscar el menor
+
+                                        foreach ($listaReservas as $reserva) {
+                                            $fecha_reser = $reserva['fecha_reserva'];
+                                            $hora_reser = $reserva['hora_inicio'];
+                                            $date_comp_reser = $fecha_reser . ' ' . $hora_reser;
+                                            $conv_date = strtotime($date_comp_reser) + 21600;
+                                            if ($conv_date < $comp_date) {
+                                                $comp_date = $conv_date;
+                                            }
+                                        }
+                                        $fecha_actual = time();
+                                        $comparacion = $comp_date - $fecha_actual;
+                                        if ($comparacion >= 172801) {
+                                            echo "NO";
+                                        } else {
+                                            if ($comparacion <= 172800 && $comparacion > 86400) {
+                                                echo "menos de 2 dias";
+                                            } else {
+                                                if ($comparacion <= 86400 && $comparacion > 43200) {
+                                                    echo "menos de 1 dia";
+                                                } else {
+                                                    if ($comparacion <= 43200 && $comparacion > 0) {
+                                                        echo "menos de 12 hrs";
+                                                    } else {
+                                                        echo "Expedido";
+                                                    }
+                                                }
+                                            }
+                                        }
                                         ?>
                                     </td>
 

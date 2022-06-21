@@ -15,7 +15,13 @@ $title = 'Docentes Page';
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $conexion = $db;
-$id_sol_DetPend = $_POST['id_solicitud_Pend'];
+$id_sol_DetPend='';
+if (isset( $_POST['id_solicitud_Pend'])) {
+    $id_sol_DetPend = $_POST['id_solicitud_Pend'];
+}
+if (isset($_GET['id_solicitud_Pend'])) {
+    $id_sol_DetPend = $_GET['id_solicitud_Pend'];
+}
 
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
@@ -129,6 +135,7 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     <div style="text-align:right">
                         <br><br>
                         <input id="id_solicitud" type="hidden" value="<?php echo $id_sol_DetPend; ?>">
+                        <input id="id_admin" type="hidden" value="<?php echo $_SESSION['id_docente'] ?>">
                         <input id="num_total_rese" type="hidden" value="<?php echo $indice; ?>">
                         <input id="num_rese_ate" type="hidden" value="<?php echo $indiceRev; ?>">
                         <button type="submit" class="btn btn-primary" href="funciono.php" id="boton" onclick="comprobacion()">REVISADO</button>
