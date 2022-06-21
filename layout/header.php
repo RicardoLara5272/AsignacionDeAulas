@@ -16,8 +16,16 @@
   <script src="http://asignaciondeaulas/vista/js/jquery-3.4.1.js"></script>
   <link rel="stylesheet" href="http://asignaciondeaulas/vista/DataTables/datatables.min.css">
   <link rel="stylesheet" href="http://asignaciondeaulas/vista/DataTables/datatables.css">
-<script src="http://asignaciondeaulas/vista/DataTables/datatables.min.js"></script>
-<script src="http://asignaciondeaulas/vista/DataTables/datatables.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  
+
+  <script src="http://asignaciondeaulas/vista/sweet/dist/sweetalert2.all.min.js"></script>
+  <link rel="stylesheet" href="http://asignaciondeaulas/vista/sweet/dist/sweetalert2.min.css">
 </head>
 
 <body>

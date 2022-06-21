@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     $('#ConfirmarAgregar').click(function() {
-      $("#FormularioArticulo").modal('hide');
       let registro = recuperarDatosFormulario();
       validarCampos(registro);
     });
@@ -70,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     $('.cancelModal').click(function() {
+      $("#FormularioArticulo").modal('hide');
       $('#grupo').empty().append('<option value="">Primero seleccione materia...</option>');
     });
 
@@ -303,6 +303,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if(capEstudiantes!='' && capEstudiantes >=1 && capEstudiantes<=1000 ){
                   if (detalle != '' && detalle.length <= 200 ) {
                     agregarRegistro(registro);
+                    window.location.reload(true);
                   } else {
                     alert("Error!!\nDebe introducir un detalle maximo de 200 caracteres");
                     

@@ -1,4 +1,3 @@
-
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 //if not logged in redirect to login page
@@ -171,19 +170,21 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" id="ConfirmarAgregar" class="btn btn-info cancelModal">AGREGAR</button>
+                    <button type="button" id="ConfirmarAgregar" class="btn btn-info">AGREGAR</button>
                     <button type="button" class="btn btn-danger cancelModal" data-dismiss="modal">CANCELAR</button>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-        var nro_solicitud = '<?php echo $nro ?>';
-        var id_doc = '<?php echo $id_docente ?>';
-    </script>
-    <script src="http://asignaciondeaulas/controlador/controladorReserva.js"></script>
-    <script src="http://asignaciondeaulas/vista/scrip.js"></script>
 </div>
+<script>
+    var nro_solicitud = '<?php echo $nro ?>';
+    var id_doc = '<?php echo $id_docente ?>';
+</script>
+<script src="http://asignaciondeaulas/vista/DataTables/datatables.min.js"></script>
+<script src="http://asignaciondeaulas/vista/DataTables/datatables.js"></script>
+<script src="http://asignaciondeaulas/vista/scrip.js"></script>
+<script src="http://asignaciondeaulas/controlador/controladorReserva.js"></script>
 
 <?php
 //include header template
