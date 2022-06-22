@@ -45,7 +45,7 @@ foreach ($resultado_docente as $key => $value) {
   $data_consultar['docente'] = $value;
   break;
 }
-$fecha_solicitud = "";
+
 
 $result3 = $conexion->prepare("SELECT * FROM `solicitudes`");
 $result3->execute();
@@ -59,19 +59,18 @@ foreach ($mostrard as $mostrar3) {
     $fecha_solicitud = $mostrar3['fecha_solicitud'];
   }
 }
-$id_materia = "";
-$fecha_reserva = "";
-$grupo = "";
-$hora_inicio = "";
-$hora_fin = "";
-$cap_est = "";
-$detalle = "";
-
-$codigo_materia = "";
-$nom_materia = "";
-$nivel = "";
-
-$nombre_docente = "";
+$id_materia = $data_consultar['id_materia'];
+$fecha_reserva = $data_consultar['fecha_reserva'];
+$grupo = $data_consultar['grupo'];
+$hora_inicio = $data_consultar['hora_inicio'];
+$hora_fin = $data_consultar['hora_fin'];
+$cap_est = $data_consultar['capEstudiantes'];
+$detalle = $data_consultar['detalle'];
+$codigo_materia = $data_consultar['materia']['codigo_materia'];
+$nom_materia = $data_consultar['materia']['nombre_materia'];
+$nivel = $data_consultar['materia']['nivel'];
+$nombre_docente = $data_consultar['docente']['nombre_docente'];
+$fecha_solicitud = $fecha_solicitud;
 
 ?>
 
@@ -82,9 +81,6 @@ $nombre_docente = "";
         <br>
         <div class="card-header text-center">
           <h2>Consultar Aulas</h2>
-          <div class="col-lg-12">
-            <h2><?php echo $_POST["fecha"] ?></h2>
-          </div>
         </div>
         <div class="card-body">
           <div>
@@ -105,13 +101,16 @@ $nombre_docente = "";
             <?php
             $contador = 0;
             $boolean = "pendiente";
+            $cap_est = $data_consultar['capEstudiantes'];
 
             $result6 = $conexion->prepare("SELECT * FROM `aulas`");
             $result6->execute();
             $mostrarf = $result6->fetchAll(PDO::FETCH_ASSOC);
-
+            
             foreach ($mostrarf as $mostrar6) {
               $valor = "si";
+              
+              
               if ($boolean == "pendiente") {
 
                 $result7 = $conexion->prepare("SELECT * FROM `reservas_atendidas`");
@@ -140,20 +139,21 @@ $nombre_docente = "";
                 }
 
                 if ($valor == "si") {
+                  
                   if ((int)$mostrar6['capacidad'] == (int)$cap_est) {
                     echo "<div class='reserva'><form action='car2.php' method='post'>
-                    <input type='hidden' name='id_solicitud_Pend' value=" . $id_solicitud . ">
-                    <input type='hidden' name='id_reserva2' value=" . $id_reserva . ">
-                    <input type='hidden' name='fecha_solicitud' value=" . $fecha_solicitud . ">
-                    <input type='hidden' name='fecha_reserva' value=" . $fecha_reserva . ">
-                    <input type='hidden' name='capEstudiantes' value=" . $cap_est . ">
-                    <input type='hidden' name='id_docente' value=" . $id_docente . ">
-                    <input type='hidden' name='id_materia' value=" . $id_materia . ">
-                    <input type='hidden' name='grupo' value=" . $grupo . ">
-                    <input type='hidden' name='hora_inicio' value=" . $hora_inicio . ">
-                    <input type='hidden' name='hora_fin' value=" . $hora_fin . ">" .
-                      "<input type='hidden' name='id_aula' style='background: blue;' value=" . $mostrar6['id_aula'] . ">
-                    <input type='submit' id='asignar' name='asignar' value=" . $mostrar6['codigo_aula'] . "-Cap" . $mostrar6['capacidad'] . ">
+                    <input type='hidden' name='id_solicitud_Pend' value='{$id_solicitud}'>
+                    <input type='hidden' name='id_reserva2' value='{$id_reserva}'>
+                    <input type='hidden' name='fecha_solicitud' value='{$fecha_solicitud}'>
+                    <input type='hidden' name='fecha_reserva' value='{$fecha_reserva}'>
+                    <input type='hidden' name='capEstudiantes' value='{$cap_est}'>
+                    <input type='hidden' name='id_docente' value='{$id_docente}'>
+                    <input type='hidden' name='id_materia' value='{$id_materia}'>
+                    <input type='hidden' name='grupo' value='{$grupo}'>
+                    <input type='hidden' name='hora_inicio' value='{$hora_inicio}'>
+                    <input type='hidden' name='hora_fin' value='{$hora_fin}'>
+                    <input type='hidden' name='id_aula' style='background: blue;' value='{$mostrar6['id_aula']}'>
+                    <input type='submit' id='asignar' name='asignar' value='{$mostrar6['codigo_aula']}-Cap{$mostrar6['capacidad']}'>
                     </form> </div>";
                     $contador++;
                   }
@@ -198,27 +198,24 @@ $nombre_docente = "";
                   if ($mostrar6['capacidad'] > $cap_est) {
                     $contador++;
                     echo "<div class='reserva1'><form action='car2.php' method='post'>
-                    <input type='hidden' name='id_solicitud_Pend' value=" . $id_solicitud . ">
-                    <input type='hidden' name='id_reserva2' value=" . $id_reserva . ">
-                    <input type='hidden' name='fecha_solicitud' value=" . $fecha_solicitud . ">
-                    <input type='hidden' name='fecha_reserva' value=" . $fecha_reserva . ">
-                    <input type='hidden' name='capEstudiantes' value=" . $cap_est . ">
-                    <input type='hidden' name='id_docente' value=" . $id_docente . ">
-                    <input type='hidden' name='id_materia' value=" . $id_materia . ">
-                    <input type='hidden' name='grupo' value=" . $grupo . ">
-                    <input type='hidden' name='hora_inicio' value=" . $hora_inicio . ">
-                    <input type='hidden' name='hora_fin' value=" . $hora_fin . ">" .
-                      "<input type='hidden' name='id_aula' style='background: blue;' value=" . $mostrar6['id_aula'] . ">
-                    <input type='submit' id='asignar' name='asignar' value=" . $mostrar6['codigo_aula'] . "-Cap" . $mostrar6['capacidad'] . ">
+                    <input type='hidden' name='id_solicitud_Pend' value='{$id_solicitud}'>
+                    <input type='hidden' name='id_reserva2' value='{$id_reserva}'>
+                    <input type='hidden' name='fecha_solicitud' value='{$fecha_solicitud}'>
+                    <input type='hidden' name='fecha_reserva' value='{$fecha_reserva}'>
+                    <input type='hidden' name='capEstudiantes' value='{$cap_est}'>
+                    <input type='hidden' name='id_docente' value='{$id_docente}'>
+                    <input type='hidden' name='id_materia' value='{$id_materia}'>
+                    <input type='hidden' name='grupo' value='{$grupo}'>
+                    <input type='hidden' name='hora_inicio' value='{$hora_inicio}'>
+                    <input type='hidden' name='hora_fin' value='{$hora_fin}'>
+                    <input type='hidden' name='id_aula' style='background: blue;' value='{$mostrar6['id_aula']}'>
+                    <input type='submit' id='asignar' name='asignar' value='{$mostrar6['codigo_aula']}-Cap{$mostrar6['capacidad']}'>
                     </form> </div>";
                   }
                 }
               }
             }
-
-
             ?>
-
           </div>
           <?php if ($contador == 0 && $boolean == "pendiente") {
             echo "<form name='envia' method='POST' action='asignaciones_Conjutas.php'>
@@ -228,10 +225,15 @@ $nombre_docente = "";
             document.envia.submit()
             </script>";
           } ?>
-          <form action="vistaDetRese.php" method="post">
-            <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
-            <input class="btn1" type="submit" value="Atras">
-          </form>
+          <div class="col-12">
+            <div style="text-align:right">
+              <br>
+              <form action="vistaDetRese.php" method="post">
+                <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
+                <input class="btn btn-primary" type="submit" value="ATRAS">
+              </form>
+            </div>
+          </div>
         </div>
         <!-- ggdhahdah -->
       </div>

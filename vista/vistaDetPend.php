@@ -108,7 +108,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                     <td>
                                         <form action="vistaDetRese.php" method="post" name="formulario">
                                             <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $solicitud['id_solicitudes']; ?> ">
-                                            <input type="submit" class="btn btn-success botton" value="Detalles">
+                                            <input type="submit" class="btn btn-secondary botton" value="DETALLES">
                                         </form>
                                     </td>
 
