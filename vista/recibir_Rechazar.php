@@ -10,16 +10,6 @@ require 'librerias/phpmailer/src/SMTP.php';
 require 'librerias/phpmailer/src/Exception.php';
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 $conexion = $db;
-// $sql = "UPDATE `solicitudes` SET `estado`=:estado WHERE id_solicitudes=:id_solicitudes";
-//     $stmt = $conexion->prepare( $sql);
-//     $stmt->execute(array(
-//       ':id_solicitudes' => $_POST['id_solicitud_Pend'],
-//       ':estado' => 'revisado'
-//     ));
-//     if ($stmt->rowCount() == 1) {
-//      var_dump($stmt->rowCount());
-//     }
-
 
 $sql = "INSERT INTO reservas_atendidas(id_reserva, fecha_atendida, estado, detalle, id_aula) VALUES (:id_reserva, :fecha_atendida, :estado, :detalle, :id_aula)";
 $stmt = $conexion->prepare($sql);

@@ -26,6 +26,8 @@
 
   <script src="http://asignaciondeaulas/vista/sweet/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="http://asignaciondeaulas/vista/sweet/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="http://asignaciondeaulas/vista/formulario.css">
+    <link rel="stylesheet" href="http://asignaciondeaulas/vista/css/stylesheets/asignacionDeAulas.css">
 </head>
 
 <body>

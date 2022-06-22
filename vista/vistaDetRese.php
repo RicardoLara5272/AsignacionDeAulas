@@ -115,7 +115,7 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                             <!--redirigr mariscal y ricardo-->
                                             <div class="btn-group">
                                                 <form action="consultarAulas.php" method="post">
-                                                    <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_sol_DetPend; ?> ">
+                                                    <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
                                                     <input type="submit" class="btn btn-info btn-space" value="CONSULTAR">
                                                 </form>
                                                 <form action="formulario_Rechazar.php" method="post">

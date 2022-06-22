@@ -11,6 +11,8 @@ $conexion = $db;
 $title = 'Docentes Page';
 $id_solicitud_Pend = $_REQUEST['id_solicitud_Pend'];
 $estado = $_REQUEST['enviar'];
+var_dump($_REQUEST);
+
 $sqlIdSolicitudes = "SELECT * FROM `reserva` where id_reserva=" . $id_solicitud_Pend;
 $query = $conexion->prepare($sqlIdSolicitudes);
 $query->execute();
