@@ -13,27 +13,41 @@ $title = 'Asignacion de aulas Page';
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_solicitud = $_POST["id_solicitud_Pend"];
+$id_sol_DetPend = $_REQUEST['id_solicitud_Pend'];
 $id_reserva = $_POST['id_reserva2'];
 $fecha_solicitud = $_POST["fecha_solicitud"];
 $fecha_reserva = $_POST["fecha_reserva"];
 $cantidad_estudiantes = $_POST["capEstudiantes"];
 $id_docente = $_POST['id_docente'];
-$id_materia = (int)$_POST["id_materia"];
-//var_dump($_REQUEST);
-$Grupo = $_POST["grupo"];
+//$id_materia = (int)$_POST["id_materia"];
 $hora_inicio = $_POST["hora_inicio"];
 $hora_fin = $_POST["hora_fin"];
 $conexion = $db;
 $nombre = "nom";
 $correo = "corr";
 $aulas_asignadas = array();
-$consultar_grupo = $conexion->prepare("SELECT * FROM reserva WHERE id_reserva ='" . $id_reserva . "' AND id_solicitudes =" . $id_solicitud);
 
+var_dump($_REQUEST);
+
+$consultar_grupo = $conexion->prepare("SELECT * FROM reserva WHERE id_reserva ='" . $id_reserva . "' AND id_solicitudes =" . $id_solicitud);
 $consultar_grupo->execute();
 $grupo = $consultar_grupo->fetchAll(PDO::FETCH_ASSOC);
 foreach ($grupo as $mostrar_grupo) {
   $grupos = json_decode($mostrar_grupo['grupo']);
+  $id_materia = $mostrar_grupo['id_materia'];
 }
+
+$nom_materia=$conexion->prepare("SELECT * FROM `materias` WHERE id_materia = $id_materia");
+$nom_materia->execute();
+$la_materia=$nom_materia->fetchAll(PDO::FETCH_ASSOC);
+
+foreach($la_materia as $mamateria) {
+  $rempl=$mamateria['nombre_materia'];
+  $detectamos=mb_detect_encoding($rempl, 'UTF-8, ISO-8859-1, WINDOWS-1252', true);
+  $remplazo = iconv($detectamos, 'UTF-8', $rempl);
+  $nombre_materia=$rempl;
+}
+
 
 $IDsDocente = array();
 $nombres = array();
@@ -54,10 +68,13 @@ foreach ($el_id_docente as $elDocente) {
       $nombre_docente = $LosDocentes->fetchAll(PDO::FETCH_ASSOC);
       foreach ($nombre_docente as $nom_docente) {
         if ($nom_docente['id_docente'] == $elDocente['id_docente']) {
-          $IDsDocente[] = $nom_docente['id_docente'];
-          $nombres[] = $nom_docente['nombre_docente'];
-          $correos[] = $nom_docente['correo'];
-          $grupo_ordenado[] = $grupos[$g];
+          $IDsDocente[]=$nom_docente['id_docente'];
+          $remplazo=$nom_docente['nombre_docente'];
+          $detectar=mb_detect_encoding($remplazo, 'UTF-8, ISO-8859-1, WINDOWS-1252', true);
+          $remplazo = iconv($detectar, 'UTF-8', $remplazo);
+          $nombres[]=$remplazo;
+          $correos[]=$nom_docente['correo'];
+          $grupo_ordenado[]=$grupos[$g];
         }
       }
     }
@@ -80,16 +97,21 @@ foreach ($el_id_docente as $elDocente) {
         if (count($grupos) > 1) {
           echo "<form action='funciones_asignacion_aceptar.php' method='post'><br>";
           echo  "<div class='elem-group'>";
-          echo  "<center><label for='id_solicitud'><b>ID Solicitud:</b> <br/> " . $id_solicitud . "</label>  ";
-          echo  "<input type='hidden' id='id_solicitud' name='id_solicitud' value='" . $id_solicitud . "'>";
+          echo  "<center><label for='Materia'><b>Solicitud para la materia:</b> <br/> " . $nombre_materia . "</label>  ";
+          echo  "<input type='hidden' id='las_materia' name='la_materia' value='" . $nombre_materia . ">";
           echo "</div>";
-          echo "<div>";
-          echo  "<input type='hidden' id='materia' name='materia' value=" . $id_materia . "'>";
+
+          echo  "<div class='elem-group'>";
+          echo  "<center><label for='id_solicitud'><b>ID Solicitud:</b> <br/> " . $id_solicitud . "</label>  ";
+          echo  "<input type='hidden' id='id_solicitud' name='id_solicitud' value='" . $id_solicitud . ">";
+          echo "</div>";
+          echo "<div class='elem-group'>";
+          echo  "<input type='hidden' id='materia' name='materia' value=" . $id_materia . ">";
           echo "</div>";
 
           echo  "<div class='elem-group'>";
           echo  "<center><label for='id_reserva2'><b>ID Reserva:</b> <br/> " . $id_reserva . "</label>  ";
-          echo  "<input type='hidden' id='id_reserva2' name='id_reserva2' value='" . $id_reserva . "'></center>";
+          echo  "<input type='hidden' id='id_reserva2' name='id_reserva2' value='" . $id_reserva . "</center>";
           echo "</div>";
 
           echo "<div class='elem-group'>";
@@ -99,8 +121,7 @@ foreach ($el_id_docente as $elDocente) {
               echo "<label>$nombres[$n] </label><br>";
             }
           }
-
-          echo "<input type='hidden' id='nombre' name='nombre' value=" . htmlspecialchars(serialize($nombres)) . "'>";
+          echo "</center><input type='hidden' id='docente' name='docente' value=" . htmlspecialchars(serialize($nombres)) . ">";
           echo "</div>";
 
           echo "<div class='elem-group'>";
@@ -113,10 +134,8 @@ foreach ($el_id_docente as $elDocente) {
 
           echo "<div class='elem-group'>";
           echo "<center><label for='correo'><b>Correos:</b></label><br>";
-          if (count($correos) >= count($grupos)) {
-            for ($c = 0; $c < count($grupos); $c++) {
-              echo "<label>$correos[$c] </label><br>";
-            }
+          for($c=0; $c<count($grupos); $c++){
+            echo "<label>$correos[$c] </label><br>";
           }
           echo "<input type='hidden' id='correo' name='correo' value='" . htmlspecialchars(serialize($correos)) . "'>";
           echo "</div>";
@@ -174,19 +193,26 @@ foreach ($el_id_docente as $elDocente) {
           echo "<div class='elem-group'>";
 
           echo "</div>";
-          echo "<input type='hidden' id='las_aulas' name='las_aulas' value=" . htmlspecialchars(serialize($aulas_asignadas)) . "'>";
-          echo "<center><input type='submit'  class='btn btn-primary' name='Enviar' id='Enviar' value='GUARDAR/ENVIAR'></center>";
+          echo "<input type='hidden' id='las_aulas' name='las_aulas' value=" . htmlspecialchars(serialize($aulas_asignadas)) . ">";
+          echo "<input type='hidden' id='id_materia' name='id_materia' value=".$id_materia." >";
+          echo "<input id='id_solicitud_Pend' name='id_solicitud_Pend' type='hidden' value='$id_solicitud'>";
+          echo "<center><input type='submit' name='Enviar' id='Enviar' value='GUARDAR/ENVIAR'></center>";
           echo "</form>";
           echo "<center><form action='vistaDetRese.php' method='post'>
-    <input type='hidden' name='id_solicitud_Pend' value=" . $id_solicitud . "'>
-    <input type='submit' name='Cancelar'  class='btn btn-danger' value='CANCELAR'>
-    </form></center>";
+          <input type='hidden' name='id_solicitud_Pend' value=". $id_solicitud .">
+          <input type='submit' name='Cancelar' value='CANCELAR'>
+          </form></center>";
         } else {
           echo "<form action='funciones_asignacion_aceptar.php' method='post'><br>";
           echo  "<div class='elem-group'>";
+          echo  "<center><label for='Materia'><b>Solicitud para la materia:</b> <br/> " . $nombre_materia . "</label>  ";
+          echo  "<input type='hidden' id='las_materia' name='la_materia' value='" . $nombre_materia . ">";
+          echo "</div>";
+          
+          echo  "<div class='elem-group'>";
           echo  "<center><label for='id_solicitud'><b>ID Solicitud:</b> <br/> " . $id_solicitud . "</label>  ";
           echo  "<input type='hidden' id='id_solicitud' name='id_solicitud' value='" . $id_solicitud . "</center>";
-          echo  "<input type='hidden' id='id_materia' name='id_materia' value='" . $id_materia . "</center>";
+          echo  "<input type='hidden' id='materia' name='materia' value='" . $id_materia . "</center>";
           echo "</div>";
           echo  "<div class='elem-group'>";
           echo  "<center><label for='id_reserva2'><b>ID Reserva:</b> <br/> " . $id_reserva . "</label>  ";
@@ -194,10 +220,8 @@ foreach ($el_id_docente as $elDocente) {
           echo "</div>";
           echo "<div class='elem-group'>";
           echo "<center><label for='nombre'> <b>Docentes:</b></label><br>";
-          if (count($nombres) >= count($grupos)) {
-            for ($n = 0; $n < count($grupos); $n++) {
-              echo "<label>$nombres[$n] </label><br>";
-            }
+          for($n=0; $n<count($grupos); $n++){
+            echo "<label>$nombres[$n] </label><br>";
           }
           echo "<input type='hidden' id='nombre' name='nombre' value='" . htmlspecialchars(serialize($nombres)) . "'>";
           echo "</div>";
@@ -210,10 +234,8 @@ foreach ($el_id_docente as $elDocente) {
           echo "</div>";
           echo "<div class='elem-group'>";
           echo "<center><label for='correo'><b>Correos:</b></label><br>";
-          if (count($correos) >= count($grupos)) {
-            for ($c = 0; $c < count($grupos); $c++) {
-              echo "<label>$correos[$c] </label><br>";
-            }
+          for ($c = 0; $c < count($grupos); $c++) {
+            echo "<label>$correos[$c] </label><br>";
           }
           echo "<input type='hidden' id='correo' name='correo' value='" . htmlspecialchars(serialize($correos)) . "'>";
           echo "</div>";
@@ -241,10 +263,7 @@ foreach ($el_id_docente as $elDocente) {
           $codigo_aula = $consultar_aula->fetchAll(PDO::FETCH_ASSOC);
           $numero = 1;
           $numero2 = 0;
-          //$consulta_aula = "SELECT * FROM `aulas`";
-          //$resultado_consulta_aula = mysqli_query($conexion, $consulta_aula);
           foreach ($codigo_aula as $cod_aula) {
-
             $consultar_auxiliar = $conexion->prepare("SELECT * FROM auxiliar ");
             $consultar_auxiliar->execute();
             $codigo_auxiliar = $consultar_auxiliar->fetchAll(PDO::FETCH_ASSOC);
@@ -267,13 +286,14 @@ foreach ($el_id_docente as $elDocente) {
           echo "</div>";
           echo "<input type='hidden' id='las_aulas' name='las_aulas' value=" . htmlspecialchars(serialize($aulas_asignadas)) . "'>";
           echo "<div class='elem-group'>";
-
+          echo "<input id='id_solicitud_Pend' name='id_solicitud_Pend' type='hidden' value='$id_solicitud'>";
           echo "<center><input type='submit'  class='btn btn-primary' name='Enviar' id='Enviar' value='GUARDAR/ENVIAR'></center>";
           echo "</form>";
           echo "<center><form action='vistaDetRese.php' method='post'>
-    <input type='hidden' name='id_solicitud_Pend' value=" . $id_solicitud . "'>
-    <input type='submit' class='btn btn-danger' name='Cancelar' value='CANCELAR'>
-    </form></center>";
+                <input id='id_solicitud_Pend' name='id_solicitud_Pend' type='hidden' value='$id_solicitud'>
+                <button type='submit' class='btn btn-danger' name='Cancelar'>CANCELAR</button>
+              </form></center>";
+    
         }
         ?>
       </div>
@@ -282,5 +302,6 @@ foreach ($el_id_docente as $elDocente) {
 </main>
 <?php
 //include header template
+//<input type='hidden' name='id_solicitud_Pend' value=".$id_solicitud_Pend."'>
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');
 ?>

@@ -12,11 +12,14 @@ $title = 'Docentes Page';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 
+
+
+$conexion = $db;
+
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_reserva = $_REQUEST['id_solicitud_Pend'];
-$id_solicitud = '';
-$conexion = $db;
+
 $sql = "SELECT * FROM `reserva` where id_reserva=" . trim($id_reserva);
 $query = $conexion->prepare($sql);
 $query->execute();
@@ -59,20 +62,12 @@ foreach ($mostrard as $mostrar3) {
     $fecha_solicitud = $mostrar3['fecha_solicitud'];
   }
 }
-
-$id_materia = "";
-$fecha_reserva = "";
-$grupo = "";
-$hora_inicio = "";
-$hora_fin = "";
-$cap_est = "";
-$detalle = "";
-$fecha_solicitud = "";
-$codigo_materia = "";
-$nom_materia = "";
-$nivel = "";
-$nombre_docente = "";
+$id_materia=$data_consultar['materia']['id_materia'];
+$fecha_reserva=$data_consultar['fecha_reserva'];
+$hora_inicio = $data_consultar['hora_inicio'];
+$hora_fin = $data_consultar['hora_fin'];
 (int)$suma = 0;
+
 ?>
 
 <main class="content">
@@ -112,7 +107,7 @@ $nombre_docente = "";
             </div>";
           }
           ?>
-          <div class="aulas">
+          <div class="aulasReservar">
             <?php
             $contador = 0;
 
@@ -223,7 +218,7 @@ $nombre_docente = "";
                 echo
                 "
                 <style type='text/css'>
-                #reserva { display:none !important; }
+                .aulasReservar { display:none !important; }
                 #alerta{
                   display:none !important;}
               
@@ -237,12 +232,11 @@ $nombre_docente = "";
                   <input type='hidden' name='capEstudiantes' value=" . $cap_est . ">
                   <input type='hidden' name='id_docente' value=" . $id_docente . ">
                   <input type='hidden' name='id_materia' value=" . $id_materia . ">
-                  <input type='hidden' name='grupo' value=" . $grupo . ">
                   <input type='hidden' name='hora_inicio' value=" . $hora_inicio . ">
                   <input type='hidden' name='hora_fin' value=" . $hora_fin . ">
                   
                   </div>
-                  <button type='submit' id='asignar' class='btn btn-primary' name='asignar' style='position: absolute; bottom: 0;right:250px;'>ASIGNAR</button>
+                  <button type='submit' id='asignar' class='btn btn-primary' name='asignar' style='position: absolute; bottom: 0;right:360px;'>ASIGNAR</button>
                   </form>";
               }
             }
@@ -252,6 +246,10 @@ $nombre_docente = "";
           <div class="col-12">
             <div style="text-align:right">
               <br>
+              <form action="formulario_Rechazar.php" method="post">
+                <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_reserva; ?> ">
+                <button type="submit" name="enviar" class="btn btn-secondary" style='position: absolute; bottom: 0; right:231px;'>RECHAZAR</button>
+              </form>
               <form action="vistaDetRese.php" method="post">
                 <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
                 <button id="btn1" class="btn btn-danger" style='position: absolute; bottom: 0; right:140px;' type="submit" >ATRAS</button>

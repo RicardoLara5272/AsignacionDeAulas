@@ -76,6 +76,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
               <li><strong>Materia:</strong> <span><?php echo ($data_reserva_rechazar['materia']['nombre_materia']); ?></span></li>
               <li><strong>Fecha de Reserva:</strong> <span><?php echo ($data_reserva_rechazar['fecha_reserva']); ?></span></li>
               <li><strong>Hora de Reserva:</strong> <span><?php echo ($data_reserva_rechazar['hora_inicio'] . ' - ' . $data_reserva_rechazar['hora_fin']); ?></span></li>
+              <li><strong>Capacidad de Estudiantes:</strong> <span><?php echo ($data_reserva_rechazar['capEstudiantes']); ?></span></li>
               <li><strong>Detalle:</strong> <span><?php echo ($data_reserva_rechazar['detalle']); ?></span></li>
             </ul>
           </div>
@@ -182,7 +183,8 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, rechazar!'
+            confirmButtonText: 'SI',
+            cancelButtonText: 'NO'
           }).then((result) => {
             if (result.value) {
               document.formulario.action = destino;

@@ -68,7 +68,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                     $sentenciaSQL->execute();
                                     $fecha_atend = $sentenciaSQL->fetchColumn(2);
                                     if (empty($fecha_atend)) {
-                                        echo 'aún no se reviso';
+                                        echo 'Aún no se reviso';
                                     } else {
                                         echo $fecha_atend;
                                     }
@@ -78,7 +78,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                 <td>
                                     <form action="DetalleReserDocent.php" method="post" name="formulario">
                                         <input type="hidden" name="id_solicitud" value=" <?php echo $solicitud['id_solicitudes']; ?> ">
-                                        <input type="submit" class="btn btn-success botton" value="Detalles">
+                                        <input type="submit" class="btn btn-secondary botton" value="DETALLES">
                                     </form>
                                 </td>
                                 </tr>

@@ -89,13 +89,13 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                             echo "NO";
                                         } else {
                                             if ($comparacion <= 172800 && $comparacion > 86400) {
-                                                echo "menos de 2 dias";
+                                                echo "Menos de 2 dias";
                                             } else {
                                                 if ($comparacion <= 86400 && $comparacion > 43200) {
-                                                    echo "menos de 1 dia";
+                                                    echo "Menos de 1 dia";
                                                 } else {
                                                     if ($comparacion <= 43200 && $comparacion > 0) {
-                                                        echo "menos de 12 hrs";
+                                                        echo "Menos de 12 hrs";
                                                     } else {
                                                         echo "Expedido";
                                                     }

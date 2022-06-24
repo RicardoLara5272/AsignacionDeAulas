@@ -95,37 +95,54 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                     <td> <?php echo $reserva['hora_fin']; ?> </td>
                                     <td>
                                         <?php
-                                        $id_reserva = $reserva['id_reserva'];
-                                        $sentenciaSQL = $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
-                                        $sentenciaSQL->execute();
-                                        $estado_reserva = $sentenciaSQL->fetchColumn(3);
-                                        if (empty($estado_reserva)) {
-                                            echo 'pendiente';
-                                        } else {
-                                            echo $estado_reserva;
-                                            $indiceRev++;
-                                        }
+                                            //es unico el id_reserva?
+                                            $id_reserva = $reserva['id_reserva'];
+                                            $sentenciaSQL = $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
+                                            $sentenciaSQL->execute();
+                                            $estado_reserva = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+                                            $estado_reserva_value = '';
+                                            $detalle_reserva_value = '';
+                                            foreach ($estado_reserva as $key => $value) {
+                                                $estado_reserva_value = $value['estado'];
+                                                $detalle_reserva_value = $value['detalle'];
+                                                break;
+                                            }
+                                            if ($estado_reserva_value) {
+                                                echo $estado_reserva_value;
+                                            } else {
+                                                echo "Aun no atendido";
+                                                $indiceRev++;
+                                            }
                                         ?>
                                     </td>
-                                    <td> <?php echo $reserva['detalle']; ?> </td>
-                                    <th>
+                                    <td> 
+                                        <?php 
+                                            if ($detalle_reserva_value) {
+                                                echo $detalle_reserva_value;
+                                            } else {
+                                                echo '<b>-</b>';
+                                                $indiceRev++;
+                                            }
+                                        ?> 
+                                    </td>
+                                    <td>
                                         <?php
                                             $id_reserva = $reserva['id_reserva'];
                                             $sentenciaSQL= $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
                                             $sentenciaSQL->execute();
                                             $aula_reserva= $sentenciaSQL->fetchColumn(5);
-
+                                            
                                             if(empty($aula_reserva)){
-                                                echo '-';
+                                                echo '<b>-</b>';
                                             }
                                             else{
-                                                $sentenciaSQL= $conexion->prepare(" SELECT * FROM aula WHERE id_aula = $aula_reserva ");
+                                                $sentenciaSQL= $conexion->prepare(" SELECT * FROM aulas WHERE id_aula = $aula_reserva ");
                                                 $sentenciaSQL->execute();
                                                 $codigo_aula= $sentenciaSQL->fetchColumn(1);
                                                 echo $codigo_aula;
                                             }
                                         ?>
-                    </th>
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>

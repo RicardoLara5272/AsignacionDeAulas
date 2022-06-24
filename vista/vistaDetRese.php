@@ -22,10 +22,13 @@ if (isset( $_POST['id_solicitud_Pend'])) {
 if (isset($_GET['id_solicitud_Pend'])) {
     $id_sol_DetPend = $_GET['id_solicitud_Pend'];
 }
-
+var_dump($id_sol_DetPend);
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
 $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+
+$sentencia= $conexion->prepare("DELETE FROM `auxiliar` WHERE id_aula>0");
+$sentencia->execute();
 
 ?>
 <main class="content">

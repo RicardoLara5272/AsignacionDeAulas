@@ -12,15 +12,19 @@ $title = 'Docentes Page';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
+
 $id_docente = $_SESSION['id_docente'];
 $id_reserva = $_REQUEST['id_solicitud_Pend'];
 $id_solicitud = '';
+$boolean = "pendiente";
+
 $conexion = $db;
 $sql = "SELECT * FROM `reserva` where id_reserva=" . trim($id_reserva);
 $query = $conexion->prepare($sql);
 $query->execute();
 $result_consultar = $query->fetchAll(PDO::FETCH_ASSOC);
 $data_consultar = [];
+
 foreach ($result_consultar as $key => $value) {
   $data_consultar = $value;
   $id_solicitud = $value['id_solicitudes'];
@@ -71,7 +75,7 @@ $nom_materia = $data_consultar['materia']['nombre_materia'];
 $nivel = $data_consultar['materia']['nivel'];
 $nombre_docente = $data_consultar['docente']['nombre_docente'];
 $fecha_solicitud = $fecha_solicitud;
-
+var_dump($id_solicitud);
 ?>
 
 <main class="content">
@@ -100,7 +104,7 @@ $fecha_solicitud = $fecha_solicitud;
             <!-- hhhhhh -->
             <?php
             $contador = 0;
-            $boolean = "pendiente";
+            
             $cap_est = $data_consultar['capEstudiantes'];
 
             $result6 = $conexion->prepare("SELECT * FROM `aulas`");
@@ -228,9 +232,13 @@ $fecha_solicitud = $fecha_solicitud;
           <div class="col-12">
             <div style="text-align:right">
               <br>
+              <form action="formulario_Rechazar.php" method="post">
+                <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_reserva; ?> ">
+                <button type="submit" name="enviar" class="btn btn-secondary" style='position: absolute; bottom: auto; right:231px;' >RECHAZAR</button>
+              </form>
               <form action="vistaDetRese.php" method="post">
                 <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
-                <input class="btn btn-primary" type="submit" value="ATRAS">
+                <button id="btn1" class="btn btn-danger" style='position: absolute; bottom: auto; right:140px;' type="submit" >ATRAS</button>
               </form>
             </div>
           </div>

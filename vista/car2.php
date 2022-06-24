@@ -1,3 +1,4 @@
+<?php include("../config/db.php"); ?>
 <?php 
   
   $id_solicitud= $_POST['id_solicitud_Pend'];
@@ -12,14 +13,8 @@
   $hora_fin= $_POST['hora_fin'];
   $id_aula= $_POST['id_aula'];
 
-  
-  $db_host = "localhost";
-  $db_nombre = "asignacionaulas";
-  $db_usuario = "root";
-  $db_contra = "";
-  $conexion = mysqli_connect($db_host, $db_usuario, $db_contra, $db_nombre);
-  $sqlv = "INSERT INTO `auxiliar` (`id_aula`) VALUES ('$id_aula')";
-  $result=mysqli_query($conexion,$sqlv);
+  $sentenciaSQL= $conexion->prepare("INSERT INTO `auxiliar` (`id_aula`) VALUES ('$id_aula')");
+  $sentenciaSQL->execute();
 
   echo "<form name='envia' action='AsignacionDeAulas.php' method='post'>
   <input type='hidden' name='id_solicitud_Pend' value=". $id_solicitud .">
@@ -38,3 +33,4 @@ document.envia.submit()
 </script>";
 
 ?>
+
