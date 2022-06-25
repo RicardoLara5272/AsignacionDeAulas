@@ -5,32 +5,58 @@ if (!$user->is_logged_in()) {
   header('Location: login.php');
   exit();
 }
-
 //define page title
-$title = 'Docentes Page';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
-
 $id_docente = $_SESSION['id_docente'];
 $id_reserva = $_REQUEST['id_solicitud_Pend'];
 $id_solicitud = '';
 $boolean = "pendiente";
-
 $conexion = $db;
+$mostrar_mensaje='';
+
+
+$result5= $conexion->prepare("SELECT * FROM `reservas_atendidas`");
+$result5->execute();
+$mostrarb=$result5->fetchAll(PDO::FETCH_ASSOC);
+
+foreach($mostrarb as $mostrar5) {
+  if($boolean=="pendiente"){
+    if ($id_reserva == $mostrar5['id_reserva']) {
+      $color_emergente='';
+      $boolean=$mostrar5['estado'];
+      if(strtolower($boolean)=='rechazado'){
+        $color_emergente ='danger';
+      }elseif (strtolower($boolean)=='aceptado') {
+        $color_emergente ='success';
+      }else{
+        $color_emergente ='info';
+      }
+      $mostrar_mensaje =
+        '<div class="alert alert-'.$color_emergente.' d-flex align-items-center" role="alert">
+          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+            <use xlink:href="#info-fill" />
+          </svg>
+          <div>
+            La reserva ha sido ' . $boolean . ' anteriormente!!
+          </div>
+        </div>';
+    }
+  }
+}
+
 $sql = "SELECT * FROM `reserva` where id_reserva=" . trim($id_reserva);
 $query = $conexion->prepare($sql);
 $query->execute();
 $result_consultar = $query->fetchAll(PDO::FETCH_ASSOC);
 $data_consultar = [];
-
 foreach ($result_consultar as $key => $value) {
   $data_consultar = $value;
   $id_solicitud = $value['id_solicitudes'];
   break;
 }
-
 //materia
 $materia = "SELECT * FROM `materias` where id_materia=" . $data_consultar['id_materia'];
 $query_a = $conexion->prepare($materia);
@@ -49,14 +75,9 @@ foreach ($resultado_docente as $key => $value) {
   $data_consultar['docente'] = $value;
   break;
 }
-
-
 $result3 = $conexion->prepare("SELECT * FROM `solicitudes`");
 $result3->execute();
 $mostrard = $result3->fetchAll(PDO::FETCH_ASSOC);
-
-//$sqlv = "SELECT * FROM `reserva`";
-//$resultv = mysqli_query($conexion, $sqlv);
 foreach ($mostrard as $mostrar3) {
   if ($id_solicitud == $mostrar3['id_solicitudes']) {
     $id_docente = $mostrar3['id_docente'];
@@ -75,9 +96,7 @@ $nom_materia = $data_consultar['materia']['nombre_materia'];
 $nivel = $data_consultar['materia']['nivel'];
 $nombre_docente = $data_consultar['docente']['nombre_docente'];
 $fecha_solicitud = $fecha_solicitud;
-var_dump($id_solicitud);
 ?>
-
 <main class="content">
   <div class="container">
     <div class="row justify-content-center">
@@ -98,36 +117,29 @@ var_dump($id_solicitud);
               <li><strong>Detalle:</strong> <span><?php echo ($data_consultar['detalle']); ?></span></li>
             </ul>
           </div>
+          
         </div>
         <div class="card-body">
           <div class="aulas">
             <!-- hhhhhh -->
             <?php
             $contador = 0;
-            
             $cap_est = $data_consultar['capEstudiantes'];
-
             $result6 = $conexion->prepare("SELECT * FROM `aulas`");
             $result6->execute();
             $mostrarf = $result6->fetchAll(PDO::FETCH_ASSOC);
             
             foreach ($mostrarf as $mostrar6) {
               $valor = "si";
-              
-              
               if ($boolean == "pendiente") {
-
                 $result7 = $conexion->prepare("SELECT * FROM `reservas_atendidas`");
                 $result7->execute();
                 $mostrarg = $result7->fetchAll(PDO::FETCH_ASSOC);
-
                 foreach ($mostrarg as $mostrar7) {
                   if ($mostrar6['id_aula'] == $mostrar7['id_aula']) {
-
                     $result8 = $conexion->prepare("SELECT * FROM `reserva`");
                     $result8->execute();
                     $mostrarh = $result8->fetchAll(PDO::FETCH_ASSOC);
-
                     foreach ($mostrarh as $mostrar8) {
                       if ($mostrar7['id_reserva'] == $mostrar8['id_reserva']) {
                         if ($fecha_reserva == $mostrar8['fecha_reserva']) {
@@ -141,9 +153,7 @@ var_dump($id_solicitud);
                     }
                   }
                 }
-
                 if ($valor == "si") {
-                  
                   if ((int)$mostrar6['capacidad'] == (int)$cap_est) {
                     echo "<div class='reserva'><form action='car2.php' method='post'>
                     <input type='hidden' name='id_solicitud_Pend' value='{$id_solicitud}'>
@@ -164,26 +174,20 @@ var_dump($id_solicitud);
                 }
               }
             }
-
             $result6 = $conexion->prepare("SELECT * FROM `aulas`");
             $result6->execute();
             $mostrarf = $result6->fetchAll(PDO::FETCH_ASSOC);
-
             foreach ($mostrarf as $mostrar6) {
               $valor = "si";
               if ($boolean == "pendiente") {
-
                 $result7 = $conexion->prepare("SELECT * FROM `reservas_atendidas`");
                 $result7->execute();
                 $mostrarg = $result7->fetchAll(PDO::FETCH_ASSOC);
-
                 foreach ($mostrarg as $mostrar7) {
                   if ($mostrar6['id_aula'] == $mostrar7['id_aula']) {
-
                     $result8 = $conexion->prepare("SELECT * FROM `reserva`");
                     $result8->execute();
                     $mostrarh = $result8->fetchAll(PDO::FETCH_ASSOC);
-
                     foreach ($mostrarh as $mostrar8) {
                       if ($mostrar7['id_reserva'] == $mostrar8['id_reserva']) {
                         if ($fecha_reserva == $mostrar8['fecha_reserva']) {
@@ -197,7 +201,6 @@ var_dump($id_solicitud);
                     }
                   }
                 }
-
                 if ($valor == "si") {
                   if ($mostrar6['capacidad'] > $cap_est) {
                     $contador++;
@@ -229,26 +232,29 @@ var_dump($id_solicitud);
             document.envia.submit()
             </script>";
           } ?>
+          <?php 
+            echo $mostrar_mensaje;
+          ?>
           <div class="col-12">
             <div style="text-align:right">
               <br>
               <form action="formulario_Rechazar.php" method="post">
-                <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_reserva; ?> ">
+                <input type="hidden" name="id_solicitud_Pend" value="<?php echo $id_reserva; ?>">
                 <button type="submit" name="enviar" class="btn btn-secondary" style='position: absolute; bottom: auto; right:231px;' >RECHAZAR</button>
               </form>
               <form action="vistaDetRese.php" method="post">
-                <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
+                <input type="hidden" name="id_solicitud_Pend" value="<?php echo $id_solicitud ?>">
                 <button id="btn1" class="btn btn-danger" style='position: absolute; bottom: auto; right:140px;' type="submit" >ATRAS</button>
               </form>
             </div>
           </div>
         </div>
+        
         <!-- ggdhahdah -->
       </div>
     </div>
   </div>
 </main>
-
 <?php
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');

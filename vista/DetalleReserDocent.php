@@ -108,14 +108,23 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                                 break;
                                             }
                                             if ($estado_reserva_value) {
-                                                echo $estado_reserva_value;
+                                                $estaditos='';
+                                                if(strtolower($estado_reserva_value)=='rechazado'){
+                                                    $estaditos ='<span class="rojo">'.$estado_reserva_value.'</span>';
+                                                }elseif (strtolower($estado_reserva_value)=='aceptado') {
+                                                    $estaditos ='<span class="verde">'.$estado_reserva_value.'</span>';
+                                                }else{
+                                                    $estaditos ='<span class="amarillo">'.$estado_reserva_value.'</span>';
+                                                }
+                                                echo $estaditos;
                                             } else {
-                                                echo "Aun no atendido";
+                                                $estaditos ='<span class="amarillo">Aun no atendido</span>';
+                                                echo $estaditos;
                                                 $indiceRev++;
                                             }
                                         ?>
                                     </td>
-                                    <td> 
+                                    <td class="texto"> 
                                         <?php 
                                             if ($detalle_reserva_value) {
                                                 echo $detalle_reserva_value;

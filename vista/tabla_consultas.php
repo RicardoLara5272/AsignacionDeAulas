@@ -8,22 +8,17 @@
 </head>
 <body>
 <?php
-
 	$db_host="localhost";
 	$db_nombre="umss_tis";
 	$db_usuario="root";
 	$db_contrasenia="";
 	$conexion=mysqli_connect($db_host,$db_usuario,$db_contrasenia,$db_nombre);
-
 	if(mysqli_connect_errno()){
 		echo "fallo al conectar con la Base de Datos";
 		exit();
 	}
-
 	mysqli_set_charset($conexion, "utf8");
-
 	//Datos de la tabla a pasar son :
-	
 		$consulta="SELECT * FROM `enero`";
 		$resultado_consulta=mysqli_query($conexion,$consulta);
 		$mes=$_GET["mes"];
@@ -52,14 +47,5 @@
 		}else{
 			echo "Elija otro mes";
 		}
-
-		
-
 	mysqli_close($conexion);
-
 ?>
-</body>
-<footer>
-
-</footer>
-</html>

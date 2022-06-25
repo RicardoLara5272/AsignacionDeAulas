@@ -5,17 +5,11 @@ if (!$user->is_logged_in()) {
   header('Location: login.php');
   exit();
 }
-
 //define page title
-$title = 'Docentes Page';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
-
-
-
 $conexion = $db;
-
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_reserva = $_REQUEST['id_solicitud_Pend'];
@@ -30,7 +24,6 @@ foreach ($result_consultar as $key => $value) {
   $id_solicitud = $value['id_solicitudes'];
   break;
 }
-
 //materia
 $materia = "SELECT * FROM `materias` where id_materia=" . $data_consultar['id_materia'];
 $query_a = $conexion->prepare($materia);
@@ -49,13 +42,10 @@ foreach ($resultado_docente as $key => $value) {
   $data_consultar['docente'] = $value;
   break;
 }
-
+//solicitudes
 $result3 = $conexion->prepare("SELECT * FROM `solicitudes`");
 $result3->execute();
 $mostrard = $result3->fetchAll(PDO::FETCH_ASSOC);
-
-//$sqlv = "SELECT * FROM `reserva`";
-//$resultv = mysqli_query($conexion, $sqlv);
 foreach ($mostrard as $mostrar3) {
   if ($id_solicitud == $mostrar3['id_solicitudes']) {
     $id_docente = $mostrar3['id_docente'];
@@ -67,9 +57,7 @@ $fecha_reserva=$data_consultar['fecha_reserva'];
 $hora_inicio = $data_consultar['hora_inicio'];
 $hora_fin = $data_consultar['hora_fin'];
 (int)$suma = 0;
-
 ?>
-
 <main class="content">
   <div class="container">
     <div class="row justify-content-center">
@@ -114,22 +102,17 @@ $hora_fin = $data_consultar['hora_fin'];
             $result6 = $conexion->prepare("SELECT * FROM `aulas`");
             $result6->execute();
             $mostrari = $result6->fetchAll(PDO::FETCH_ASSOC);
-
             foreach ($mostrari as $mostrar6) {
               $valor = "si";
-
               $result9 = $conexion->prepare("SELECT * FROM `auxiliar`");
               $result9->execute();
               $mostrarj = $result9->fetchAll(PDO::FETCH_ASSOC);
-
               foreach ($mostrarj as $mostrar9) {
                 if ($mostrar9['id_aula'] == $mostrar6['id_aula']) {
                   $valor = "no";
-
                   $result11 = $conexion->prepare("SELECT * FROM `aulas`");
                   $result11->execute();
                   $mostrark = $result11->fetchAll(PDO::FETCH_ASSOC);
-
                   foreach ($mostrark as $mostrar11) {
                     if ($mostrar9['id_aula'] == $mostrar11['id_aula']) {
                       $suma = $suma + (int)$mostrar11['capacidad'];
@@ -138,18 +121,14 @@ $hora_fin = $data_consultar['hora_fin'];
                 }
               }
               if ($boolean == "pendiente") {
-
                 $result7 = $conexion->prepare("SELECT * FROM `reservas_atendidas`");
                 $result7->execute();
                 $mostrarn = $result7->fetchAll(PDO::FETCH_ASSOC);
-
                 foreach ($mostrarn as $mostrar7) {
                   if ($mostrar6['id_aula'] == $mostrar7['id_aula']) {
-
                     $result8 = $conexion->prepare("SELECT * FROM `reserva`");
                     $result8->execute();
                     $mostrarm = $result8->fetchAll(PDO::FETCH_ASSOC);
-
                     foreach ($mostrarm as $mostrar8) {
                       if ($mostrar7['id_reserva'] == $mostrar8['id_reserva']) {
                         if ($fecha_reserva == $mostrar8['fecha_reserva']) {
@@ -163,7 +142,6 @@ $hora_fin = $data_consultar['hora_fin'];
                     }
                   }
                 }
-
                 (int)$capa = $cap_est;
                 if ($valor == "si") {
                   $texto = $mostrar6['codigo_aula'] . "-Cap" . $mostrar6['capacidad'];
@@ -174,7 +152,6 @@ $hora_fin = $data_consultar['hora_fin'];
                 }
               }
             }
-
             ?>
           </div>
           <?php if ($boolean == "pendiente") {
@@ -190,18 +167,13 @@ $hora_fin = $data_consultar['hora_fin'];
           } ?>
           <div class="aulas">
             <?php
-
-
             $result12 = $conexion->prepare("SELECT * FROM `auxiliar`");
             $result12->execute();
             $mostraro = $result12->fetchAll(PDO::FETCH_ASSOC);
-
             foreach ($mostraro as $mostrar12) {
-
               $resultq = $conexion->prepare("SELECT * FROM `aulas`");
               $resultq->execute();
               $mostrarq = $resultq->fetchAll(PDO::FETCH_ASSOC);
-
               foreach ($mostrarq as $mostrar13) {
                 if ($mostrar12['id_aula'] == $mostrar13['id_aula']) {
                   echo "<div class='reserva2'><form action='desmarcar_aulas.php' method='post'  >" .
@@ -211,7 +183,6 @@ $hora_fin = $data_consultar['hora_fin'];
                 }
               }
             }
-
             if ($boolean == "pendiente") {
               echo "<div> </div>";
               if ($suma >= $capa) {
@@ -240,7 +211,6 @@ $hora_fin = $data_consultar['hora_fin'];
                   </form>";
               }
             }
-
             ?>
           </div>
           <div class="col-12">

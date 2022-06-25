@@ -5,17 +5,14 @@ if (!$user->is_logged_in()) {
     header('Location: login.php');
     exit();
 }
-
 //define page title
-$title = 'Docentes Page';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
-//$objeto = new Conexion();
-$conexion = $db; // $objeto->Conectar();
+$conexion = $db;
 
 $sql = "SELECT nombre_docente FROM docentes WHERE id_docente = $id_docente";
 $resultado = $conexion->prepare($sql);
@@ -37,7 +34,6 @@ $consulta = "SELECT fecha_reserva, grupo, capEstudiantes, detalle FROM reserva r
 $resultado = $conexion->prepare($consulta);
 $resultado->execute();
 $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 <main class="content">
     <div class="container">
@@ -48,15 +44,15 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
                         <h2>Solicitud de Reserva de Aula: # <?php echo $nro ?></h2>
                     </div>
                     <div class="col-lg-12">
-                        <h2><?php echo $_POST["fecha"] ?></h2>
+                        <h3><?php echo $_POST["fecha"] ?></h3>
                     </div>
                 </div>
             </section>
             <div class="col-md-12 mb-2">
                 <div class="col-md-12">
-                    <label for="nombre_docente">Solicitado por Docente:</label>
-                    <h5><?php echo $nombre_docente['0']['nombre_docente'] ?></h5>
-                </div>
+                    <strong><label for="nombre_docente">Solicitado por Docente:</label></strong><br>
+                    <?php echo $nombre_docente['0']['nombre_docente'] ?>
+                </div><br>
                 <button id="BotonAgregar" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#FormularioArticulo" data-whatever="@mdo">NUEVA RESERVA</button>
             </div>
             <br>
@@ -80,16 +76,16 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
                 </div>
             </div>
             <div class="col-md-12 mb-2">
-                <button type="button" id="btnReserva" class="btn btn-primary text-center btnReserva">ENVIAR Y GUARDAR</button>
-                <button type="button" id="btnCancelReserva" class="btn btn-danger text-center btnCancelReserva">CANCELAR</button>
-
+                <div style="text-align:right">
+                    <br><br>
+                    <button type="button" id="btnReserva" class="btn btn-primary text-center btnReserva">ENVIAR Y GUARDAR</button>
+                    <button type="button" id="btnCancelReserva" class="btn btn-danger text-center btnCancelReserva">CANCELAR</button>
+                </div>
             </div>
         </div>
     </div>
 </main>
-
 <!-- Formulario (Agregar, Modificar) -->
-
 <div class="modal fade" id="FormularioArticulo" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -185,7 +181,6 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
 <script src="http://asignaciondeaulas/vista/DataTables/datatables.js"></script>
 <script src="http://asignaciondeaulas/vista/scrip.js"></script>
 <script src="http://asignaciondeaulas/controlador/controladorReserva.js"></script>
-
 <?php
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');

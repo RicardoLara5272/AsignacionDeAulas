@@ -1,16 +1,11 @@
 <?php
-// include_once("layouts/head.php");
-// include_once("../conexiones/conexion.php");
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
-//if not logged in redirect to login page
 if (!$user->is_logged_in()) {
     header('Location: login.php');
     exit();
 }
-
 //define page title
-$title = 'Docentes Page';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
@@ -19,8 +14,6 @@ $sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='Pen
 $sentenciaSQL->execute();
 $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
-
 <main class="content">
     <div class="container">
         <div class="row justify-content-center">
@@ -73,7 +66,6 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                             break;
                                         }
                                         //ciclo para buscar el menor
-
                                         foreach ($listaReservas as $reserva) {
                                             $fecha_reser = $reserva['fecha_reserva'];
                                             $hora_reser = $reserva['hora_inicio'];
@@ -104,25 +96,21 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                         }
                                         ?>
                                     </td>
-
                                     <td>
                                         <form action="vistaDetRese.php" method="post" name="formulario">
                                             <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $solicitud['id_solicitudes']; ?> ">
                                             <input type="submit" class="btn btn-secondary botton" value="DETALLES">
                                         </form>
                                     </td>
-
                                 </tr>
                             <?php } ?>
                         </tbody>
                     </table> <!-- final de tabla-->
-
                 </div>
             </div>
         </div>
     </div>
 </main>
-
 <?php
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');

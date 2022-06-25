@@ -1,23 +1,17 @@
 <?php
-// include_once("layouts/head.php");
-// include_once("../conexiones/conexion.php");
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 //if not logged in redirect to login page
 if (!$user->is_logged_in()) {
     header('Location: login.php');
     exit();
 }
-
 //define page title
-$title = 'Docentes solicitud vista compartida';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
-
-//$objeto = new Conexion();
-$conexion = $db; // $objeto->Conectar();
+$conexion = $db;
 
 $consulta = "SELECT count(solicitudes.id_solicitudes) from solicitudes WHERE id_docente=$id_docente";
 $resultado = $conexion->prepare($consulta);
@@ -66,7 +60,6 @@ $queryDocenteCompartido = "SELECT DISTINCT m.nombre_docente, d.id_grupo FROM doc
 $resultadoDocenteCompartido = $conexion->prepare($queryDocenteCompartido);
 $resultadoDocenteCompartido->execute();
 $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 <main class="content">
     <div class="container">
@@ -81,15 +74,15 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
             </section>
-            <div class="col-md-12">
-                <div class="col-md-4">
-                    <label for="nombre_docente">Solicitado por Docente:</label>
-                    <h5><?php echo $nombre_docente['0']['nombre_docente'] ?></h5>
-                    <label for="nombre_grupos">Solicitud compartida con los docentes:</label>
-                    <h5><?php for ($i = 0; $i < count($arrayDataCompartido); $i++) {
+            <div class="row justify-content-center" >
+                <div class="col-md-6">
+                    <strong><label for="nombre_docente">Solicitado por Docente:</label></strong><br>
+                    <?php echo $nombre_docente['0']['nombre_docente'] ?><br>
+                    <strong><label for="nombre_grupos">Solicitud compartida con los docentes:</label></strong><br>
+                    <?php for ($i = 0; $i < count($arrayDataCompartido); $i++) {
                             echo ($arrayDataCompartido[$i]['nombre_docente']);
                             echo (' - ' . $arrayDataCompartido[$i]['id_grupo']); ?><br>
-                        <?php } ?></h5>
+                        <?php } ?><br>
                     <button id="BotonAgregar" type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#FormularioArticulo" data-whatever="@mdo">NUEVA RESERVA COMPARTIDA</button>
                 </div>
             </div>
@@ -114,11 +107,10 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
                         </table>
                     </div>
                 </div>
-                <div class="row justify-content-around">
-                    <div class="col-8">
-                        <button type="button" id="btnReserva" class="btn btn-primary text-center btnReserva">ENVIAR Y GUARDAR</button>
-                    </div>
+                <div class="row justify-content-end">
                     <div class="col-4">
+                        <br>
+                        <button type="button" id="btnReserva" class="btn btn-primary text-center btnReserva">ENVIAR Y GUARDAR</button>
                         <button type="button" id="btnCancelReserva" class="btn btn-danger text-center btnCancelReserva">CANCELAR</button>
                     </div>
                 </div>
@@ -192,7 +184,6 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </div>
-
 <script>
         var nro_solicitud = '<?php echo $nro ?>';
         var id_doc = '<?php echo $id_docente ?>';

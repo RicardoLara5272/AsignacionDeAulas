@@ -1,6 +1,4 @@
 <?php
-// include_once("layouts/head.php");
-// include_once("../conexiones/conexion.php");
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 //if not logged in redirect to login page
 if (!$user->is_logged_in()) {
@@ -9,18 +7,16 @@ if (!$user->is_logged_in()) {
 }
 
 //define page title
-$title = 'Docentes Page';
+$title = 'Asignaciones';
 
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
-//$objeto = new Conexion();
-$conexion = $db; // $objeto->Conectar();
+$conexion = $db; 
 
 $id_sol_DetPend = $_POST['id_solicitud_Revi'];
-
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
 $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
@@ -47,7 +43,6 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         $sentenciaSQL = $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_docente ");
                         $sentenciaSQL->execute();
                         $nom_docente = $sentenciaSQL->fetchColumn(2);
-                        //echo $nom_docente;
                         ?>
                         <label for="nombre_docente">Revisado por:</label>
                         <h5><?php echo $nom_docente ?></h5>
@@ -58,7 +53,6 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
 
                         </div>
                 </section>
-
                 <!-- comienzo de tabla-->
                 <div class="row justify-content-center">
                     <div class="table-responsive">
@@ -120,7 +114,7 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                             }
                                             ?>
                                         </td>
-                                        <td> <?php echo ($detalle_reserva_value);
+                                        <td class="texto"> <?php echo ($detalle_reserva_value);
                                                 ?> </td>
                                     </tr>
                                 <?php } ?>
@@ -128,7 +122,6 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         </table>
                     </div>
                 </div>
-
                 <div class="col-12">
                     <div style="text-align:right">
                         <br><br>

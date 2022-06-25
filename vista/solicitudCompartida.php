@@ -1,28 +1,17 @@
 <?php
-// include_once("layouts/head.php");
-// include_once("../conexiones/conexion.php");
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 //if not logged in redirect to login page
 if (!$user->is_logged_in()) {
     header('Location: login.php');
     exit();
 }
-
 //define page title
-$title = 'Docentes solicitud compartida';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
-
-//$objeto = new Conexion();
-$conexion = $db; // $objeto->Conectar();
-
-/*echo "<pre>";
-print_r($data);
-print_r($fila);
-echo "</pre>";*/
+$conexion = $db; 
 
 $sql = "SELECT nombre_docente FROM docentes WHERE id_docente = $id_docente";
 $resultado = $conexion->prepare($sql);
@@ -57,61 +46,54 @@ if (isset($_GET['Message'])) {
                     </div>
                 </div>
             </section>
-            <section>
-                <div class="solicitudCompartida">
-                    <form class="form-horizontal" id="formCompartida" onsubmit="return validationForm(event)" action="./solicitudVistaCompartida.php" method="POST">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="nombre_docente">Solicitud realizada por el Docente :</label>
-                                <h5><?php echo $nombre_docente['0']['nombre_docente'] ?></h5>
-                            </div>
-                            <div class="col-md-12 ">
-                                <label for="id_materia">Materia:</label>
-                                <div class="form-group">
-                                    <select class="form-control col-md-12 grupoMultiple" name="nombre_materia" id="id_materia_compartido">
-                                        <option value="">Seleccionar materia...</option>
-                                        <?php
-                                        foreach ($tablamaterias as $key => $materia) {
-                                        ?>
-                                            <option value="<?php echo $materia['id_materia'] ?>"><?php echo $materia['nombre_materia'] ?></option>
-                                        <?php
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <label for="grupo" class="col-form-label">Selecciona el o los docentes:</label>
-                                <div class="form-group">
-                                    <select class="form-control col-md-12" name="grupo[]" id="grupo" multiple>
-                                        <option value="">Seleccionar docentes...</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12 mt-3">
-                                <div class="row justify-content-center">
-                                    <div class="col-6">
-                                        <input class="btn btn-primary btnContinuar" id="btnContinuar" type="hidden" name="registroDoc" value="CONTINUAR">
-                                        <button class="btn btn-primary" type="submit">CONTINUAR</button>
-                                    </div>
-                                    <div class="col-6">
-                                        <input class="btn btn-danger" type="button" id="btnCancelar" onClick="window.parent.location='./homeDocente'" value="CANCELAR">
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </form>
+            <form class="form-horizontal" id="formCompartida" onsubmit="return validationForm(event)" action="./solicitudVistaCompartida.php" method="POST">
+                <div class="row justify-content-center" >
+                    <div class="col-md-4">
+                        <strong><label for="nombre_docente">Solicitud realizada por el Docente :</label></strong><br>
+                        <?php echo $nombre_docente['0']['nombre_docente'] ?>
+                    </div><br>
                 </div>
-            </section>
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        
+                        <strong><label for="id_materia">Materia:</label></strong>
+                        <div class="form-group">
+                            <select class="form-control col-md-4 grupoMultiple" name="nombre_materia" id="id_materia_compartido">
+                                <option value="">Seleccionar materia...</option>
+                                <?php
+                                foreach ($tablamaterias as $key => $materia) {
+                                ?>
+                                    <option value="<?php echo $materia['id_materia'] ?>"><?php echo $materia['nombre_materia'] ?></option>
+                                <?php
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <strong><label for="grupo" class="col-form-label">Selecciona el o los docentes:</label></strong>
+                        <div class="form-group">
+                            <select class="form-control col-md-8" name="grupo[]" id="grupo" multiple>
+                                <option value="">Seleccionar docentes...</option>
+                            </select>
+                        </div>
+                    </div>
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <br><br>
+                        <input class="btn btn-primary btnContinuar" id="btnContinuar" type="hidden" name="registroDoc" value="CONTINUAR">
+                        <button class="btn btn-primary" type="submit">CONTINUAR</button>
+                        <input class="btn btn-danger" type="button" id="btnCancelar" onClick="window.parent.location='./homeDocente'" value="CANCELAR">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </main>
 <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 <script src="http://asignaciondeaulas/vista/scrip.js"></script>
-
 <?php
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');

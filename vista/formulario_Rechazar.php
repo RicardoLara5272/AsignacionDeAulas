@@ -6,11 +6,11 @@ if (!$user->is_logged_in()) {
   exit();
 }
 $conexion = $db;
-
 //define page title
-$title = 'Docentes Page';
+$title = 'Asignaciones';
 $id_solicitud_Pend = $_REQUEST['id_solicitud_Pend'];
 $estado = $_REQUEST['enviar'];
+$mostrar_mensaje='';
 
 $sqlIdSolicitudes = "SELECT * FROM `reserva` where id_reserva=" . $id_solicitud_Pend;
 $query = $conexion->prepare($sqlIdSolicitudes);
@@ -44,8 +44,8 @@ $query2 = $conexion->prepare($reservas_atendidas);
 $query2->execute();
 $existe = false;
 $resultado_reservas_atendidas = $query2->fetchAll(PDO::FETCH_ASSOC);
-$estado_reserva="";
 
+$estado_reserva="";
 if (count($resultado_reservas_atendidas) > 0) {
   foreach ($resultado_reservas_atendidas as $key => $value) {
     if ($value['estado'] == 'Rechazado' || $value['estado'] == 'Aceptado') {
@@ -55,7 +55,6 @@ if (count($resultado_reservas_atendidas) > 0) {
     break;
   }
 }
-//var_dump( $data_reserva_rechazar);
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 ?>
@@ -92,19 +91,36 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
                     <button id='btn2' type='button' class="btn btn-primary" onClick="enviar('recibir_Rechazar.php')">RECHAZAR</button>
                   <?php
                   } else{?>
-                  <div class="alert alert-primary d-flex align-items-center" role="alert">
-                      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
-                        <use xlink:href="#info-fill" />
-                      </svg>
-                      <div>
-                        La reserva ya fue <?php echo ($estado_reserva); ?> anteriormente!!
-                      </div>
-                    </div>
-                  <?php } ?>
-                  <input type="hidden" name="id_reserva" value=" <?php echo ($data_reserva_rechazar['id_reserva']); ?> ">
-                  <input type="hidden" name="id_solicitud_Pend" value=" <?php echo ($data_reserva_rechazar['id_solicitudes']); ?> ">
-                  <input type="hidden" name="estado" value=" <?php echo ($estado); ?> ">
+                  <?php
+                    $color_emergente='';
+                    //var_dump($estado_reserva);
+                    //$estado_reserva;
+                    if(strtolower($estado_reserva)=='rechazado'){
+                      $color_emergente ='danger';
+                    }elseif (strtolower($estado_reserva)=='aceptado') {
+                      $color_emergente ='success';
+                    }else{
+                      $color_emergente ='info';
+                    }
+                    $mostrar_mensaje =
+                      '<div class="alert alert-'.$color_emergente.' d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                          <use xlink:href="#info-fill" />
+                        </svg>
+                        <div>
+                          La reserva ha sido ' . $estado_reserva . ' anteriormente!!
+                        </div>
+                      </div>';
+                      echo $mostrar_mensaje;
+                  }
+                 
+                  ?>
+
+                  <input type="hidden" name="id_reserva" value="<?php echo($data_reserva_rechazar['id_reserva']);?>">
+                  <input type="hidden" name="id_solicitud_Pend" value="<?php echo($data_reserva_rechazar['id_solicitudes']);?>">
+                  <input type="hidden" name="estado" value="<?php echo($estado);?>">
                   <button id="btn1" type="button" class="btn btn-danger" onClick="enviar2('vistaDetRese.php')">ATRAS</button>
+
                 </div>
               </div>
             </form>
@@ -130,13 +146,11 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
       return false;
     }
   }
-
   function enviar2(destino) {
     document.formulario.action = destino;
     document.formulario.submit();
     //    alert('holaa');
   }
-
   function validar(texto) {
     for (var j = 0; j < 69; j++) {
       var res = true;
@@ -148,7 +162,6 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
     }
     return res;
   }
-
   function enviar(destino) {
     let motivo = document.getElementById("motivo").value;
     var res = true;
@@ -170,8 +183,6 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
             alert('No se permiten caraecteres especiales');
           }
         }
-
-
         if (res == true && i + 1 < motivo.length && motivo[i] == ' ' && motivo[i + 1] == ' ') {
           res = false;
           alert('Demasiados espacios vacios');
@@ -195,11 +206,9 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
                 'Se envio el formulario',
                 'success'
               )
-
             }
           });
         }
-
       }
     } else {
       alert('Rellene los espacios vacios');

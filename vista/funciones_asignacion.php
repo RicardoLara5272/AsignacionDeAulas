@@ -40,15 +40,8 @@
 
             while(($fila = mysqli_fetch_row($resultado_consulta)) == true){
                   $id_aulaa=(int)$fila[0];
-
                   $guardar="INSERT INTO reservas_atendidas (id_reserva, estado, detalle, id_aula) VALUES ('$id_reserva', 'aceptado', '$mensaje', '$id_aulaa')"; 
                   $result=mysqli_query($conexion,$guardar);
-
-                  /*if($result == true){
-                        echo "<form action='macanas.php' method='post'><input type='hidden' name='entro' value='entro'><input type='submit' name='prueba' value='prueba'></form>";
-                  }else{
-                        echo "no entre 1) $fila[0], el otro $id_aulaa 2 ) el id reserva es $id_reserva<br>";
-                  }*/
             }
             $query = mysqli_query($conexion, "SELECT * FROM auxiliar, aulas WHERE aulas.id_aula = auxiliar.id_aula");
             $result = mysqli_num_rows($query);

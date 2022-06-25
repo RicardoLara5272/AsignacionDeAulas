@@ -1,6 +1,4 @@
 <?php
-// include_once("layouts/head.php");
-// include_once("../conexiones/conexion.php");
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 //if not logged in redirect to login page
 if (!$user->is_logged_in()) {
@@ -9,15 +7,15 @@ if (!$user->is_logged_in()) {
 }
 
 //define page title
-$title = 'Docentes Page';
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
 
-//$objeto = new Conexion();
-$conexion = $db; // $objeto->Conectar();
+
+$conexion = $db; 
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='revisado'");
 $sentenciaSQL->execute();
 $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
@@ -81,7 +79,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                         echo $fecha_aten;
                                         ?>
                                     </td>
-                                    <td> <?php echo $solicitud['estado']; ?> </td>
+                                    <td class="mayuscula"> <?php echo $solicitud['estado']; ?> </td>
                                     <td>
                                         <form action="vistaDetReservaAtendi.php" method="post" name="formulario">
                                             <input type="hidden" name="id_solicitud_Revi" value=" <?php echo $solicitud['id_solicitudes']; ?> ">

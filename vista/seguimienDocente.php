@@ -1,21 +1,17 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
-//if not logged in redirect to login page
 if (!$user->is_logged_in()) {
     header('Location: login.php');
     exit();
 }
-
 //define page title
-$title = 'Docentes Page';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
-//$objeto = new Conexion();
-$conexion = $db; // $objeto->Conectar();
+$conexion = $db;
 
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE id_docente=$id_docente");
 $sentenciaSQL->execute();
@@ -30,7 +26,6 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     <h2>Seguimiento de solicitudes</h2>
                 </div>        
                 <!-- comienzo de tabla-->
-                
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
@@ -74,7 +69,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                     }
                                 ?>
                                 </td>
-                                <td> <?php echo $solicitud['estado']; ?></td>
+                                <td class="mayuscula"> <?php echo $solicitud['estado']; ?></td>
                                 <td>
                                     <form action="DetalleReserDocent.php" method="post" name="formulario">
                                         <input type="hidden" name="id_solicitud" value=" <?php echo $solicitud['id_solicitudes']; ?> ">
@@ -90,7 +85,6 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </main>
-
 <?php
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');

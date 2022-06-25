@@ -1,16 +1,12 @@
 <?php
-// include_once("layouts/head.php");
-// include_once("../conexiones/conexion.php");
 require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 //if not logged in redirect to login page
 if (!$user->is_logged_in()) {
     header('Location: login.php');
     exit();
 }
-
 //define page title
-$title = 'Docentes Page';
-
+$title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
@@ -22,7 +18,7 @@ if (isset( $_POST['id_solicitud_Pend'])) {
 if (isset($_GET['id_solicitud_Pend'])) {
     $id_sol_DetPend = $_GET['id_solicitud_Pend'];
 }
-var_dump($id_sol_DetPend);
+
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
 $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
@@ -51,7 +47,6 @@ $sentencia->execute();
                             $sentenciaSQL = $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_docente ");
                             $sentenciaSQL->execute();
                             $nom_docente = $sentenciaSQL->fetchColumn(2);
-                            //echo $nom_docente;
                         ?>
                         <label for="nombre_docente">Solicitado por:</label>
                         <h5><?php echo $nom_docente?></h5>
@@ -60,7 +55,6 @@ $sentencia->execute();
                     <h3>Reservas</h3>
                 </div>
                 </section>
-
                 <!-- comienzo de tabla-->
                 <div class="row justify-content-center">
                     <div class="table-responsive">
@@ -113,19 +107,23 @@ $sentencia->execute();
                                             }
                                             ?>
                                         </td>
-                                        <td> <?php echo $reserva['detalle']; ?> </td>
+                                        <td class="texto"> <?php echo $reserva['detalle']; ?> </td>
                                         <td>
-                                            <!--redirigr mariscal y ricardo-->
-                                            <div class="btn-group">
+                                            <?php
+                                            if(!(strtolower($estado_reserva)=='rechazado' || strtolower($estado_reserva)=='aceptado')){ ?>
                                                 <form action="consultarAulas.php" method="post">
                                                     <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
                                                     <input type="submit" class="btn btn-info btn-space" value="CONSULTAR">
                                                 </form>
+                                            <?php }
+                                            ?>
+                                            <!--<div class="btn-group">
+                                                
                                                 <form action="formulario_Rechazar.php" method="post">
                                                     <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
                                                     <input type="submit" name="enviar" class="btn btn-secondary" value="RECHAZAR">
                                                 </form>
-                                            </div>
+                                            </div>-->
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -133,7 +131,6 @@ $sentencia->execute();
                         </table>
                     </div>
                 </div>
-
                 <div class="col-12">
                     <div style="text-align:right">
                         <br><br>
@@ -141,8 +138,7 @@ $sentencia->execute();
                         <input id="id_admin" type="hidden" value="<?php echo $_SESSION['id_docente'] ?>">
                         <input id="num_total_rese" type="hidden" value="<?php echo $indice; ?>">
                         <input id="num_rese_ate" type="hidden" value="<?php echo $indiceRev; ?>">
-                        <button type="submit" class="btn btn-primary" href="funciono.php" id="boton" onclick="comprobacion()">REVISADO</button>
-
+                        <button type="submit" class="btn btn-primary" id="boton" onclick="comprobacion()">REVISADO</button>
                         <a class="btn btn-danger" href="vistaDetPend.php">SALIR</a>
                     </div>
                 </div>
