@@ -1,11 +1,10 @@
 <?php
-session_start();
 if (!isset($_SESSION['usuario'])) {
-    header('Location: ../login.php');
+    header('Location: ../index.php');
 }
 if($_SESSION['is_admin'] != 1)
     {
-        header("location: /asignacionAulas-main/vista/homeDocente.php");
+        header("location: asignaciondeaulas/vista/homeDocente.php");
     }
 
 ?>

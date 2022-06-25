@@ -1,7 +1,5 @@
 const iconEye = document.querySelector(".icon-eye");
 
-console.log("iconEye");
-
 iconEye.addEventListener("click", function(){
     const icon = this.querySelector("i");
 

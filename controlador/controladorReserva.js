@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
         
     let tabla1 = $("#tablaarticulos").DataTable({
       "ajax": {
-        url: "../vista/datosReserva.php?accion=listar",
+        url: "http://asignaciondeaulas/vista/datosReserva.php?accion=listar",
         dataSrc: ""
       },
       "columns": [{
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         data: null
       }],
       "language": {
-        "url": "../vista/DataTables/spanish.json",
+        "url": "http://asignaciondeaulas/vista/DataTables/spanish.json",
       },
     });
 
@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     $('#ConfirmarAgregar').click(function() {
-      $("#FormularioArticulo").modal('hide');
       let registro = recuperarDatosFormulario();
       validarCampos(registro);
     });
@@ -70,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     $('.cancelModal').click(function() {
+      $("#FormularioArticulo").modal('hide');
       $('#grupo').empty().append('<option value="">Primero seleccione materia...</option>');
     });
 
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function mostrarMensaje(id_doc){
       $.ajax({
-        url:"../controlador/tablaVacia.php",
+        url:"http://asignaciondeaulas/controlador/tablaVacia.php",
         type: "POST",
         dataType: "json",
         data: {id_doc:id_doc},
@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     confirmButtonText: 'OK',
                   }).then((result) => {
                     if (result.isConfirmed) {
-                      redireccionA("../vista/homeDocente.php");
+                      redireccionA("http://asignaciondeaulas/vista/homeDocente.php");
                     }
                   })
                 }
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
             confirmButtonText: 'OK',
             }).then((result) => {
               if (result.isConfirmed) {
-                redireccionA("../vista/homeDocente.php");
+                redireccionA("http://asignaciondeaulas/vista/homeDocente.php");
               }
             })
         }
@@ -158,7 +158,7 @@ document.addEventListener("DOMContentLoaded", function() {
       $.ajax({
         type: 'POST',
         dataType: "json",
-        url: "../vista/datosReserva.php?accion=borrarReservaPendientes",
+        url: "http://asignaciondeaulas/vista/datosReserva.php?accion=borrarReservaPendientes",
         data: {id_doc:id_doc},
         success: function(msg) {
           tabla1.ajax.reload();
@@ -174,7 +174,7 @@ document.addEventListener("DOMContentLoaded", function() {
       $.ajax({
         type: 'POST',
         dataType: "json",
-        url: "../vista/datosReserva.php?accion=agregarSolicitud",
+        url: "http://asignaciondeaulas/vista/datosReserva.php?accion=agregarSolicitud",
         data: {id_doc:id_doc},
         success: function(msg) {
           tabla1.ajax.reload();
@@ -303,6 +303,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 if(capEstudiantes!='' && capEstudiantes >=1 && capEstudiantes<=1000 ){
                   if (detalle != '' && detalle.length <= 200 ) {
                     agregarRegistro(registro);
+                    window.location.reload(true);
                   } else {
                     alert("Error!!\nDebe introducir un detalle maximo de 200 caracteres");
                     
@@ -333,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function agregarRegistro(registro) {
       $.ajax({
         type: 'POST',
-        url: '../vista/datosReserva.php?accion=agregar',
+        url: 'http://asignaciondeaulas/vista/datosReserva.php?accion=agregar',
         data: registro,
         success: function(msg) {
           tabla1.ajax.reload();
@@ -347,7 +348,7 @@ document.addEventListener("DOMContentLoaded", function() {
     function borrarRegistro(id_pendientes) {
       $.ajax({
         type: 'GET',
-        url: '../vista/datosReserva.php?accion=borrar&id_pendientes=' + id_pendientes,
+        url: 'http://asignaciondeaulas/vista/datosReserva.php?accion=borrar&id_pendientes=' + id_pendientes,
         data: '',
         success: function(msg) {
           tabla1.ajax.reload();

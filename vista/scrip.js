@@ -7,12 +7,10 @@ if (id_materia) {
     id_materia.addEventListener('change', mostrarGrupo)
 
 } 
-
 function mostrarGrupo(e){
  console.log(e.target.value, id_docente.value)
  requerirGrupo(e.target.value, id_docente.value)
 }
-
 const requerirGrupo= async (id_materia, id_docente) => {
     try {
         const body={"id_materia":id_materia, "id_docente":id_docente}
@@ -31,16 +29,13 @@ const requerirGrupo= async (id_materia, id_docente) => {
         console.log(error)
     }
 }
-
 if(id_materia_compartido){
     id_materia_compartido.addEventListener('change', mostrarDocenteGrupo)
 }
-
 function mostrarDocenteGrupo(e){
  console.log(e.target.value, id_materia_compartido.value)
  requerirDocenteGrupo(e.target.value, id_materia_compartido.value)
 }
-
 const requerirDocenteGrupo= async (id_materia_compartido) => {
     try {
         const body={"id_materia":id_materia_compartido}
@@ -64,16 +59,12 @@ const requerirDocenteGrupo= async (id_materia_compartido) => {
         console.log(error)
     }
 }
-
 function obtenerhorainicio() {
     var i, cont, tamano;
-    
     var select = document.getElementById('hora_fin');
     var option = select.options[select.selectedIndex];
-    
     var mostrar = document.getElementById('hora_inicio');
     var opciones = mostrar.options[mostrar.selectedIndex];
-    
     var valor = opciones.value;
     tamano = Number(valor);
     

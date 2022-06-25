@@ -1,14 +1,9 @@
 <?php
 header('Content-Type: application/json');
-
-require("../conexiones/conexion.php");
-
-$objeto = new Conexion();
-$conexion = $objeto->Conectar();
-
+require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
+$conexion =$db;
 $fecha_solicitud=date("Y-m-d");
 $estado="Pendiente";
-
 $id_docente=(isset($_POST['id_doc'])) ? $_POST['id_doc'] : '';
 
 switch ($_GET['accion']) {
@@ -42,6 +37,7 @@ switch ($_GET['accion']) {
         $resultado->execute();
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
         print json_encode($data, JSON_UNESCAPED_UNICODE);
+        $conexion = NULL;
         break;
         
     case 'agregarCompartido':
@@ -53,6 +49,7 @@ switch ($_GET['accion']) {
         $resultado->execute();
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
         print json_encode($data, JSON_UNESCAPED_UNICODE);
+        $conexion = NULL;
         break;
         
     case 'borrar':
@@ -61,6 +58,7 @@ switch ($_GET['accion']) {
         $resultado->execute();
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
         print json_encode($data, JSON_UNESCAPED_UNICODE);
+        $conexion = NULL;
         break;
 
     case 'consultar':
@@ -69,6 +67,7 @@ switch ($_GET['accion']) {
         $resultado->execute();
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
         print json_encode($data, JSON_UNESCAPED_UNICODE);
+        $conexion = NULL;
         break;
 
     case 'agregarSolicitud':
@@ -103,10 +102,9 @@ switch ($_GET['accion']) {
         $consulta = "DELETE FROM reserva_pendientes WHERE id_docente='$id_docente'";		
         $resultado = $conexion->prepare($consulta);
         $resultado->execute();
-
-
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
         print json_encode($data, JSON_UNESCAPED_UNICODE);
+        $conexion = NULL;
         break;
 
     case 'borrarReservaPendientes':
@@ -115,6 +113,7 @@ switch ($_GET['accion']) {
         $resultado->execute();
         $data=$resultado->fetchAll(PDO::FETCH_ASSOC);
         print json_encode($data, JSON_UNESCAPED_UNICODE);
+        $conexion = NULL;
         break;
 
 }

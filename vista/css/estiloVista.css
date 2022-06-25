@@ -11,7 +11,6 @@ body{
 header{
     background:black;
     display: flex;
-    padding: 18px;
 }
 h1{
     color:white;
@@ -20,12 +19,12 @@ h1{
     font-size: 30px;
     padding: 0px 0px 0px 10px;
 }
-nav{
+
+#nav{
     width: 100%;
-    background-color: #E5E0DE;
-    height: 40px;
+    background-color: #000000;
 }
-nav a{
+#nav a{
     text-decoration: none;
     color: black;
 }
@@ -33,7 +32,6 @@ nav a{
     margin: 0;
     width: 100px;
     overflow: hidden;
-    background-color: #E5E0DE;
 }
 .menu{
     left: 20px;

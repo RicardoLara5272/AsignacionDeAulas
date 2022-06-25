@@ -1,27 +1,78 @@
 
-* {
-    margin: 0;
-    padding: 0;
-}
-
 /* Elementos de tag <fieldset>*/
 fieldset {
     border: 0;
 }
-
-/* Elemento de tag <body> */
-body{
-    background-color: #F0F8FF;
-    font-family: sans-serif;
-    font-size: 1em;
-    color: black;
-    margin-left: 36%;
-    margin-top: 2%;
-    justify-content: center;
+.aulas{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-auto-rows: 40px;
+    grid-gap: 1rem;
+    justify-content: space-between;
+    width: 300px;
+    justify-items: stretch;
+    justify-items: center;
 }
-
+.aulasReservar{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-auto-rows: 40px;
+    grid-gap: 1rem;
+    justify-content: space-between;
+    width: 300px;
+    justify-items: stretch;
+    justify-items: center;
+}
+.reserva{
+    display:inline-block;
+}
+.reserva input{
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background: rgb(36, 154, 36);
+    color: #ffffff;
+    border: 0;
+    font-size: small;
+    border-radius: 0.5rem !important;
+    width: 100%;
+    min-width: 110px;
+} 
+.reserva input:hover { 
+    background: greenyellow; 
+  } 
+.reserva1{
+    display: inline-block;
+}
+.reserva1 input{
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background: rgb(186, 23, 23);
+    color: #ffffff;
+    border: 0;
+    font-size: small;
+    border-radius: 0.5rem !important;
+    width: 100%;
+    min-width: 110px;
+} 
+.reserva1 input:hover { 
+    background: greenyellow; 
+  } 
+.reserva2{
+    display:inline-block;
+}
+.reserva2 input{
+    margin: 0.5rem;
+    padding: 0.5rem;
+    background: rgb(0, 136, 255);
+    color: #ffffff;
+    border: 0;
+    font-size: small;
+    border-radius: 0.5rem !important;
+    width: 100%;
+    min-width: 110px;
+} 
 /* Elementos de tags <body>, <input>, <Select>, <textarea> e <button> */
-input, select, textarea, button {
+input,select, textarea, button {
     font-family: sans-serif;
     font-size: 1em;
     color: black;
@@ -39,7 +90,7 @@ h3{
     color: black;
 }
 /* Elemento de classe "botao" */
-#btn1 {
+.btn1 {
     margin: 10px;
     font-size: 1.2em;
     background: blue;
@@ -48,14 +99,58 @@ h3{
     color: #ffffff;
     padding: 0.2em 0.6em;
     box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);    
 }
 
-#btn2 {
+.btn2 {
     margin: 10px;
     margin-left: 15px;
     font-size: 1.2em;
     background: red;
+    border: 0;
+    margin-bottom: 1em;
+    color: white;
+    padding: 0.2em 0.6em;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+.btn3 {
+    margin: 10px;
+    margin-left: 15px;
+    font-size: 1.2em;
+    background: rgb(0, 0, 0);
+    border: 0;
+    margin-bottom: 1em;
+    color: white;
+    padding: 0.2em 0.6em;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+.btnAtras{
+    display: inline-block;
+}
+.btnAtras input {
+    margin: 10px;
+    margin-left: 15px;
+    font-size: 1.2em;
+    background: rgb(5, 13, 251);
+    border: 0;
+    margin-bottom: 1em;
+    color: white;
+    padding: 0.2em 0.6em;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+}
+
+.btnAsig{
+    display: inline-block;
+    
+}
+.btnAsig input {
+    margin: 10px;
+    margin-left: 645px;
+    font-size: 1.2em;
+    background: rgb(2, 161, 2);
     border: 0;
     margin-bottom: 1em;
     color: white;

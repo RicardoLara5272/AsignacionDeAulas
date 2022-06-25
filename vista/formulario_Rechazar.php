@@ -1,270 +1,221 @@
 <?php
-//  $motivo=$_POST[]
-//capturamos datos de la tabla solicitud
-$id= $_POST['id_solicitud_Pend'];
-if(strlen($id)==3){
-  $id_reserva=$id[1];
+require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
+//if not logged in redirect to login page
+if (!$user->is_logged_in()) {
+  header('Location: login.php');
+  exit();
 }
-if(strlen($id)==4){
-  $id_reserva=$id[1].$id[2];
+$conexion = $db;
+//define page title
+$title = 'Asignaciones';
+$id_solicitud_Pend = $_REQUEST['id_solicitud_Pend'];
+$estado = $_REQUEST['enviar'];
+$mostrar_mensaje='';
+
+$sqlIdSolicitudes = "SELECT * FROM `reserva` where id_reserva=" . $id_solicitud_Pend;
+$query = $conexion->prepare($sqlIdSolicitudes);
+$query->execute();
+$result_reserva_rechazar = $query->fetchAll(PDO::FETCH_ASSOC);
+$data_reserva_rechazar = [];
+foreach ($result_reserva_rechazar as $key => $value) {
+  $data_reserva_rechazar = $value;
+  break;
 }
-if(strlen($id)==5){
-  $id_reserva=$id[1].$id[2].$id[3];
+//materia
+$materia = "SELECT * FROM `materias` where id_materia=" . $data_reserva_rechazar['id_materia'];
+$query = $conexion->prepare($materia);
+$query->execute();
+$resultado_materia = $query->fetchAll(PDO::FETCH_ASSOC);
+foreach ($resultado_materia as $key => $value) {
+  $data_reserva_rechazar['materia'] = $value;
+  break;
 }
+//docente
+$docente = "SELECT doc.* FROM solicitudes d INNER JOIN docentes doc ON d.id_docente=doc.id_docente WHERE d.id_solicitudes=" . $data_reserva_rechazar['id_solicitudes'];
+$query = $conexion->prepare($docente);
+$query->execute();
+$resultado_docente = $query->fetchAll(PDO::FETCH_ASSOC);
+foreach ($resultado_docente as $key => $value) {
+  $data_reserva_rechazar['docente'] = $value;
+  break;
+}
+$reservas_atendidas = "SELECT * FROM `reservas_atendidas` where id_reserva=" . trim($data_reserva_rechazar['id_reserva']);
+$query2 = $conexion->prepare($reservas_atendidas);
+$query2->execute();
+$existe = false;
+$resultado_reservas_atendidas = $query2->fetchAll(PDO::FETCH_ASSOC);
 
-//$id_reserva= $_POST['id_solicitud_Pend'];
-//$id_reserva=$id[1];
-$boolean="pendiente";
-$db_host = "localhost";
-$db_nombre = "asignacionaulas";
-$db_usuario = "root";
-$db_contra = "";
-
-$id_solicitud="";
-$id_materia = "";
-$fecha_reserva="";
-$grupo="";
-$hora_inicio="";
-$hora_fin="";
-$cap_est="";
-$detalle="";
-
-$codigo_materia="";
-$nom_materia="";
-$nivel="";
-
-$id_docente="";
-$nombre_docente="";
-
-$conexion = mysqli_connect($db_host, $db_usuario, $db_contra, $db_nombre);
-
-$sql5 = "SELECT * FROM `reservas_atendidas`";
-$result5 = mysqli_query($conexion, $sql5);
-while ($mostrar5 = mysqli_fetch_array($result5)) {
-  if ($id_reserva == $mostrar5['id_reserva']) {
-        if($mostrar5['estado']=="rechazado"){
-          $boolean="rechazado";
-          echo "
-      <div>
-      <h1   style='background:red; color:white; text-align: center;font-family:Verdana, sans-serif;'; > La Solicitud ha sido rechazada anteriormente  
-      </div>  </h1>";
-        }
-        if($mostrar5['estado']=="aceptado"){
-          $boolean="aceptado";
-          echo "
-      <div>
-      <h1   style='background:red; color:white; text-align: center;font-family:Verdana, sans-serif;'; > La Solicitud ha sido aceptada anteriormente   
-      </div>  </h1>";
-        }
+$estado_reserva="";
+if (count($resultado_reservas_atendidas) > 0) {
+  foreach ($resultado_reservas_atendidas as $key => $value) {
+    if ($value['estado'] == 'Rechazado' || $value['estado'] == 'Aceptado') {
+      $existe = true;
+      $estado_reserva=$value['estado'];
+    }
+    break;
   }
-} 
-if($boolean=="pendiente"){
-
-$sqlP = "SELECT * FROM `reserva`";
-$resultP = mysqli_query($conexion, $sqlP);
-while ($mostrarP = mysqli_fetch_array($resultP)) {
-        if($mostrarP['id_reserva']==$id_reserva){
-            $id_solicitud=$mostrarP['id_solicitudes'];
-            $id_materia=$mostrarP['id_materia'];
-            $fecha_reserva=$mostrarP['fecha_reserva'];
-            $grupo=$mostrarP['grupo'];
-            $hora_inicio=$mostrarP['hora_inicio'];
-            $hora_fin=$mostrarP['hora_fin'];
-            $cap_est=$mostrarP['capEstudiantes'];
-            $detalle=$mostrarP['detalle'];
-        }
-      }
-     $sql2 = "SELECT * FROM `materias`"; 
-      $result2 = mysqli_query($conexion, $sql2);
-      while ($mostrar2 = mysqli_fetch_array($result2)) {
-        if ($mostrar2['id_materia'] == $id_materia) {
-          $codigo_materia = $mostrar2['codigo_materia'];
-          $nom_materia=$mostrar2['nombre_materia'];
-          $nivel=$mostrar2['nivel'];
-         }
-      }
-      
-      $sql3 = "SELECT * FROM `solicitudes`";
-      $result3 = mysqli_query($conexion, $sql3);
-      while ($mostrar3 = mysqli_fetch_array($result3)) {
-        if ($id_solicitud == $mostrar3['id_solicitudes']) {
-              $id_docente = $mostrar3['id_docente'];
-        }
-      }        
-      
-      $sql4 = "SELECT * FROM `docentes`";
-      $result4 = mysqli_query($conexion, $sql4);
-      while ($mostrar4 = mysqli_fetch_array($result4)) {
-        if ($id_docente == $mostrar4['id_docente']) {
-              $nombre_docente = $mostrar4['nombre_docente'];
-        }
-      } 
-  
-    }
-
+}
+//include header template
+require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 ?>
+<!-- codigo -->
+<main class="content">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <br>
+        <div class="card-header text-center">
+          <h2>Rechazar solicitud</h2>
+        </div>
+        <div class="card-body">
+          <div>
+            <ul>
+              <li><strong>ID Reserva:</strong> <span><?php echo ($data_reserva_rechazar['id_reserva']); ?></span></li>
+              <li><strong>Docente:</strong> <span><?php echo ($data_reserva_rechazar['docente']['nombre_docente']); ?></span></li>
+              <li><strong>Materia:</strong> <span><?php echo ($data_reserva_rechazar['materia']['nombre_materia']); ?></span></li>
+              <li><strong>Fecha de Reserva:</strong> <span><?php echo ($data_reserva_rechazar['fecha_reserva']); ?></span></li>
+              <li><strong>Hora de Reserva:</strong> <span><?php echo ($data_reserva_rechazar['hora_inicio'] . ' - ' . $data_reserva_rechazar['hora_fin']); ?></span></li>
+              <li><strong>Capacidad de Estudiantes:</strong> <span><?php echo ($data_reserva_rechazar['capEstudiantes']); ?></span></li>
+              <li><strong>Detalle:</strong> <span><?php echo ($data_reserva_rechazar['detalle']); ?></span></li>
+            </ul>
+          </div>
+          <div>
+            <form id="formluario" name="formulario" method="post">
+              <div class="col-4">
+                <div class="form-group">
+                  <label for="motivo">Motivo para el rechazo de la Solicitud</label>
+                  <textarea rows="4" class="form-control" name="motivo" id="motivo" cols="30" rows="10" onkeypress="return sololetras(event)"></textarea>
+                </div>
+                <div id="botones" class="mt-4">
+                  <?php if ($existe == false) { ?>
+                    <button id='btn2' type='button' class="btn btn-primary" onClick="enviar('recibir_Rechazar.php')">RECHAZAR</button>
+                  <?php
+                  } else{?>
+                  <?php
+                    $color_emergente='';
+                    //var_dump($estado_reserva);
+                    //$estado_reserva;
+                    if(strtolower($estado_reserva)=='rechazado'){
+                      $color_emergente ='danger';
+                    }elseif (strtolower($estado_reserva)=='aceptado') {
+                      $color_emergente ='success';
+                    }else{
+                      $color_emergente ='info';
+                    }
+                    $mostrar_mensaje =
+                      '<div class="alert alert-'.$color_emergente.' d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                          <use xlink:href="#info-fill" />
+                        </svg>
+                        <div>
+                          La reserva ha sido ' . $estado_reserva . ' anteriormente!!
+                        </div>
+                      </div>';
+                      echo $mostrar_mensaje;
+                  }
+                 
+                  ?>
 
-<!DOCTYPE html>
-<html lang="en">
+                  <input type="hidden" name="id_reserva" value="<?php echo($data_reserva_rechazar['id_reserva']);?>">
+                  <input type="hidden" name="id_solicitud_Pend" value="<?php echo($data_reserva_rechazar['id_solicitudes']);?>">
+                  <input type="hidden" name="estado" value="<?php echo($estado);?>">
+                  <button id="btn1" type="button" class="btn btn-danger" onClick="enviar2('vistaDetRese.php')">ATRAS</button>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <link rel="stylesheet" href="formulario.css">
-  <link rel="stylesheet" href="librerias/plugins/sweetAlert2/sweetalert2.min.css" />
-  <link rel="stylesheet" href="librerias/plugins/animate.css/animate.css" />
-  <title>Formulario de Rechazo</title>
-</head>
-
-<body>
-  <script>
-    function sololetras(e) {
-      key = e.keyCode || e.which;
-      teclado = String.fromCharCode(key).toLowerCase();
-      letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwxyz1234567890,.:;";
-      especiales = "8-37-38-46-164";
-      teclado_especial = false;
-      for (var i in especiales) {
-        if (key == especiales[i]) {
-          teclado_especial = true;
-          break;
-        }
-      }
-      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
-        return false;
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
+<script>
+  function sololetras(e) {
+    key = e.keyCode || e.which;
+    teclado = String.fromCharCode(key).toLowerCase();
+    letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwxyz1234567890,.:;";
+    especiales = "8-37-38-46-164";
+    teclado_especial = false;
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true;
+        break;
       }
     }
-  </script>
-  <script>
-    function enviar2(destino) {
-      document.formulario.action = destino;
-      document.formulario.submit();
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
     }
-
-    function validar(texto) {
-      for (var j = 0; j < 69; j++) {
-        var res = true;
-        var letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwxyz1234567890,.:;";
-        console.log(letras[j]);
-        if (texto == letras[j]) {
-          res = false;
-        }
-      }
-      return res;
-    }
-
-    function enviar(destino) {
-      let motivo = document.getElementById("experiencia").value;
+  }
+  function enviar2(destino) {
+    document.formulario.action = destino;
+    document.formulario.submit();
+    //    alert('holaa');
+  }
+  function validar(texto) {
+    for (var j = 0; j < 69; j++) {
       var res = true;
-      if (!motivo == '' && !motivo == ' ') {
-        for (var i = 0; i < motivo.length; i++) {
-
-          if (res == true) {
-            if (motivo[i] != 'A' && motivo[i] != 'B' && motivo[i] != 'C' && motivo[i] != 'D' && motivo[i] != 'E' && motivo[i] != 'F' && motivo[i] != 'G' && motivo[i] != 'H' &&
-              motivo[i] != 'I' && motivo[i] != 'J' && motivo[i] != 'K' && motivo[i] != 'L' && motivo[i] != 'M' && motivo[i] != 'N' && motivo[i] != 'O' && motivo[i] != 'P' &&
-              motivo[i] != 'Q' && motivo[i] != 'R' && motivo[i] != 'S' && motivo[i] != 'T' && motivo[i] != 'V' && motivo[i] != 'W' && motivo[i] != 'X' && motivo[i] != 'Y' &&
-              motivo[i] != 'Z' && motivo[i] != 'a' && motivo[i] != 'b' && motivo[i] != 'c' && motivo[i] != 'd' && motivo[i] != 'e' && motivo[i] != 'f' && motivo[i] != 'g' && motivo[i] != 'h' &&
-              motivo[i] != 'i' && motivo[i] != 'j' && motivo[i] != 'k' && motivo[i] != 'l' && motivo[i] != 'm' && motivo[i] != 'n' && motivo[i] != 'o' && motivo[i] != 'p' &&
-              motivo[i] != 'q' && motivo[i] != 'r' && motivo[i] != 's' && motivo[i] != 't' && motivo[i] != 'v' && motivo[i] != 'w' && motivo[i] != 'x' && motivo[i] != 'y' &&
-              motivo[i] != 'z' && motivo[i] != '1' && motivo[i] != '2' && motivo[i] != '3' && motivo[i] != '4' && motivo[i] != '5' && motivo[i] != '6' && motivo[i] != '7' &&
-              motivo[i] != '8' && motivo[i] != '9' && motivo[i] != '0' && motivo[i] != ',' && motivo[i] != '.' && motivo[i] != ':' && motivo[i] != ';' && motivo[i] != ' '
-              && motivo[i] != 'U' && motivo[i] != 'u'
-              ) {
-              res = false;
-              alert('No se permiten caraecteres especiales');
-            }
-          }
-
-
-          if (res == true && i + 1 < motivo.length && motivo[i] == ' ' && motivo[i + 1] == ' ') {
-            res = false;
-            alert('Demasiados espacios vacios');
-          } else if (res == true && i == motivo.length - 1) {
-            Swal.fire({
-              title: "¿Esta seguro en rechazar la solicitud?",
-              text: "",
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Si, rechazar!'
-            }).then((result) => {
-              if (result.value) {
-                document.formulario.action = destino;
-                document.formulario.submit();
-
-                Swal.fire(
-                  'Rechazado!',
-                  'Se envio el formulario',
-                  'success'
-                )
-
-              }
-            });
-          }
-
-        }
-      } else {
-        alert('Rellene los espacios vacios');
+      var letras = " ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijgklmnopqrstuvwxyz1234567890,.:;";
+      console.log(letras[j]);
+      if (texto == letras[j]) {
+        res = false;
       }
     }
-  </script>
-  <?php
-  include('layouts/header.php');
-  include('layouts/navegacion.php');
-  ?>
+    return res;
+  }
+  function enviar(destino) {
+    let motivo = document.getElementById("motivo").value;
+    var res = true;
+    if (!motivo == '' && !motivo == ' ') {
+      for (var i = 0; i < motivo.length; i++) {
 
-  <section>
-    <div class="row text-center">
-      <div class="col-lg-12">
-        <h2 id="titulo">Rechazar Solicitud</h2>
-      </div>
-    </div>
-  </section>
-  <br />
-  <div id="for" class="row text-center">
-    <form id="formluario" name="formulario" method="post">
-      <!-- <h3>ID: </h3>-->
-      <b><label for="ID">ID Reserva:</label></b>
-      <label><?php echo $id_reserva ?></label><br>
-      <b><label for="docente">Docente:</label></b><br/>
-      <label><?php echo $nombre_docente ?></label><br>
-      <b><label for="materia">Materia:</label></b><br/>
-      <label><?php echo $nom_materia ?></label><br>
-      <b><label for="fecha_solicitud">Fecha de Reserva:</label></b><br/>
-      <label for=""><?php echo $fecha_reserva ?></label><br>
-      <b><label for="fecha_reserva">Hora de Reserva:</label></b><br/>
-      <label for=""><?php echo $hora_inicio . " - ". $hora_fin ?></label><br>
-      <b><label for="detalle">Detalle:</label></b><br/>
-      <label for=""><?php echo $detalle ?></label><br>
-      <div class="campo">
-        
-        <label for="experiencia"><b>Motivo para el rechazo de la Solicitud</b></label>
-        <textarea rows="6" style="width: 26em" id="experiencia" name="experiencia" onkeypress="return sololetras(event)"></textarea>
-        <?php
-        if($boolean=="pendiente"){
-          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
+        if (res == true) {
+          if (motivo[i] != 'A' && motivo[i] != 'B' && motivo[i] != 'C' && motivo[i] != 'D' && motivo[i] != 'E' && motivo[i] != 'F' && motivo[i] != 'G' && motivo[i] != 'H' &&
+            motivo[i] != 'I' && motivo[i] != 'J' && motivo[i] != 'K' && motivo[i] != 'L' && motivo[i] != 'M' && motivo[i] != 'N' && motivo[i] != 'O' && motivo[i] != 'P' &&
+            motivo[i] != 'Q' && motivo[i] != 'R' && motivo[i] != 'S' && motivo[i] != 'T' && motivo[i] != 'V' && motivo[i] != 'W' && motivo[i] != 'X' && motivo[i] != 'Y' &&
+            motivo[i] != 'Z' && motivo[i] != 'a' && motivo[i] != 'b' && motivo[i] != 'c' && motivo[i] != 'd' && motivo[i] != 'e' && motivo[i] != 'f' && motivo[i] != 'g' && motivo[i] != 'h' &&
+            motivo[i] != 'i' && motivo[i] != 'j' && motivo[i] != 'k' && motivo[i] != 'l' && motivo[i] != 'm' && motivo[i] != 'n' && motivo[i] != 'o' && motivo[i] != 'p' &&
+            motivo[i] != 'q' && motivo[i] != 'r' && motivo[i] != 's' && motivo[i] != 't' && motivo[i] != 'v' && motivo[i] != 'w' && motivo[i] != 'x' && motivo[i] != 'y' &&
+            motivo[i] != 'z' && motivo[i] != '1' && motivo[i] != '2' && motivo[i] != '3' && motivo[i] != '4' && motivo[i] != '5' && motivo[i] != '6' && motivo[i] != '7' &&
+            motivo[i] != '8' && motivo[i] != '9' && motivo[i] != '0' && motivo[i] != ',' && motivo[i] != '.' && motivo[i] != ':' && motivo[i] != ';' && motivo[i] != ' ' &&
+            motivo[i] != 'U' && motivo[i] != 'u'
+          ) {
+            res = false;
+            alert('No se permiten caraecteres especiales');
+          }
         }
-        else if($boolean=="aceptado"){
-          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
-        }
-        else if($boolean=="rechazado"){
-          echo "<input type='hidden' id='fila' name='id_reserva' value='" . $id_reserva . "'>";
-        }
-        ?>
-        <div id="botones">
-          <?php if($boolean=="pendiente"){
-                 echo   "<button id='btn2' type='button' onClick="."enviar('recibir_Rechazar.php')>Rechazar</button>";
-          }?>
-        <button id="btn1" type="button" onClick="enviar2('vistaDetPend.php')">Atras</button>
-      </div>
-      </div>
-    </form>
-    </div>
+        if (res == true && i + 1 < motivo.length && motivo[i] == ' ' && motivo[i + 1] == ' ') {
+          res = false;
+          alert('Demasiados espacios vacios');
+        } else if (res == true && i == motivo.length - 1) {
+          Swal.fire({
+            title: "¿Esta seguro en rechazar la solicitud?",
+            text: "",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'SI',
+            cancelButtonText: 'NO'
+          }).then((result) => {
+            if (result.value) {
+              document.formulario.action = destino;
+              document.formulario.submit();
 
-    <script src="librerias/jquery/jquery-3.3.1.min.js"></script>
-    <script src="librerias/popper/popper.min.js"></script>
-    <script src="librerias/plugins/sweetAlert2/sweetalert2.all.min.js"></script>
-</body>
-
-</html>
+              Swal.fire(
+                'Rechazado!',
+                'Se envio el formulario',
+                'success'
+              )
+            }
+          });
+        }
+      }
+    } else {
+      alert('Rellene los espacios vacios');
+    }
+  }
+</script>
+<?php
+//include header template
+require($_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php');
+?>
