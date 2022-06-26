@@ -12,10 +12,45 @@ $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
 $conexion = $db;
+$array_id_solicitudes=array();
 
-$sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE id_docente=$id_docente");
+//materia y grupo que dicta el docente logeado
+$sentenciaSQL = $conexion->prepare(" SELECT id_materia, id_grupo FROM docente_materia WHERE id_docente=$id_docente");
 $sentenciaSQL->execute();
-$listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+$listaMaterias = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+//var_dump($listaMaterias);
+
+//materias que tienen reserva y que dicta el docente logeado 
+$sentenciaSQL = $conexion->prepare(" SELECT DISTINCT res.id_solicitudes, res.id_reserva, res.id_materia, res.grupo, docmat.id_docente FROM reserva res INNER JOIN docente_materia docmat ON res.id_materia=docmat.id_materia WHERE docmat.id_docente = $id_docente ");
+$sentenciaSQL->execute();
+$listaDocente = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+//var_dump($listaDocente);
+//$grupo_materia_reserva=array();
+
+foreach($listaMaterias as $key => $materiasDictaDocente){
+    $id_materia_dicta_docente=$materiasDictaDocente['id_materia'];
+    $grupo_materia_dicta_docente=$materiasDictaDocente['id_grupo'];
+    foreach($listaDocente as $key => $docenteMaterias){
+        $id_materia_reserva=$docenteMaterias['id_materia'];
+        $grupo_materia_reserva=json_decode( $docenteMaterias['grupo']);
+        
+        if($id_materia_dicta_docente==$id_materia_reserva){
+            $cont=0;
+            for ($i=0; $i < count($grupo_materia_reserva); $i++) { 
+                
+                if($grupo_materia_dicta_docente == $grupo_materia_reserva[$i]){
+                    $array_id_solicitudes[]=$docenteMaterias['id_solicitudes'];
+                $cont++;
+                
+                }
+                
+
+            }
+        }
+    }
+}
+$array_id_solicitudes=array_values(array_unique($array_id_solicitudes));
+sort($array_id_solicitudes);
 ?>
 <main class="content">
     <div class="container">
@@ -39,7 +74,13 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody action="vistaDetRese.php" method="post">
-                            <?php foreach ($listaSolicitudes as $solicitud) { ?>
+                            <?php 
+                                for ($i=0; $i < count($array_id_solicitudes); $i++) { 
+                                    $valor=$array_id_solicitudes[$i];
+                                    $sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE id_solicitudes=$valor");
+                                    $sentenciaSQL->execute();
+                                    $solicitud = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC)[0];
+                            ?>
                                 <tr>
                                 <td> <?php echo $solicitud['id_solicitudes']; ?> </td>
                                 <td> 

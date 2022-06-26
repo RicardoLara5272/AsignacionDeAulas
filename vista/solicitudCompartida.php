@@ -85,7 +85,7 @@ if (isset($_GET['Message'])) {
                         <br><br>
                         <input class="btn btn-primary btnContinuar" id="btnContinuar" type="hidden" name="registroDoc" value="CONTINUAR">
                         <button class="btn btn-primary" type="submit">CONTINUAR</button>
-                        <input class="btn btn-danger" type="button" id="btnCancelar" onClick="window.parent.location='./homeDocente'" value="CANCELAR">
+                        <input class="btn btn-danger" type="button" id="btnCancelar" onClick="window.parent.location='./homeDocente'" value="CANCELAR" style="width: 115px;">
                     </div>
                 </div>
             </form>

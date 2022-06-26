@@ -10,7 +10,7 @@ $title = 'Asignaciones';
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 ?>
-<main class="content" style="background-image: url('../img.jpg');background-position: center;background-repeat: no-repeat;background-size: cover;height: 100vh;">
+<main class="content" style="background-image: url('../class.jpg');background-position: center;background-repeat: no-repeat;background-size: cover;height: 100vh;">
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <div class="col-12">

@@ -15,7 +15,12 @@
     </ul>
     <p>@2022 Gerf Software S.R.L | Contactos: (+591) 70791322</p>
 </footer>
-
+<script>
+    $( '#topheader .navbar-nav li' ).on( 'click', function () {
+	$( '#topheader .navbar-nav' ).find( 'li.active' ).removeClass( 'active' );
+	$( this ).parent( 'li' ).addClass( 'active' );
+});
+</script>
 <!-- 
 <script src="http://asignaciondeaulas/vista/scrip.js"></script>
 <script src="http://asignaciondeaulas/controlador/controladorReserva.js"></script>

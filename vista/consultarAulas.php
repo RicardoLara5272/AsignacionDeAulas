@@ -16,6 +16,7 @@ $id_solicitud = '';
 $boolean = "pendiente";
 $conexion = $db;
 $mostrar_mensaje='';
+$tipo_solicitud;
 
 
 $result5= $conexion->prepare("SELECT * FROM `reservas_atendidas`");
@@ -56,6 +57,12 @@ foreach ($result_consultar as $key => $value) {
   $data_consultar = $value;
   $id_solicitud = $value['id_solicitudes'];
   break;
+}
+$grupos = json_decode($data_consultar['grupo']);
+if (count($grupos) > 1) {
+  $tipo_solicitud = "Compartido";
+} else {
+  $tipo_solicitud = "Individual";
 }
 //materia
 $materia = "SELECT * FROM `materias` where id_materia=" . $data_consultar['id_materia'];
@@ -104,6 +111,7 @@ $fecha_solicitud = $fecha_solicitud;
         <br>
         <div class="card-header text-center">
           <h2>Consultar Aulas</h2>
+          <h3>Solicitud <?php echo $tipo_solicitud ?></h3>
         </div>
         <div class="card-body">
           <div>

@@ -9,9 +9,13 @@ if (!$user->is_logged_in()) {
 $title = 'Asignaciones';
 //include header template
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
+ini_set('date.timezone','America/Los_Angeles');
+
 $_POST["fecha"] = date("Y-m-d");
 $conexion = $db;
 $id_sol_DetPend='';
+
+$tipo_solicitud;
 if (isset( $_POST['id_solicitud_Pend'])) {
     $id_sol_DetPend = $_POST['id_solicitud_Pend'];
 }
@@ -22,6 +26,22 @@ if (isset($_GET['id_solicitud_Pend'])) {
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
 $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+$data_consultar = [];
+foreach ($listaReservas as $key => $value) {
+    $data_consultar = $value;
+    break;
+}
+
+//var_dump($listaReservas);
+$grupos = json_decode($data_consultar['grupo']);
+//var_dump($grupos);
+if (count($grupos) > 1) {
+    $tipo_solicitud = "Compartido";
+} else {
+    $tipo_solicitud = "Individual";
+}
+//echo date_default_timezone_get();
+//echo date("Y-m-d H:m:s");
 
 $sentencia= $conexion->prepare("DELETE FROM `auxiliar` WHERE id_aula>0");
 $sentencia->execute();
@@ -35,7 +55,7 @@ $sentencia->execute();
                     <div class="row text-center">
                         <div class="col-lg-12">
                             <br>
-                            <h2>Solicitud nro # <?php echo $id_sol_DetPend; ?> </h2>
+                            <h2>Solicitud <?php echo $tipo_solicitud?> nro # <?php echo $id_sol_DetPend; ?> </h2>
                         </div>
                     </div>
                     <div class="col-lg-12">
@@ -48,8 +68,8 @@ $sentencia->execute();
                             $sentenciaSQL->execute();
                             $nom_docente = $sentenciaSQL->fetchColumn(2);
                         ?>
-                        <label for="nombre_docente">Solicitado por:</label>
-                        <h5><?php echo $nom_docente?></h5>
+                        <strong><label for="nombre_docente">Solicitado por:</label></strong><br>
+                        <?php echo $nom_docente?>
                     </div>
                     <div class="card-header text-center">
                     <h3>Reservas</h3>
@@ -61,7 +81,7 @@ $sentencia->execute();
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Num</th>
+                                    <th>Nro</th>
                                     <th>Materia</th>
                                     <th>Cap.</th>
                                     <th>Fecha Reserva</th>
@@ -110,20 +130,40 @@ $sentencia->execute();
                                         <td class="texto"> <?php echo $reserva['detalle']; ?> </td>
                                         <td>
                                             <?php
-                                            if(!(strtolower($estado_reserva)=='rechazado' || strtolower($estado_reserva)=='aceptado')){ ?>
-                                                <form action="consultarAulas.php" method="post">
-                                                    <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
-                                                    <input type="submit" class="btn btn-info btn-space" value="CONSULTAR">
-                                                </form>
-                                            <?php }
+                                                $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_reserva = $id_reserva");
+                                                $sentenciaSQL->execute();
+                                                $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+                                                //ciclo para sacar el mayor considerando la fecha de hoy 
+
+                                                $fecha_re = $reserva['fecha_reserva'];
+                                                $hora_re = $reserva['hora_inicio'];
+                                                $fecha_comp_re = $fecha_re . ' ' . $hora_re;
+                                                $comp_date = strtotime($fecha_comp_re) + 21600;
+
+                                                $fecha_actual = time();
+                                                $comparacion = $comp_date - $fecha_actual;
+                                                if ($comparacion < 0) { 
+                                                    if(strtolower($estado_reserva)=='rechazado'){ 
+                                                        echo "Atendido";
+                                                    }else{?>
+                                                        <form action="formulario_Rechazar.php" method="post">
+                                                            <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
+                                                            <input type="submit" name="enviar" class="btn btn-secondary" value="RECHAZAR">
+                                                        </form>
+                                                    <?php  
+                                                    }
+                                                }else{
+                                                    if(!(strtolower($estado_reserva)=='rechazado' || strtolower($estado_reserva)=='aceptado')){ ?>
+                                                        <form action="consultarAulas.php" method="post">
+                                                            <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
+                                                            <input type="submit" class="btn btn-info btn-space" value="CONSULTAR">
+                                                        </form>
+                                                    <?php 
+                                                    }else{
+                                                        echo "Atendido";
+                                                    }
+                                                }
                                             ?>
-                                            <!--<div class="btn-group">
-                                                
-                                                <form action="formulario_Rechazar.php" method="post">
-                                                    <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $reserva['id_reserva']; ?> ">
-                                                    <input type="submit" name="enviar" class="btn btn-secondary" value="RECHAZAR">
-                                                </form>
-                                            </div>-->
                                         </td>
                                     </tr>
                                 <?php } ?>

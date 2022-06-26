@@ -12,7 +12,7 @@ require 'librerias/phpmailer/src/Exception.php';
 
 $id_reserva=(int)$_POST['id_reserva'];
 $mensaje=$_POST["mensaje"];
-var_dump($_REQUEST);
+//var_dump($_REQUEST);
 //obtenemos los nombres de los docentes
 $id_solicitud;
 $cantidad_estudiantes;

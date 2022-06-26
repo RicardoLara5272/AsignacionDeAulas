@@ -55,5 +55,15 @@ class User extends Password{
 			return true;
 		}
 	}
+	public function activeUrl($requestUri)
+	{
+		$current_file_name = basename($_SERVER['REQUEST_URI'], ".php");
+		if ($current_file_name == $requestUri){
+			return 'active';
+
+		}
+		return '';
+		
+	}
 
 }

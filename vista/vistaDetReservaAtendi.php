@@ -17,10 +17,11 @@ $id_materias = 1;
 $conexion = $db; 
 
 $id_sol_DetPend = $_POST['id_solicitud_Revi'];
+
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
 $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
-
+//var_dump($listaReservas);
 ?>
 <main class="content">
     <div class="container">
@@ -34,19 +35,29 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <div class="col-lg-12">
-
+                    <label for="nombre_docente">Solicitado por:</label>
                         <?php
-                        $sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE id_solicitudes = $id_sol_DetPend");
+                        $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes WHERE id_solicitudes = $id_sol_DetPend");
                         $sentenciaSQL->execute();
                         $id_docente = $sentenciaSQL->fetchColumn(3);
-
-                        $sentenciaSQL = $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_docente ");
+            
+                        $sentenciaSQL= $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_docente ");
                         $sentenciaSQL->execute();
                         $nom_docente = $sentenciaSQL->fetchColumn(2);
+                        echo $nom_docente; 
                         ?>
                         <label for="nombre_docente">Revisado por:</label>
-                        <h5><?php echo $nom_docente ?></h5>
+                        <?php 
+                        $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes_atendidas WHERE id_solicitud = $id_sol_DetPend");
+                        $sentenciaSQL->execute();
+                        $id_admi = $sentenciaSQL->fetchColumn(3);
+                        
+                        $sentenciaSQL= $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_admi");
+                        $sentenciaSQL->execute();
+                        $nombre_admi = $sentenciaSQL->fetchColumn(2);
+                        echo $nombre_admi;
 
+                        ?>      
                         <div class="card-header text-center">
 
                             <h3>Reservas </h3>

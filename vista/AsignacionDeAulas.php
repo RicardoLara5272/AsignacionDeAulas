@@ -13,6 +13,7 @@ $title = 'Asignaciones';
 require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 
 $id_reserva = $_REQUEST['id_reserva2'];
+$tipo_solicitud;
 
 $sql = "SELECT * FROM `reserva` where id_reserva=" . $id_reserva;
 $query = $conexion->prepare($sql);
@@ -23,6 +24,12 @@ foreach ($result_reserva as $key => $value) {
   $data_consultar = $value;
   $id_solicitud = $value['id_solicitudes'];
   break;
+}
+$grupos = json_decode($result_reserva['grupo']);
+if (count($grupos) > 1) {
+  $tipo_solicitud = "Compartido";
+} else {
+  $tipo_solicitud = "Individual";
 }
 
 //materia 
@@ -56,9 +63,9 @@ $grupos = json_decode($data_consultar['grupo']);
         <br>
         <div class="card-header text-center">
           <?php if (count($grupos) > 1) { ?>
-            <h2>ASIGNACION A SOLICITUD COMPARTIDA</h2>
+            <h2>Asignacion a Solicitud Compartido</h2>
           <?php } else { ?>
-            <h2>ASIGNACION A SOLICITUD INDIVIDUAL</h2>
+            <h2>Asignacion a Solicitud Individual</h2>
           <?php } ?>
         </div>
         <div class="card-body">
@@ -106,7 +113,7 @@ $grupos = json_decode($data_consultar['grupo']);
                 <textarea id='mensaje' name='mensaje' rows="4" class="form-control" cols="30" placeholder="Escribe tu mensaje aquí (Opcional)"></textarea><br>
                 <input type="hidden" id="id_reserva" name="id_reserva" value="<?php echo $id_reserva ?>" >
                 <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
-                <button class="btn btn-primary btnGuardar" type="submit" id="btnGuardar">ENVIAR Y GUARDAR"</button>
+                <button class="btn btn-primary btnGuardar" type="submit" id="btnGuardar">ENVIAR Y GUARDAR</button>
                 <button class="btn btn-danger text-center btnCancelar" type="submit" id="btnCancelar" formaction="./vistaDetRese.php">CANCELAR</button>
               </div>
             </div>

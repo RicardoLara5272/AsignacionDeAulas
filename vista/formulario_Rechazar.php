@@ -10,7 +10,8 @@ $conexion = $db;
 $title = 'Asignaciones';
 $id_solicitud_Pend = $_REQUEST['id_solicitud_Pend'];
 $estado = $_REQUEST['enviar'];
-$mostrar_mensaje='';
+$mostrar_mensaje = '';
+$tipo_solicitud;
 
 $sqlIdSolicitudes = "SELECT * FROM `reserva` where id_reserva=" . $id_solicitud_Pend;
 $query = $conexion->prepare($sqlIdSolicitudes);
@@ -21,6 +22,13 @@ foreach ($result_reserva_rechazar as $key => $value) {
   $data_reserva_rechazar = $value;
   break;
 }
+$grupos = json_decode($data_reserva_rechazar['grupo']);
+if (count($grupos) > 1) {
+  $tipo_solicitud = "Compartido";
+} else {
+  $tipo_solicitud = "Individual";
+}
+
 //materia
 $materia = "SELECT * FROM `materias` where id_materia=" . $data_reserva_rechazar['id_materia'];
 $query = $conexion->prepare($materia);
@@ -45,12 +53,12 @@ $query2->execute();
 $existe = false;
 $resultado_reservas_atendidas = $query2->fetchAll(PDO::FETCH_ASSOC);
 
-$estado_reserva="";
+$estado_reserva = "";
 if (count($resultado_reservas_atendidas) > 0) {
   foreach ($resultado_reservas_atendidas as $key => $value) {
     if ($value['estado'] == 'Rechazado' || $value['estado'] == 'Aceptado') {
       $existe = true;
-      $estado_reserva=$value['estado'];
+      $estado_reserva = $value['estado'];
     }
     break;
   }
@@ -65,10 +73,11 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
       <div class="col-lg-12 col-md-12 col-sm-12">
         <br>
         <div class="card-header text-center">
-          <h2>Rechazar solicitud</h2>
+          <h2>Rechazar Solicitud <?php echo $tipo_solicitud ?></h2>
         </div>
+      
         <div class="card-body">
-          <div>
+          <div class="center-list">
             <ul>
               <li><strong>ID Reserva:</strong> <span><?php echo ($data_reserva_rechazar['id_reserva']); ?></span></li>
               <li><strong>Docente:</strong> <span><?php echo ($data_reserva_rechazar['docente']['nombre_docente']); ?></span></li>
@@ -79,55 +88,60 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
               <li><strong>Detalle:</strong> <span><?php echo ($data_reserva_rechazar['detalle']); ?></span></li>
             </ul>
           </div>
-          <div>
+        </div>
+        <div class="card-body">
+          <div class="center-list">
             <form id="formluario" name="formulario" method="post">
-              <div class="col-4">
-                <div class="form-group">
-                  <label for="motivo">Motivo para el rechazo de la Solicitud</label>
-                  <textarea rows="4" class="form-control" name="motivo" id="motivo" cols="30" rows="10" onkeypress="return sololetras(event)"></textarea>
-                </div>
-                <div id="botones" class="mt-4">
-                  <?php if ($existe == false) { ?>
-                    <button id='btn2' type='button' class="btn btn-primary" onClick="enviar('recibir_Rechazar.php')">RECHAZAR</button>
-                  <?php
-                  } else{?>
-                  <?php
-                    $color_emergente='';
-                    //var_dump($estado_reserva);
-                    //$estado_reserva;
-                    if(strtolower($estado_reserva)=='rechazado'){
-                      $color_emergente ='danger';
-                    }elseif (strtolower($estado_reserva)=='aceptado') {
-                      $color_emergente ='success';
-                    }else{
-                      $color_emergente ='info';
-                    }
-                    $mostrar_mensaje =
-                      '<div class="alert alert-'.$color_emergente.' d-flex align-items-center" role="alert">
-                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
-                          <use xlink:href="#info-fill" />
-                        </svg>
-                        <div>
-                          La reserva ha sido ' . $estado_reserva . ' anteriormente!!
-                        </div>
-                      </div>';
-                      echo $mostrar_mensaje;
-                  }
-                 
-                  ?>
-
-                  <input type="hidden" name="id_reserva" value="<?php echo($data_reserva_rechazar['id_reserva']);?>">
-                  <input type="hidden" name="id_solicitud_Pend" value="<?php echo($data_reserva_rechazar['id_solicitudes']);?>">
-                  <input type="hidden" name="estado" value="<?php echo($estado);?>">
-                  <button id="btn1" type="button" class="btn btn-danger" onClick="enviar2('vistaDetRese.php')">ATRAS</button>
-
-                </div>
-              </div>
+                  <div class="form-group">
+                    <strong><label for="motivo">Motivo para el rechazo de la solicitud:</label></strong>
+                    <textarea style="width: 390px;" rows="4" class="form-control" name="motivo" id="motivo" cols="30" rows="10" onkeypress="return sololetras(event)"></textarea>
+                  </div><br>
+                  <div class="form-group">         
+                    <div id="botones" class="col-12">
+                      <div style="text-align:right">
+                        <?php if ($existe == false) { ?>
+                          <button id='btn2' type='button' class="btn btn-primary" onClick="enviar('recibir_Rechazar.php')">RECHAZAR</button>
+                        <?php
+                        } else { ?>
+                        <?php
+                          $color_emergente = '';
+                          //var_dump($estado_reserva);
+                          //$estado_reserva;
+                          if (strtolower($estado_reserva) == 'rechazado') {
+                            $color_emergente = 'danger';
+                          } elseif (strtolower($estado_reserva) == 'aceptado') {
+                            $color_emergente = 'success';
+                          } else {
+                            $color_emergente = 'info';
+                          }
+                          $mostrar_mensaje =
+                            '<div class="alert alert-' . $color_emergente . ' d-flex align-items-center" role="alert">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+                                  <use xlink:href="#info-fill" />
+                                </svg>
+                                <div>
+                                  La reserva ha sido ' . $estado_reserva . ' anteriormente!!
+                                </div>
+                              </div>';
+                          echo $mostrar_mensaje;
+                        }
+                        ?>
+                        <input type="hidden" name="id_reserva" value="<?php echo ($data_reserva_rechazar['id_reserva']); ?>">
+                        <input type="hidden" name="id_solicitud_Pend" value="<?php echo ($data_reserva_rechazar['id_solicitudes']); ?>">
+                        <input type="hidden" name="estado" value="<?php echo ($estado); ?>">
+                        <button id="btn1" type="button" class="btn btn-danger" onClick="enviar2('vistaDetRese.php')">ATRAS</button>
+                      </div>
+                    </div>
+                  </div>
+                
+              
             </form>
+            
           </div>
         </div>
       </div>
     </div>
+  </div>
 </main>
 <script>
   function sololetras(e) {
@@ -146,11 +160,13 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
       return false;
     }
   }
+
   function enviar2(destino) {
     document.formulario.action = destino;
     document.formulario.submit();
     //    alert('holaa');
   }
+
   function validar(texto) {
     for (var j = 0; j < 69; j++) {
       var res = true;
@@ -162,6 +178,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
     }
     return res;
   }
+
   function enviar(destino) {
     let motivo = document.getElementById("motivo").value;
     var res = true;
