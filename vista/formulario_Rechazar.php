@@ -94,7 +94,7 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
             <form id="formluario" name="formulario" method="post">
                   <div class="form-group">
                     <strong><label for="motivo">Motivo para el rechazo de la solicitud:</label></strong>
-                    <textarea style="width: 390px;" rows="4" class="form-control" name="motivo" id="motivo" cols="30" rows="10" onkeypress="return sololetras(event)"></textarea>
+                    <textarea style="width: 390px;" rows="4" class="form-control" name="motivo" id="motivo" cols="30" rows="10" onkeypress="return sololetras(event)" placeholder="Escribe tu mensaje aquí (Obligatorio)"></textarea>
                   </div><br>
                   <div class="form-group">         
                     <div id="botones" class="col-12">

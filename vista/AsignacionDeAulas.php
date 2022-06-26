@@ -14,22 +14,27 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 
 $id_reserva = $_REQUEST['id_reserva2'];
 $tipo_solicitud;
+$grupos;
+$data_consultar = [];
+$mensaje;
 
 $sql = "SELECT * FROM `reserva` where id_reserva=" . $id_reserva;
 $query = $conexion->prepare($sql);
 $query->execute();
 $result_reserva = $query->fetchAll(PDO::FETCH_ASSOC);
-$data_consultar = [];
+
 foreach ($result_reserva as $key => $value) {
   $data_consultar = $value;
   $id_solicitud = $value['id_solicitudes'];
   break;
 }
-$grupos = json_decode($result_reserva['grupo']);
+$grupos = json_decode($data_consultar['grupo']);
 if (count($grupos) > 1) {
   $tipo_solicitud = "Compartido";
+  $mensaje = "para los docentes";
 } else {
   $tipo_solicitud = "Individual";
+  $mensaje = "para el docente";
 }
 
 //materia 
@@ -52,7 +57,7 @@ foreach ($resultado_docente as $key => $value) {
   break;
 }
 $id_materia = $data_consultar['id_materia'];
-$grupos = json_decode($data_consultar['grupo']);
+//$grupos = json_decode($data_consultar['grupo']);
 
 
 ?>
@@ -62,19 +67,15 @@ $grupos = json_decode($data_consultar['grupo']);
       <div class="col-lg-12 col-md-12 col-sm-12">
         <br>
         <div class="card-header text-center">
-          <?php if (count($grupos) > 1) { ?>
-            <h2>Asignacion a Solicitud Compartido</h2>
-          <?php } else { ?>
-            <h2>Asignacion a Solicitud Individual</h2>
-          <?php } ?>
+          <h2>Asignacion a Solicitud <?php echo $tipo_solicitud ?></h2>
         </div>
         <div class="card-body">
-          <div class="list">
+          <div class="center-list">
             <ul>
               <li><strong>ID Solicitud:</strong> <span><?php echo ($data_consultar['id_solicitudes']); ?></span></li>
               <li><strong>ID Reserva:</strong> <span><?php echo ($data_consultar['id_reserva']); ?></span></li>
               <li><strong>Materia:</strong> <span><?php echo ($data_consultar['materia']['nombre_materia']); ?></span></li>
-              <li><strong>Solicitud compartida para los docentes - grupo:</strong><span><br>
+              <li><strong>Solicitud <?php echo $tipo_solicitud . ' ' . $mensaje?> - grupo:</strong><span><br>
                   <?php for ($i = 0; $i < count($grupos); $i++) {
                     $sql = "SELECT doc.nombre_docente, d.id_grupo FROM docente_materia d INNER JOIN docentes doc ON d.id_docente=doc.id_docente WHERE d.id_materia=$id_materia AND d.id_grupo='$grupos[$i]'";
                     $query = $conexion->prepare($sql);
@@ -106,19 +107,23 @@ $grupos = json_decode($data_consultar['grupo']);
                 } ?></span></li>
             </ul>
           </div>
-          <form action='./funciones_asignacion_aceptar.php' method='post'>
-            <div class="col-4">
-              <div class="form-group">
-                <label for='mensaje'><b>Respuesta de asignacion:</b></label>
-                <textarea id='mensaje' name='mensaje' rows="4" class="form-control" cols="30" placeholder="Escribe tu mensaje aquí (Opcional)"></textarea><br>
-                <input type="hidden" id="id_reserva" name="id_reserva" value="<?php echo $id_reserva ?>" >
-                <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
-                <button class="btn btn-primary btnGuardar" type="submit" id="btnGuardar">ENVIAR Y GUARDAR</button>
-                <button class="btn btn-danger text-center btnCancelar" type="submit" id="btnCancelar" formaction="./vistaDetRese.php">CANCELAR</button>
+        </div class="card-body">
+          <div class="center-list">
+            <form action='./funciones_asignacion_aceptar.php' method='post'>
+                <div class="form-group">
+                  <strong><label for='mensaje'>Respuesta de asignacion:</label></strong>
+                  <textarea style="width: 390px;" id='mensaje' name='mensaje' rows="4" class="form-control" cols="30" placeholder="Escribe tu mensaje aquí (Opcional)"></textarea><br>
+                </div>
+                <div class="form-group">         
+                    <div id="botones" class="col-12" style="text-align:right">
+                    <input type="hidden" id="id_reserva" name="id_reserva" value="<?php echo $id_reserva ?>" >
+                    <input type="hidden" name="id_solicitud_Pend" value=" <?php echo $id_solicitud ?> ">
+                    <button class="btn btn-primary btnGuardar" type="submit" id="btnGuardar">ENVIAR Y GUARDAR</button>
+                    <button class="btn btn-danger text-center btnCancelar" type="submit" id="btnCancelar" formaction="./vistaDetRese.php">CANCELAR</button>
+                
               </div>
-            </div>
-          </form>
-          
+            </form>
+          </div>
         </div>
       </div>
     </div>

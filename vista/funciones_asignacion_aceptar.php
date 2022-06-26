@@ -1,17 +1,18 @@
 <?php 
 
-include("../config/db.php");
+include($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
 ini_set("pcre.jit", "0");
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
     
-require 'librerias/phpmailer/src/PHPMailer.php';
-require 'librerias/phpmailer/src/SMTP.php';
-require 'librerias/phpmailer/src/Exception.php';
+require $_SERVER['DOCUMENT_ROOT'] .'/vista/librerias/phpmailer/src/PHPMailer.php';
+require $_SERVER['DOCUMENT_ROOT'] .'/vista/librerias/phpmailer/src/SMTP.php';
+require $_SERVER['DOCUMENT_ROOT'] .'/vista/librerias/phpmailer/src/Exception.php';
 
 $id_reserva=(int)$_POST['id_reserva'];
 $mensaje=$_POST["mensaje"];
+$conexion = $db;
 //var_dump($_REQUEST);
 //obtenemos los nombres de los docentes
 $id_solicitud;
@@ -144,7 +145,7 @@ if(count($grupos)>1){
     for($i=0; $i<count($grupos); $i++){
         global $aulas;
         $mail = new PHPMailer(true);
-            try {
+            //try {
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
@@ -155,15 +156,16 @@ if(count($grupos)>1){
                       
                 $mail->setFrom('gerfsoftware.srl@gmail.com', 'UMSS FCyT');
                 $mail->addCC($correos[$i]);
+                var_dump(array_values($correos));
                 $mail->addAddress($correos[$i]);
                       
                 $mail->isHTML(true);
                 $mail->Subject = 'Respuesta a solicitud de asignacion de aula compartida.';
-                $mail->Body = '<h4>'. $nombres[$i] .'</h4><p>Se aprobó su solicitud compartida de aula para la toma de examen para la materia : '. $nombre_materia . ' <br>grupo ' . $grupos[$i] . '<br> Aulas: ' . $aulas . '<br>Fecha que se realizó la solicitud: ' . $fecha_solicitud .'<br>Cantidad de estudiantes: ' . $cantidad_estudiantes .'<br>Mensaje: ' . $mensaje .'</p>';
+                $mail->Body = 'hola prueba error del mensaje del solicitud compartido';//'<h4>'. $nombres[$i] .'</h4><p>Se aprobó su solicitud compartida de aula para la toma de examen para la materia : '. $nombre_materia . ' <br>grupo ' . $grupos[$i] . '<br> Aulas: ' . $aulas . '<br>Fecha que se realizó la solicitud: ' . $fecha_solicitud .'<br>Cantidad de estudiantes: ' . $cantidad_estudiantes .'<br>Mensaje: ' . $mensaje .'</p>';
                 $mail->send();
-            } catch(Exception $e) {
-                              echo '<script language="javascript">alert("error");</script>';
-            }
+            //} catch(Exception $e) {
+                             // echo '<script language="javascript">alert("error");</script>';
+            //}
     }
 }else{
     global $id_solicitud;
@@ -177,7 +179,7 @@ if(count($grupos)>1){
     global $nom_materia;
     global $aulas;
     $mail = new PHPMailer(true);
-    try {
+    //try {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
@@ -188,15 +190,17 @@ if(count($grupos)>1){
                 
         $mail->setFrom('gerfsoftware.srl@gmail.com', 'UMSS FCyT');
         $mail->addCC($correos[0]);
+        var_dump(array_values($correos));
         $mail->addAddress($correos[0]);
                 
         $mail->isHTML(true);
         $mail->Subject = 'Respuesta a solicitud de asignacion de aula individual.';
-        $mail->Body = '<h4>'. $nombres[0] .'</h4><p>Se aprobó su solicitud individual de aula para la toma de examen para la materia : '. $nombre_materia . ' <br>Grupo ' . $grupos[0] . '<br>Aulas: ' . $aulas . '<br>Fecha que se realizó la solicitud: ' . $fecha_solicitud .'<br>Cantidad de estudiantes: ' . $cantidad_estudiantes .'<br>Mensaje: ' . $mensaje .'</p>';
+        $mail->Body = 'hola prueba error del mensaje';//'<h4>'. $nombres[0] .'</h4><p>Se aprobó su solicitud individual de aula para la toma de examen para la materia : '. $nombre_materia . ' <br>Grupo ' . $grupos[0] . '<br>Aulas: ' . $aulas . '<br>Fecha que se realizó la solicitud: ' . $fecha_solicitud .'<br>Cantidad de estudiantes: ' . $cantidad_estudiantes .'<br>Mensaje: ' . $mensaje .'</p>';
+        
         $mail->send();
-    } catch(Exception $e) {
-      echo '<script language="javascript">alert("error");</script>';
-    }
+    //} catch(Exception $e) {
+      //echo '<script language="javascript">alert("error");</script>';
+    //}
 }
 $borrar_auxiliar=$conexion->prepare("DELETE FROM auxiliar");
 $borrar_auxiliar->execute();

@@ -113,18 +113,36 @@ $sentencia->execute();
                                         <td> <?php echo $reserva['fecha_reserva']; ?> </td>
                                         <td> <?php echo $reserva['hora_inicio']; ?> </td>
                                         <td> <?php echo $reserva['hora_fin']; ?> </td>
-                                        <td>
+                                        <td class="texto">
                                             <?php
+                                            $estaditos='';
                                             $id_reserva = $reserva['id_reserva'];
                                             $sentenciaSQL = $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
                                             $sentenciaSQL->execute();
                                             $estado_reserva = $sentenciaSQL->fetchColumn(3);
                                             if (empty($estado_reserva)) {
+                                                $estaditos ='<span class="amarillo">Pendiente</span>';
+                                                echo $estaditos;
+                                                
+                                                
+                                            } else {
+                                                if(strtolower($estado_reserva)=='rechazado'){
+                                                    $estaditos ='<span class="rojo">'.$estado_reserva.'</span>';
+                                                }elseif (strtolower($estado_reserva)=='aceptado') {
+                                                    $estaditos ='<span class="verde">'.$estado_reserva.'</span>';
+                                                }else{
+                                                    $estaditos ='<span class="amarillo">'.$estado_reserva.'</span>';
+                                                }
+                                                echo $estaditos;
+                                                $indiceRev++;
+                                                
+                                            }
+                                            /*if (empty($estado_reserva)) {
                                                 echo 'Pendiente';
                                             } else {
                                                 echo $estado_reserva;
                                                 $indiceRev++;
-                                            }
+                                            }*/
                                             ?>
                                         </td>
                                         <td class="texto"> <?php echo $reserva['detalle']; ?> </td>
@@ -182,7 +200,7 @@ $sentencia->execute();
                         <a class="btn btn-danger" href="vistaDetPend.php">SALIR</a>
                     </div>
                 </div>
-                <script language="javascript" src="../js/redireccion.js"> </script>
+                <script language="javascript" src="http://asignaciondeaulas/js/redireccion.js"> </script>
         </div>
     </div>
 </main>
