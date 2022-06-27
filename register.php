@@ -5,7 +5,7 @@ if ($user->is_logged_in()) {
     header('Location: memberpage.php');
     exit();
 }
-
+$error = [];
 //Verifica si el formulario ha sido enviado correctamente
 if (isset($_POST['submit'])) {
 
@@ -37,6 +37,9 @@ if (isset($_POST['submit'])) {
     if (strlen($_POST['passwordConfirm']) < 3) {
         $error[] = 'Confirmar contraseña es demasiado corta.';
     }
+    if (strlen($_POST['is_admin']) == 0) {
+        $error[] = 'Selecione rol.';
+    }
 
     if ($_POST['password'] != $_POST['passwordConfirm']) {
         $error[] = 'Las contraseñas no coinciden.';
@@ -55,19 +58,16 @@ if (isset($_POST['submit'])) {
             $error[] = 'Email provided is already in use.';
         }
     }
-
-
     //Comprobamos que no exista error
-    if (!isset($error)) {
-
+    if (count($error) == 0) {
         //hash the password
-        $hashedpassword = $user->password_hash($_POST['password'], PASSWORD_BCRYPT);
+        $hashedpassword = password_hash("password", PASSWORD_BCRYPT); // $user->password_hash($_POST['password'], PASSWORD_BCRYPT);
 
         //Creamos el codigo de activacion
         $activasion = md5(uniqid(rand(), true));
         $ci_docente = $_POST['ci_docente'];
         $nombre_docente = $_POST['nombre_docente'];
-        $is_admin = 0;
+        $is_admin = (int) $_POST['is_admin'];
         $resetToken = "";
         $resetComplete = "";
         try {
@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
 }
 
 //definimos el titulo de la pagina
-$title = 'Login y registro PDO';
+$title = 'registro PDO';
 
 //include header tema
 require('layout/header.php');
@@ -123,82 +123,91 @@ require('layout/header.php');
         <div class="row d-flex justify-content-center">
             <?php
             //check for any errors
+            $mensaje_error = '';
             if (isset($error)) {
-                foreach ($error as $error) {
-                    echo '<p class="bg-danger">' . $error . '</p>';
+                foreach ($error as $errort) {
+                    $mensaje_error = $mensaje_error . $errort . '<br>';
                 }
             }
-
+            if ($mensaje_error) {
+                echo '<p class="alert alert-danger">' . $mensaje_error . '</p><br>';
+            }
             //if action is joined show sucess
             if (isset($_GET['action']) && $_GET['action'] == 'joined') {
-                echo "<h4 class='bg-success'>Registro exitoso, por favor revise su correo electrónico para activar su cuenta.</h4>";
+                echo "<h4 class='alert alert-success'>Registro exitoso, por favor revise su correo electrónico para activar su cuenta.</h4>";
             }
             ?>
-            <div class="row">
-
+            <?php
+            //check for any errors
+            //if action is joined show sucess
+            if (isset($_GET['action']) && $_GET['action'] == 'joined') {
+                echo "<p class='alert alert-success'>Registro exitoso, por favor revise su correo electrónico para activar su cuenta.</p>";
+            }
+            ?>
+            <div class="row justify-content-center">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-                    <form role="form" method="post" action="" autocomplete="off">
-                        <h2>Por favor regístrese</h2>
-                        <hr>
+                    <div class="user-card " style="height: 500px;">
+                        <div class="login-box">
+                            <div class="login-form">
+                                <form role="form" method="post" action="" autocomplete="off">
+                                    <h2>Por favor regístrese</h2>
+                                    <hr>
 
-                        <?php
-                        //check for any errors
-                        if (isset($error)) {
-                            foreach ($error as $erro) {
-                                echo '<p class="bg-danger">' . $erro . '</p>';
-                            }
-                        }
 
-                        //if action is joined show sucess
-                        if (isset($_GET['action']) && $_GET['action'] == 'joined') {
-                            echo "<h4 class='bg-success'>Registro exitoso, por favor revise su correo electrónico para activar su cuenta.</h4>";
-                        }
-                        ?>
 
-                        <div class="form-group">
-                            <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Usuario" value="<?php if (isset($error)) {
-                                                                                                                                            echo htmlspecialchars($_POST['username'], ENT_QUOTES);
-                                                                                                                                        } ?>" tabindex="1">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="nombre_docente" id="nombre_docente" class="form-control input-lg" placeholder="Nombre docente" value="<?php if (isset($error)) {
-                                                                                                                                                                echo htmlspecialchars($_POST['nombre_docente'], ENT_QUOTES);
-                                                                                                                                                            } ?>" tabindex="2">
-                        </div>
-                        <div class="form-group">
-                            <input type="number" name="ci_docente" id="ci_docente" class="form-control input-lg" placeholder="CI docente" value="<?php if (isset($error)) {
-                                                                                                                                                        echo htmlspecialchars($_POST['ci_docente'], ENT_QUOTES);
-                                                                                                                                                    } ?>" tabindex="3">
-                        </div>
+                                    <div class="form-group">
+                                        <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Usuario" value="<?php if (count($error) > 0) {
+                                                                                                                                                        echo htmlspecialchars($_POST['username'], ENT_QUOTES);
+                                                                                                                                                    } ?>" tabindex="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" name="nombre_docente" id="nombre_docente" class="form-control input-lg" placeholder="Nombre docente" value="<?php if (count($error) > 0) {
+                                                                                                                                                                            echo htmlspecialchars($_POST['nombre_docente'], ENT_QUOTES);
+                                                                                                                                                                        } ?>" tabindex="2">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="number" name="ci_docente" id="ci_docente" class="form-control input-lg" placeholder="CI docente" value="<?php if (count($error) > 0) {
+                                                                                                                                                                    echo htmlspecialchars($_POST['ci_docente'], ENT_QUOTES);
+                                                                                                                                                                } ?>" tabindex="3">
+                                    </div>
 
-                        <div class="form-group">
-                            <input type="email" name="correo" id="correo" class="form-control input-lg" placeholder="Email Address" value="<?php if (isset($error)) {
-                                                                                                                                                echo htmlspecialchars($_POST['correo'], ENT_QUOTES);
-                                                                                                                                            } ?>" tabindex="4">
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="5">
-                                </div>
+                                    <div class="form-group">
+                                        <input type="email" name="correo" id="correo" class="form-control input-lg" placeholder="Email Address" value="<?php if (count($error) > 0) {
+                                                                                                                                                            echo htmlspecialchars($_POST['correo'], ENT_QUOTES);
+                                                                                                                                                        } ?>" tabindex="4">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-6 col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="5">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-6">
+                                            <div class="form-group">
+                                                <input type="password" name="passwordConfirm" id="passwordConfirm" class="form-control input-lg" placeholder="Confirmar" tabindex="6">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="is_admin" id="is_admin" class="form-control input-lg">
+                                            <option value="0">Docente</option>
+                                            <option value="1">Administrador</option>
+                                            <option value="2">Administrador/ Docente</option>
+                                        </select>
+                                    </div>
+                                    <div class="row justify-content-center">
+                                        <div class="col-xs-6 col-md-6"><input style="text-transform: uppercase;padding: inherit;" type="submit" name="submit" value="Registrar" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
+                                    </div>
+                                    <br>
+                                    <div class="row justify-content-center">
+                                        <div>
+                                            <p>¿Ya eres usuario? <a href='login.php'>Iniciar sesion</a></p>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="password" name="passwordConfirm" id="passwordConfirm" class="form-control input-lg" placeholder="Confirmar Password" tabindex="6">
-                                </div>
-                            </div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-xs-6 col-md-6"><input type="submit" name="submit" value="Registrarme" class="btn btn-primary btn-block btn-lg" tabindex="7"></div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div>
-                                <p>¿Ya eres usuario? <a href='login.php'>Iniciar sesion</a></p>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>

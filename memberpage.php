@@ -1,8 +1,10 @@
 <?php require('config/config.php'); 
 
 //if not logged in redirect to login page
-if(!$user->is_logged_in()){ header('Location: login.php'); exit(); }
-
+if (!$user->is_logged_in()) {
+	header('Location: login.php');
+	exit();
+}
 //define page title
 $title = 'Docentes Page';
 
@@ -17,7 +19,7 @@ require('layout/header.php');
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 				
 					<h2>Bienvenido <?php echo htmlspecialchars($_SESSION['usuario'], ENT_QUOTES); ?></h2>
-					<?php if ($_SESSION["is_admin"] == 1) { ?>
+					<?php if ($_SESSION["is_admin"] >= 1) { ?>
                         <span class="dropdown-item"><i></small>Administrativo de la Facultad <br> de Ciencias y Tecnologia</small></i></span>
                       <?php } else { ?>
                         <span class="dropdown-item"><i><small>Docente de la Facultad <br> de Ciencias y Tecnologia</small></i></span>

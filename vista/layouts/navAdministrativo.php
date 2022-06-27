@@ -26,7 +26,7 @@ include('../template/cabecera.php');
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <p class="dropdown-item"><b><?php echo $_SESSION['nombre_docente'] ?></b></a>
                             <div class="dropdown-divider"></div>
-                            <?php if ($_SESSION["is_admin"] == 1) { ?>
+                            <?php if ($_SESSION["is_admin"] >= 1) { ?>
                                 <p class="dropdown-item"><i></small>Administrativo de la Facultad de Ciencias y Tecnologia</small></i></p>
                             <?php } else { ?>
                                 <p class="dropdown-item"><i><small>Docente de la Facultad de Ciencias y Tecnologia</small></i></p>

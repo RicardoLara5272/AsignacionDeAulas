@@ -63,10 +63,12 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                         $sentenciaSQL->execute();
                                         $id_admin = $sentenciaSQL->fetchColumn(3);
 
-                                        $sentenciaSQL = $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_admin");
-                                        $sentenciaSQL->execute();
-                                        $nomb_admin = $sentenciaSQL->fetchColumn(2);
-                                        echo $nomb_admin;
+                                        if ($id_admin) {
+                                            $sentenciaSQL = $conexion->prepare(" SELECT * FROM docentes WHERE id_docente = $id_admin");
+                                            $sentenciaSQL->execute();
+                                            $nomb_admin = $sentenciaSQL->fetchColumn(2);
+                                            echo $nomb_admin;
+                                        }
                                         ?>
                                     </td>
                                     <td> <?php echo $solicitud['fecha_solicitud']; ?> </td>

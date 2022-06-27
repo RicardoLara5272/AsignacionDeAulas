@@ -22,93 +22,104 @@
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  
+
 
   <script src="http://asignaciondeaulas/vista/sweet/dist/sweetalert2.all.min.js"></script>
   <link rel="stylesheet" href="http://asignaciondeaulas/vista/sweet/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="http://asignaciondeaulas/vista/formulario.css">
-    <link rel="stylesheet" href="http://asignaciondeaulas/vista/css/stylesheets/asignacionDeAulas.css">
-    <style> .mayuscula{text-transform: capitalize}
-  .texto{
-text-transform: lowercase;
-}
-.texto:first-letter {
-    text-transform: uppercase;
-}
-.rojo {
-    color: red;
-}
-.verde {
-    color: green;
-}
-.amarillo{
-  color: orange;
-}
-div>ul>li{
-  list-style: none;
-}
-/*login*/
+  <link rel="stylesheet" href="http://asignaciondeaulas/vista/formulario.css">
+  <link rel="stylesheet" href="http://asignaciondeaulas/vista/css/stylesheets/asignacionDeAulas.css">
+  <style>
+    .mayuscula {
+      text-transform: capitalize
+    }
 
-.user-card
-{
-  width: 350px;
-    height: 350px;
-    margin:1rem auto;
-    position: relative;
-    background: #fff;
-    overflow: hidden;
-    box-shadow: 5px 5px 5px 5px rgb(0 0 0 / 8%);
-    -moz-box-shadow: 0 1px 3px 0 rgba(0,0,0,0.08);
-    -webkit-box-shadow: 1px 0px 3px 4px rgb(0 0 0 / 15%);
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-}
+    .texto {
+      text-transform: lowercase;
+    }
 
-input
-{
-	width: 100%;
-	height: 40px;
-	border-radius:         3px;
-	-moz-border-radius:    3px;
-	-webkit-border-radius: 3px;
-	border: 1px solid #dee3e4;
-	padding: 3px 12px;
-	margin: 6px 0;
-}
+    .texto:first-letter {
+      text-transform: uppercase;
+    }
 
-input:focus
-{
-	outline: none;
-	border: 1px solid #03b3b5;
-	transition:         all .5s ease-in-out;
-	-o-transition:      all .5s ease-in-out;
-	-moz-transition:    all .5s ease-in-out;
-	-webkit-transition: all .5s ease-in-out;
-}
+    .rojo {
+      color: red;
+    }
 
-.login-box,
-.signup-box
-{
-	position: absolute;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: calc(100% - 25px);
-	background: #fff;
-  border-radius:         5px;
-  -moz-border-radius:    5px;
-  -webkit-border-radius: 5px;
-}
+    .verde {
+      color: green;
+    }
 
-.login-box{
-	padding: 11px 11px;
-	right: 0px;
-}
-.center-list{
-  justify-content: center;
-    display: flex;
-}
+    .amarillo {
+      color: orange;
+    }
+
+    div>ul>li {
+      list-style: none;
+    }
+
+    /*login*/
+
+    .user-card {
+      width: 350px;
+      height: 400px;
+      margin: 1rem auto;
+      position: relative;
+      background: #fff;
+      overflow: hidden;
+      box-shadow: 5px 5px 5px 5px rgb(0 0 0 / 8%);
+      -moz-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+      -webkit-box-shadow: 1px 0px 3px 4px rgb(0 0 0 / 15%);
+      border-radius: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+    }
+
+    input {
+      width: 100%;
+      height: 40px;
+      border-radius: 3px;
+      -moz-border-radius: 3px;
+      -webkit-border-radius: 3px;
+      border: 1px solid #dee3e4;
+      padding: 3px 12px;
+      margin: 6px 0;
+    }
+
+    input:focus {
+      outline: none;
+      border: 1px solid #03b3b5;
+      transition: all .5s ease-in-out;
+      -o-transition: all .5s ease-in-out;
+      -moz-transition: all .5s ease-in-out;
+      -webkit-transition: all .5s ease-in-out;
+    }
+
+    .login-box,
+    .signup-box {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: calc(100% - 25px);
+      background: #fff;
+      border-radius: 5px;
+      -moz-border-radius: 5px;
+      -webkit-border-radius: 5px;
+    }
+
+    .login-box {
+      padding: 11px 11px;
+      right: 0px;
+      border: 1px solid #E5E0DE;
+      background-color: #E5E0DE;
+      box-shadow: 14px 14px 31px 8px rgb(0 0 0 / 10%);
+      border-radius: 0.5rem;
+    }
+
+    .center-list {
+      justify-content: center;
+      display: flex;
+    }
   </style>
 </head>
 
@@ -124,21 +135,25 @@ input:focus
         if ($user->is_logged_in()) { ?>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link <?=$user->activeUrl("vistaDetPend")?>" href="/vista/vistaDetPend.php">Pendientes</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link <?=$user->activeUrl("vistaDetRevi")?>" href="/vista/vistaDetRevi.php">Revisadas</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link <?=$user->activeUrl("informe_solicitudes")?>" href="/vista/informe_solicitudes.php">Informes</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link <?=$user->activeUrl("homeDocente")?>" href="/vista/homeDocente.php">Home docente</a>
-              </li>
-              <li class="nav-item"><a class="nav-link <?=$user->activeUrl("solicitud")?> individual" href="../vista/solicitud.php">Individual</a></li>
-              <li class="nav-item"><a class="nav-link <?=$user->activeUrl("solicitudCompartida")?> compartida" href="../vista/solicitudCompartida.php">Compartido</a></li>
-              <li class="nav-item"><a class="nav-link <?=$user->activeUrl("seguimienDocente")?> Segimiento" href="../vista/seguimienDocente.php">Seguimiento</a></li>
+              <?php if ($user->permisos() === 1 || $user->permisos() === 2) {
+              ?>
+                <li class="nav-item">
+                  <a class="nav-link <?= $user->activeUrl("vistaDetPend") ?>" href="/vista/vistaDetPend.php">Pendientes</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link <?= $user->activeUrl("vistaDetRevi") ?>" href="/vista/vistaDetRevi.php">Revisadas</a>
+                </li>
+              <?php
+              } ?>
+              <?php if ($user->permisos() === 0 || $user->permisos() === 2) {
+              ?>
+                <li class="nav-item">
+                  <a class="nav-link <?= $user->activeUrl("homeDocente") ?>" href="/vista/homeDocente.php">Home docente</a>
+                </li>
+                <li class="nav-item"><a class="nav-link <?= $user->activeUrl("solicitud") ?> individual" href="../vista/solicitud.php">Individual</a></li>
+                <li class="nav-item"><a class="nav-link <?= $user->activeUrl("solicitudCompartida") ?> compartida" href="../vista/solicitudCompartida.php">Compartido</a></li>
+                <li class="nav-item"><a class="nav-link <?= $user->activeUrl("seguimienDocente") ?> Segimiento" href="../vista/seguimienDocente.php">Seguimiento</a></li>
+              <?php } ?>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu">
               <div class="dropdown">
@@ -146,7 +161,7 @@ input:focus
                   <i class="fas fa-user"></i> <?php echo $_SESSION['usuario'] ? $_SESSION['usuario'] : '' ?>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a class="dropdown-item" href="#"> <?php if ($_SESSION["is_admin"] == 1) { ?>
+                  <li><a class="dropdown-item" href="#"> <?php if ($_SESSION["is_admin"] >= 1) { ?>
                         <span class="dropdown-item"><i></small>Administrativo</small></i></span>
                       <?php } else { ?>
                         <span class="dropdown-item"><i><small>Docente</small></i></span>

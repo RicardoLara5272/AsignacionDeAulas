@@ -132,22 +132,45 @@ footer p {
 .icon-eye {
     position: absolute;
     right: 23px;
-    top: 73%;
-    transform: translateY(-62%);
+    top: 62%;
+    transform: translateY(2%);
     cursor: pointer;
     transition: .4s ease all;
 }
+
 .icon-eye:hover {
     opacity: 0.8;
 }
 .icon-user {
     position: absolute;
     right: 24px;
-    top: 46%;
-    transform: translateY(-62%);
+    top: 41%;
+    transform: translateY(0%);
     cursor: pointer;
     transition: .4s ease all;
 }
 .icon-user:hover {
     opacity: 0.8;
+}
+
+html {
+  font-size: 1rem;
+}
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: 1.2rem;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  html {
+    font-size: 1.4rem;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html {
+    font-size: 1.6rem;
+  }
 }

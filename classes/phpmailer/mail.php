@@ -3,15 +3,16 @@ include('phpmailer.php');
 class Mail extends PhpMailer
 {
     // Set default variables for all new objects
-    public $From     = 'example@gmail.com';
-    public $FromName = SITETITLE;
-    //public $Host     = 'smtp.gmail.com';
-    //public $Mailer   = 'smtp';
-    //public $SMTPAuth = true;
-    //public $Username = 'email';
-    //public $Password = 'password';
-    //public $SMTPSecure = 'tls';
+    public $From     = 'verocruz335@gmail.com';
+    public $FromName = 'AULAS';
+    public $Host     = 'smtp.gmail.com';
+    public $Mailer   = 'smtp';
+    public $SMTPAuth = true;
+    public $Username = 'gerfsoftware.srl@gmail.com';
+    public $Password = 'ozkerkuevtskural';
+    public $SMTPSecure = 'tls';
     public $WordWrap = 75;
+    public $Port = 587;
 
     public function subject($subject)
     {
@@ -25,7 +26,7 @@ class Mail extends PhpMailer
 
     public function send()
     {
-        $this->AltBody = strip_tags(stripslashes($this->Body))."\n\n";
+        $this->AltBody = strip_tags(stripslashes($this->Body)) . "\n\n";
         $this->AltBody = str_replace("&nbsp;", "\n\n", $this->AltBody);
         return parent::send();
     }

@@ -27,13 +27,13 @@ if (!empty($usuarioAuth)) {
         $_SESSION["is_admin"] = $usuario["is_admin"];
         break;
     }
-   
+
 
     $nombreA = 'Bienvenido! ' . $_SESSION["nombre_docente"] . ' Usted esta iniciando sesion como Administrador';
     $nombreD = 'Bienvenido! ' . $_SESSION["nombre_docente"] . ' Usted esta iniciando sesion como Docente';
     if ($_COOKIE) {
         if (isset($_COOKIE[$_SESSION["usuario"]])) {
-            unset( $_COOKIE[$_SESSION["usuario"]]);
+            unset($_COOKIE[$_SESSION["usuario"]]);
         }
     }
     if (isset($_COOKIE[$_SESSION["usuario"]])) {
@@ -42,7 +42,7 @@ if (!empty($usuarioAuth)) {
     } else {
         setcookie($_SESSION["usuario"], 1, time() + 3600);
     }
-    if ($_SESSION["is_admin"] == 1) {
+    if ($_SESSION["is_admin"] >= 1) {
         if (isset($_SESSION)) {
             header("Location: ../vista/vistaDetPend.php");
             die();
@@ -51,12 +51,11 @@ if (!empty($usuarioAuth)) {
         if (isset($_SESSION)) {
             header("Location: ../vista/homeDocente.php");
             die();
-        }else{
+        } else {
             header("Location: ../index.php");
             die();
         }
     }
-   
 } else {
     header("Location: ../index.php");
     die();

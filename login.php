@@ -38,6 +38,27 @@ require('layout/header.php');
 ?>
 <main class="content">
 	<div class="container">
+		<?php
+		//check for any errors
+
+		if (isset($_GET['action'])) {
+
+			//check the action
+			switch ($_GET['action']) {
+				case 'active':
+					echo "<span class=alert alert-success'>Su cuenta ya está activa, ahora puede iniciar sesión.</span> <br>";
+					break;
+				case 'reset':
+					echo "<span class='alert alert-success'>Por favor revise su bandeja de entrada para un enlace de restablecimiento.</span><br>";
+					break;
+				case 'resetAccount':
+					echo "<span class='alert alert-success'>Contraseña cambiada, ahora puede iniciar sesión.</span><br>";
+					break;
+			}
+		}
+
+
+		?>
 		<div class="row justify-content-center">
 			<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 
@@ -50,34 +71,18 @@ require('layout/header.php');
 								</div>
 								<p><a href='./' style=" text-decoration: none;">Ir a <i class="fa fa-home"></i></a></p>
 
-								<?php
-								//check for any errors
-
-								if (isset($_GET['action'])) {
-
-									//check the action
-									switch ($_GET['action']) {
-										case 'active':
-											echo "<span class=alert alert-success'>Su cuenta ya está activa, ahora puede iniciar sesión.</span>";
-											break;
-										case 'reset':
-											echo "<span class='alert alert-success'>Por favor revise su bandeja de entrada para un enlace de restablecimiento.</span>";
-											break;
-										case 'resetAccount':
-											echo "<span class='alert alert-success'>Contraseña cambiada, ahora puede iniciar sesión.</span>";
-											break;
-									}
-								}
 
 
-								?>
-
-								<div class="form-group">
+								<div class="form-group mt-5">
+									<label for="username">Usuario</label>
+									<span class="icon-user"><i class="fa-solid fa-user"></i></span>
 									<input type="text" name="username" id="username" class="form-control input-lg" placeholder="Usuario" value="<?php if (isset($error)) {
 																																				} ?>" tabindex="1">
 								</div>
 
 								<div class="form-group">
+									<label for="password">Password</label>
+									<span class="icon-eye"><i class="fa-solid fa-eye-slash"></i></span>
 									<input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" tabindex="3">
 								</div>
 
@@ -87,7 +92,7 @@ require('layout/header.php');
 									</div>
 								</div>
 								<div class="row justify-content-center">
-									<div class="col-xs-8 col-md-8"><input type="submit" name="submit" value="Iniciar Sesion" class="btn btn-primary btn-block btn-lg" tabindex="5" style="padding: inherit;"></div>
+									<div class="col-xs-8 col-md-8"><input style="text-transform: uppercase;padding: inherit;" type="submit" name="submit" value="Iniciar Sesion" class="btn btn-primary btn-block btn-lg" tabindex="5" style="padding: inherit;"></div>
 								</div>
 								<div class="row justify-content-center mb-4">
 									<div class="col-xs-9 col-sm-9 col-md-9 text-center">
@@ -107,7 +112,7 @@ require('layout/header.php');
 				foreach ($error as $errore) {
 					$mes = $mes . $errore;
 				}
-				echo '<span class="alert-danger">' . $mes . '</span> <br>';
+				echo '<span class="alert alert-danger">' . $mes . '</span> <br>';
 			}
 			?>
 		</div>
