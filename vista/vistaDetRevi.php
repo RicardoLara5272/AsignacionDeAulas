@@ -13,12 +13,12 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
-
-
 $conexion = $db; 
+
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM solicitudes WHERE Estado='revisado'");
 $sentenciaSQL->execute();
 $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <main class="content">
@@ -34,7 +34,7 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Nro</th>
                                 <th>Nombre del docente</th>
                                 <th>Revisado por</th>
                                 <th>Fecha Solicitud</th>
@@ -44,9 +44,9 @@ $listaSolicitudes = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($listaSolicitudes as $solicitud) { ?>
+                            <?php foreach ($listaSolicitudes as $index => $solicitud) { ?>
                                 <tr>
-                                    <td> <?php echo $solicitud['id_solicitudes']; ?> </td>
+                                    <td> <?php echo $index+1; ?> </td>
                                     <td>
                                         <?php
                                         $id_docente = $solicitud['id_docente'];

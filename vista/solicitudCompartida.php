@@ -37,7 +37,8 @@ if (isset($_GET['Message'])) {
     <div class="container">
         <div class="row justify-content-center">
             <section>
-                <div class="row text-center">
+                <br>
+                <div class="card-header text-center">
                     <div class="col-lg-12">
                         <h3>Solicitud Compartida Reserva de Aula: # <?php echo $nro ?></h3>
                     </div>
@@ -45,13 +46,15 @@ if (isset($_GET['Message'])) {
                         <h4><?php echo $_POST["fecha"] ?></h4>
                     </div>
                 </div>
+                <br>
             </section>
+            
             <form class="form-horizontal" id="formCompartida" onsubmit="return validationForm(event)" action="./solicitudVistaCompartida.php" method="POST">
                 <div class="row justify-content-center" >
                     <div class="col-md-4">
                         <strong><label for="nombre_docente">Solicitud realizada por el Docente :</label></strong><br>
                         <?php echo $nombre_docente['0']['nombre_docente'] ?>
-                    </div><br>
+                    </div>
                 </div>
                 <div class="row justify-content-center">
                     <div class="col-md-4">
@@ -81,8 +84,8 @@ if (isset($_GET['Message'])) {
                         </div>
                     </div>
                 <div class="row justify-content-center">
-                    <div class="col-md-4">
-                        <br><br>
+                    <div class="col-md-4" style="text-align:right">
+                        <br>
                         <input class="btn btn-primary btnContinuar" id="btnContinuar" type="hidden" name="registroDoc" value="CONTINUAR">
                         <button class="btn btn-primary" type="submit">CONTINUAR</button>
                         <input class="btn btn-danger" type="button" id="btnCancelar" onClick="window.parent.location='./homeDocente'" value="CANCELAR" style="width: 115px;">

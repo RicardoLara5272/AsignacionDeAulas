@@ -1,7 +1,17 @@
 <?php
-
-    include '../librerias/fpdf/fpdf.php';
+    include($_SERVER['DOCUMENT_ROOT'] . '/vista/librerias/fpdf/fpdf.php');
+    
+    require($_SERVER['DOCUMENT_ROOT'] . '/config/config.php');
+    //if not logged in redirect to login page
+    if (!$user->is_logged_in()) {
+        header('Location: login.php');
+        exit();
+    }
     date_default_timezone_set('America/Caracas');
+    //define page title
+    $title = 'Asignaciones';
+    //include header template
+    require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 
     class PDF extends FPDF{
         function header(){
@@ -68,11 +78,13 @@
             }
     }
 
-    require '../conexiones/conexion.php';
-    $objeto = new Conexion();
-    $conexion = $objeto->Conectar();
+    
+    $id_docente = $_SESSION['id_docente'];
+
+    $conexion = $db;
+    
     $fecha = date("Y-m-d");
-    $id_docente = 1;
+    
 
     $consulta = "SELECT nombre_docente from docentes WHERE id_docente = $id_docente";
     $resultado = $conexion->prepare($consulta);

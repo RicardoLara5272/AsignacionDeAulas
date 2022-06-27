@@ -15,13 +15,22 @@ $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
 $conexion = $db; 
-
 $id_sol_DetPend = $_POST['id_solicitud_Revi'];
+$data_consultar = [];
 
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_sol_DetPend");
 $sentenciaSQL->execute();
 $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
-//var_dump($listaReservas);
+foreach ($listaReservas as $key => $value) {
+    $data_consultar = $value;
+    break;
+}
+$grupos = json_decode($data_consultar['grupo']);
+if (count($grupos) > 1) {
+    $tipo_solicitud = "Compartido";
+} else {
+    $tipo_solicitud = "Individual";
+}
 ?>
 <main class="content">
     <div class="container">
@@ -31,11 +40,11 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row text-center">
                         <div class="col-lg-12">
                             <br>
-                            <h2>Solicitud nro # <?php echo $id_sol_DetPend; ?> </h2>
+                            <h2>Solicitud <?php echo $tipo_solicitud?> nro # <?php echo $id_sol_DetPend; ?> </h2>
                         </div>
                     </div>
                     <div class="col-lg-12">
-                    <label for="nombre_docente">Solicitado por:</label>
+                        <strong><label for="nombre_docente">Solicitado por:</label></strong><br>
                         <?php
                         $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes WHERE id_solicitudes = $id_sol_DetPend");
                         $sentenciaSQL->execute();
@@ -46,7 +55,8 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         $nom_docente = $sentenciaSQL->fetchColumn(2);
                         echo $nom_docente; 
                         ?>
-                        <label for="nombre_docente">Revisado por:</label>
+                        <br>
+                        <strong><label for="nombre_docente">Revisado por:</label></strong><br>
                         <?php 
                         $sentenciaSQL= $conexion->prepare(" SELECT * FROM solicitudes_atendidas WHERE id_solicitud = $id_sol_DetPend");
                         $sentenciaSQL->execute();
@@ -70,7 +80,7 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Num</th>
+                                    <th>Nro</th>
                                     <th>Materia</th>
                                     <th>Grupo</th>
                                     <th>Cap.</th>
@@ -103,9 +113,10 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                         <td> <?php echo $reserva['fecha_reserva']; ?> </td>
                                         <td> <?php echo $reserva['hora_inicio']; ?> </td>
                                         <td> <?php echo $reserva['hora_fin']; ?> </td>
-                                        <td>
+                                        <td class="texto">
                                             <?php
                                             //es unico el id_reserva?
+                                            $estaditos='';
                                             $id_reserva = $reserva['id_reserva'];
                                             $sentenciaSQL = $conexion->prepare(" SELECT * FROM reservas_atendidas WHERE id_reserva = $id_reserva ");
                                             $sentenciaSQL->execute();
@@ -117,12 +128,19 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                                                 $detalle_reserva_value = $value['detalle'];
                                                 break;
                                             }
-                                            if ($estado_reserva_value) {
+                                            if(strtolower($estado_reserva_value)=='rechazado'){
+                                                $estaditos ='<span class="rojo">'.$estado_reserva_value.'</span>';
+                                            }elseif (strtolower($estado_reserva_value)=='aceptado') {
+                                                $estaditos ='<span class="verde">'.$estado_reserva_value.'</span>';
+                                                $indiceRev++; 
+                                            }
+                                            echo $estaditos;
+                                            /*if ($estado_reserva_value) {
                                                 echo $estado_reserva_value;
                                             } else {
                                                 echo $estado_reserva_value;
                                                 $indiceRev++;
-                                            }
+                                            }*/
                                             ?>
                                         </td>
                                         <td class="texto"> <?php echo ($detalle_reserva_value);

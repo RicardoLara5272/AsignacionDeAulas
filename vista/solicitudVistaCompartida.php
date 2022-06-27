@@ -65,7 +65,8 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <div class="row justify-content-center">
             <section>
-                <div class="row text-center">
+                <br>
+                <div class="card-header text-center">
                     <div class="col-lg-12">
                         <h3>Solicitud Compartida Reserva de Aula: # <?php echo $nro ?></h3>
                     </div>
@@ -73,8 +74,9 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
                         <h4><?php echo $_POST["fecha"] ?></h4>
                     </div>
                 </div>
+                <br>
             </section>
-            <div class="row justify-content-center" >
+            <div class="row justify-content-left" >
                 <div class="col-md-6">
                     <strong><label for="nombre_docente">Solicitado por Docente:</label></strong><br>
                     <?php echo $nombre_docente['0']['nombre_docente'] ?><br>
@@ -90,6 +92,7 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
             <div class="row justify-content-center">
                 <div class="col">
                     <div class="table-responsive">
+                    <br>
                         <table class="table table-bordered table-condensed" id="tablaarticulos" style="width:100%">
                             <thead class="text-center">
                                 <tr>
@@ -108,7 +111,7 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
                     </div>
                 </div>
                 <div class="row justify-content-end">
-                    <div class="col-4">
+                    <div class="col-4" style="text-align:right">
                         <br>
                         <button type="button" id="btnReserva" class="btn btn-primary text-center btnReserva">ENVIAR Y GUARDAR</button>
                         <button type="button" id="btnCancelReserva" class="btn btn-danger text-center btnCancelReserva">CANCELAR</button>
@@ -123,7 +126,7 @@ $arrayDataCompartido = $resultadoDocenteCompartido->fetchAll(PDO::FETCH_ASSOC);
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title col-11 text-center" id="FormularioArticulo">NUEVA RESERVA MULTIPLE</h5>
+                <h5 class="modal-title col-11 text-center" id="FormularioArticulo">NUEVA RESERVA COMPARTIDA</h5>
                 <button type="button" class="close cancelModal" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -31,17 +31,13 @@ foreach ($listaReservas as $key => $value) {
     $data_consultar = $value;
     break;
 }
-
-//var_dump($listaReservas);
 $grupos = json_decode($data_consultar['grupo']);
-//var_dump($grupos);
+
 if (count($grupos) > 1) {
     $tipo_solicitud = "Compartido";
 } else {
     $tipo_solicitud = "Individual";
 }
-//echo date_default_timezone_get();
-//echo date("Y-m-d H:m:s");
 
 $sentencia= $conexion->prepare("DELETE FROM `auxiliar` WHERE id_aula>0");
 $sentencia->execute();

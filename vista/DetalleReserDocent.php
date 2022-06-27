@@ -16,13 +16,24 @@ require($_SERVER['DOCUMENT_ROOT'] . '/layout/header.php');
 $_POST["fecha"] = date("Y-m-d");
 $id_docente = $_SESSION['id_docente'];
 $id_materias = 1;
-//$objeto = new Conexion();
-$conexion = $db; // $objeto->Conectar();
+$conexion = $db; 
 $id_solicitud = $_POST['id_solicitud'];
 
 $sentenciaSQL = $conexion->prepare(" SELECT * FROM reserva WHERE id_solicitudes = $id_solicitud");
 $sentenciaSQL->execute();
 $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
+$data_consultar = [];
+foreach ($listaReservas as $key => $value) {
+    $data_consultar = $value;
+    break;
+}
+$grupos = json_decode($data_consultar['grupo']);
+
+if (count($grupos) > 1) {
+    $tipo_solicitud = "Compartido";
+} else {
+    $tipo_solicitud = "Individual";
+}
 ?>
 <main class="content">
     <div class="container">
@@ -32,7 +43,7 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                     <div class="row text-center">
                         <div class="col-lg-12">
                             <br>
-                            <h2>Solicitud nro # <?php echo $id_solicitud; ?> </h2>
+                            <h2>Solicitud <?php echo $tipo_solicitud?> nro # <?php echo $id_solicitud; ?> </h2>
                         </div>
                     </div>
                 <div class="col-lg-12">
@@ -47,8 +58,8 @@ $listaReservas = $sentenciaSQL->fetchAll(PDO::FETCH_ASSOC);
                         $nom_docente = $sentenciaSQL->fetchColumn(2);
                         //echo $nom_docente;
                         ?>
-                        <label for="nombre_docente">Solicitado por:</label>
-                        <h5><?php echo $nom_docente?></h5>
+                        <strong><label for="nombre_docente">Solicitado por:</label></strong><br>
+                        <?php echo $nom_docente?>
                     
                 </div>
                 <div class="card-header text-center">

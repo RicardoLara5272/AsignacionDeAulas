@@ -39,7 +39,8 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <div class="row justify-content-center">
             <section>
-                <div class="row text-center">
+            <br>
+                <div class="card-header text-center">
                     <div class="col-lg-12">
                         <h2>Solicitud de Reserva de Aula: # <?php echo $nro ?></h2>
                     </div>
@@ -77,7 +78,6 @@ $data = $resultado->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div class="col-md-12 mb-2">
                 <div style="text-align:right">
-                    <br><br>
                     <button type="button" id="btnReserva" class="btn btn-primary text-center btnReserva">ENVIAR Y GUARDAR</button>
                     <button type="button" id="btnCancelReserva" class="btn btn-danger text-center btnCancelReserva">CANCELAR</button>
                 </div>

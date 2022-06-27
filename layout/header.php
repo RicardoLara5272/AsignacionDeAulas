@@ -131,6 +131,9 @@ input:focus
                 <a class="nav-link <?=$user->activeUrl("vistaDetRevi")?>" href="/vista/vistaDetRevi.php">Revisadas</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link <?=$user->activeUrl("informe_solicitudes")?>" href="/vista/informe_solicitudes.php">Informes</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link <?=$user->activeUrl("homeDocente")?>" href="/vista/homeDocente.php">Home docente</a>
               </li>
               <li class="nav-item"><a class="nav-link <?=$user->activeUrl("solicitud")?> individual" href="../vista/solicitud.php">Individual</a></li>
